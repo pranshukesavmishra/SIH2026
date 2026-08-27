@@ -88,6 +88,16 @@ class Gimbal:
         rate = float(np.clip(rate, -self.max_rate, self.max_rate))
         return position + rate * dt, rate
 
+    def snapshot(self):
+        """Cheap state capture, so a controller can roll the model forward."""
+        return (self.az, self.el, self.rate_az, self.rate_el,
+                self._target, list(self._queue), self._clock)
+
+    def restore(self, state) -> None:
+        (self.az, self.el, self.rate_az, self.rate_el,
+         self._target, queue, self._clock) = state
+        self._queue = deque(queue)
+
     @property
     def true_pointing(self) -> Tuple[float, float]:
         return self.az, self.el

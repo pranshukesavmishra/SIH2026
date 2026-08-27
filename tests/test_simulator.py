@@ -47,12 +47,32 @@ def test_image_is_well_exposed_not_black_and_not_saturated():
     assert (frame.image >= full_scale).mean() < 0.001
 
 
-def test_beacon_snr_rises_towards_culmination():
-    """The difficulty gradient of the scenario, asserted rather than assumed."""
+def _culmination_time(cfg):
+    """Midpoint of the pass, derived from the scenario rather than hard-coded."""
+    p = cfg.beacons[0].trajectory.params
+    return 0.5 * (p["t_rise_s"] + p["t_set_s"])
+
+
+def test_beacon_snr_rises_monotonically_towards_culmination():
+    """
+    The difficulty gradient of the scenario, asserted rather than assumed.
+
+    Brightness is set by inverse-square range, so SNR climbs as the target
+    approaches. It is checked over the approach only: range is stationary at
+    culmination, so the curve genuinely plateaus there and asserting a rise
+    across the top would be asserting the wrong physics.
+
+    Scintillation is disabled because it is a random multiplier of order unity;
+    with it on, a single frame at each time samples the fluctuation rather than
+    the trend. The trend is what this test is about.
+    """
     cfg = SimConfig.load("scenarios/leo_pass_nominal.yaml")
-    horizon = _aimed(cfg, t=5.0).step().primary.snr
-    culmination = _aimed(cfg, t=120.0).step().primary.snr
-    assert culmination > 4.0 * horizon
+    cfg.turbulence.enabled = False
+    peak = _culmination_time(cfg)
+    times = np.linspace(0.0, 0.8 * peak, 5)
+    snrs = [_aimed(cfg, t=float(t)).step().primary.snr for t in times]
+    assert all(b > a for a, b in zip(snrs, snrs[1:])), snrs
+    assert snrs[-1] > 2.5 * snrs[0], snrs
 
 
 def test_dropped_frames_are_blank_and_flagged():
@@ -79,9 +99,11 @@ def test_vibration_perturbs_the_optical_axis():
 
 
 def test_decoys_are_labelled_and_enter_the_field():
+    """A decoy that never crosses the field cannot test discrimination."""
     cfg = SimConfig.load("scenarios/decoy_field.yaml")
+    peak = _culmination_time(cfg)
     seen = set()
-    for t in np.arange(100.0, 140.0, 0.5):
+    for t in np.arange(peak - 20.0, peak + 20.0, 0.5):
         for target in _aimed(cfg, t=float(t)).step().targets:
             if target.is_decoy and target.in_frame:
                 seen.add(target.name)
@@ -90,7 +112,7 @@ def test_decoys_are_labelled_and_enter_the_field():
 
 def test_primary_returns_the_single_non_decoy_target():
     cfg = SimConfig.load("scenarios/decoy_field.yaml")
-    frame = _aimed(cfg, t=120.0).step()
+    frame = _aimed(cfg, t=_culmination_time(cfg)).step()
     assert frame.primary is not None and not frame.primary.is_decoy
 
 

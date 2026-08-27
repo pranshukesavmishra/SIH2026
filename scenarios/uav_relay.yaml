@@ -1,11 +1,14 @@
 name: uav_relay
 description: 'Air-to-ground link to a manoeuvring UAV at 4 km: slower than a satellite
-  but with sharp direction changes the filter must not lag.'
+  but with sharp direction changes the filter must not lag. The beacon modulates at
+  6 Hz: an acquisition beacon must pulse below the tracking camera''s Nyquist limit
+  or its modulation is aliased away and cannot be used to identify it.'
 seed: 20261169
 duration_s: 90.0
 initial_pointing_deg:
-- 10.0
-- 12.0
+- 8.8
+- 12.9
+acquisition_fou_deg: 2.0
 camera:
   width: 640
   height: 480
@@ -74,7 +77,7 @@ beacons:
         - 6.0
   amplitude_e_s: 2500000.0
   ref_range_km: 4.0
-  blink_hz: 200.0
+  blink_hz: 6.0
   blink_duty: 0.5
   is_decoy: false
 turbulence:

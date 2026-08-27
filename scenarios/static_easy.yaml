@@ -4,8 +4,9 @@ description: 'Acquisition sanity check: a stationary bright beacon, no turbulenc
 seed: 20261169
 duration_s: 30.0
 initial_pointing_deg:
-- 0.0
-- 20.0
+- -0.9
+- 21.1
+acquisition_fou_deg: 2.0
 camera:
   width: 640
   height: 480
@@ -52,7 +53,7 @@ beacons:
       range_km: 800.0
   amplitude_e_s: 4000000.0
   ref_range_km: 800.0
-  blink_hz: 0.0
+  blink_hz: 4.0
   blink_duty: 0.5
   is_decoy: false
 turbulence:

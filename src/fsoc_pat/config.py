@@ -140,6 +140,10 @@ class SimConfig:
     seed: int = 20261169
     duration_s: float = 60.0
     initial_pointing_deg: List[float] = field(default_factory=lambda: [0.0, 10.0])
+    # How far the true beacon direction may be from `initial_pointing_deg`.
+    # This is the Field of Uncertainty the acquisition spiral has to cover, and
+    # it stands for real ephemeris, mount-alignment and timing error.
+    acquisition_fou_deg: float = 2.0
     camera: CameraConfig = field(default_factory=CameraConfig)
     gimbal: GimbalConfig = field(default_factory=GimbalConfig)
     scene: SceneConfig = field(default_factory=SceneConfig)

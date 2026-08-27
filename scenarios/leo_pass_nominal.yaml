@@ -5,8 +5,9 @@ description: 'Baseline: a 550 km LEO pass culminating at 55 deg. Beacon is faint
 seed: 20261169
 duration_s: 240.0
 initial_pointing_deg:
-- 70.0
-- 2.0
+- 12.165
+- 19.169
+acquisition_fou_deg: 2.0
 camera:
   width: 640
   height: 480
@@ -48,14 +49,14 @@ beacons:
   trajectory:
     kind: leo_pass
     params:
-      t_rise_s: 0.0
-      t_set_s: 240.0
+      t_rise_s: -30.0
+      t_set_s: 210.0
       peak_el_deg: 55.0
       peak_az_deg: 90.0
       altitude_km: 550.0
   amplitude_e_s: 4000000.0
   ref_range_km: 800.0
-  blink_hz: 0.0
+  blink_hz: 4.0
   blink_duty: 0.5
   is_decoy: false
 turbulence:
