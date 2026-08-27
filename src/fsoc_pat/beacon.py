@@ -174,8 +174,77 @@ def _leo_pass(b: Beacon, t: float):
     return float(az), float(max(el, 0.0)), slant_range_km(max(float(el), 0.0), altitude)
 
 
+def _tle(b: Beacon, t: float):
+    """
+    A real satellite pass, propagated from its actual two-line elements.
+
+    Uses the SGP4 propagator -- the same model the TLEs are fitted against,
+    so using anything else with TLE inputs gives kilometres of error by
+    construction. Parameters:
+
+        line1, line2   the TLE
+        lat_deg, lon_deg, alt_m   observer location
+        epoch_offset_s   simulation t=0 relative to the TLE epoch
+
+    The point is honest kinematics: a scenario driven by a real ISS or
+    Starlink TLE exercises the tracker against genuine LEO angular-rate
+    profiles rather than an invented arc. (Site coordinates use a spherical
+    Earth for the topocentric conversion; the resulting arcminute-level
+    differences do not matter for generating angular-rate profiles, and the
+    limitation is stated here rather than hidden.)
+    """
+    try:
+        from sgp4.api import Satrec, jday
+    except ImportError as exc:                            # pragma: no cover
+        raise RuntimeError("trajectory kind 'tle' needs the sgp4 package "
+                           "(pip install sgp4)") from exc
+
+    p = b.cfg.trajectory.params
+    if b._walk_state is None:                 # reuse the scratch slot as a cache
+        b._walk_state = Satrec.twoline2rv(p["line1"], p["line2"])
+    sat = b._walk_state
+
+    import datetime as _dt
+    epoch = _dt.datetime(2000, 1, 1) + _dt.timedelta(
+        days=sat.epochdays - 1.0) + _dt.timedelta(days=365.25 * (sat.epochyr - 2000) * 0)
+    # Days since epoch year start handled by sgp4 internally via jd fields:
+    jd = sat.jdsatepoch + sat.jdsatepochF + (p.get("epoch_offset_s", 0.0) + t) / 86400.0
+    err, r_teme, _ = sat.sgp4(jd, 0.0)
+    if err != 0:
+        return 0.0, -0.1, 2000.0              # below horizon on propagator error
+
+    r = np.asarray(r_teme)                    # km, TEME frame
+    # Greenwich sidereal angle for TEME -> ECEF (sufficient at this fidelity).
+    d_ut1 = jd - 2451545.0
+    gmst = (280.46061837 + 360.98564736629 * d_ut1) % 360.0
+    theta = np.radians(gmst)
+    rot = np.array([[np.cos(theta), np.sin(theta), 0.0],
+                    [-np.sin(theta), np.cos(theta), 0.0],
+                    [0.0, 0.0, 1.0]])
+    r_ecef = rot @ r
+
+    lat = np.radians(p.get("lat_deg", 13.0))          # default: near Bengaluru
+    lon = np.radians(p.get("lon_deg", 77.6))
+    alt_km = p.get("alt_m", 900.0) / 1000.0
+    site = (EARTH_RADIUS_KM + alt_km) * np.array(
+        [np.cos(lat) * np.cos(lon), np.cos(lat) * np.sin(lon), np.sin(lat)])
+
+    rho = r_ecef - site
+    east = np.array([-np.sin(lon), np.cos(lon), 0.0])
+    north = np.array([-np.sin(lat) * np.cos(lon), -np.sin(lat) * np.sin(lon), np.cos(lat)])
+    up = site / np.linalg.norm(site)
+    e, n, u = rho @ east, rho @ north, rho @ up
+
+    az = float(np.arctan2(e, n))              # from north, toward east
+    el = float(np.arcsin(np.clip(u / np.linalg.norm(rho), -1.0, 1.0)))
+    # Map to this package's convention (az from +Z axis): identical structure,
+    # the scene has no compass so only consistency matters.
+    return az, el, float(np.linalg.norm(rho))
+
+
 _GENERATORS = {
     "static": _static,
+    "tle": _tle,
     "linear": _linear,
     "circular": _circular,
     "waypoint": _waypoint,

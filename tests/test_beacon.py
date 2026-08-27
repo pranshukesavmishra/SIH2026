@@ -77,3 +77,20 @@ def test_waypoint_interpolates_between_points():
     assert np.degrees(az) == pytest.approx(5.0)
     assert np.degrees(el) == pytest.approx(15.0)
     assert rng_km == pytest.approx(150.0)
+
+
+def test_tle_trajectory_produces_a_physical_pass():
+    """Real ISS elements through SGP4: rates and ranges must be LEO-like."""
+    pytest.importorskip("sgp4")
+    from fsoc_pat.geometry import angular_separation
+    cfg = BeaconConfig(trajectory=TrajectoryConfig("tle", dict(
+        line1="1 25544U 98067A   24022.54744419  .00016717  00000-0  30777-3 0  9992",
+        line2="2 25544  51.6415 174.1156 0005267  38.8942  95.9614 15.49561887434415",
+        lat_deg=13.0, lon_deg=77.6, epoch_offset_s=72900)))
+    b = Beacon(cfg, RNG)
+    az0, el0, r0 = b.state(0.0)
+    az1, el1, r1 = b.state(30.0)
+    assert np.degrees(el0) > 45.0                      # culminating pass
+    assert 300.0 < r0 < 2500.0                         # LEO slant range
+    rate = np.degrees(angular_separation(az0, el0, az1, el1)) / 30.0
+    assert 0.05 < rate < 2.0                           # LEO angular rate
