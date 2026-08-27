@@ -117,12 +117,19 @@ class PointingController:
     def __init__(self, gimbal_cfg: GimbalConfig, frame_rate_hz: float,
                  az0: float = 0.0, el0: float = 0.0,
                  bandwidth_hz: float = 3.0, kp: float = 0.75, ki: float = 0.35,
-                 settle_margin_s: float = 0.02, integral_limit_urad: float = 2000.0):
+                 settle_margin_s: float = 0.02, integral_limit_urad: float = 12000.0):
         self.cfg = gimbal_cfg
         self.dt_nominal = 1.0 / frame_rate_hz
         self.bandwidth_hz = float(bandwidth_hz)
         self.kp, self.ki = float(kp), float(ki)
         self.settle_margin_s = float(settle_margin_s)
+        # The clamp exists for windup during acquisition transients, but it
+        # must not bind in steady tracking: the mount's trapezoidal follower
+        # trails a moving command by rate^2 / (2 * accel), which the integral
+        # path has to stand in for -- about 1300 urad at 3 deg/s for this
+        # mount. A clamp below that shows up as a constant tracking lag that
+        # appears only above a certain target rate, which is exactly how it
+        # was found.
         self.integral_limit = integral_limit_urad * 1e-6
 
         self.smith = SmithPredictor(gimbal_cfg, az0, el0)
@@ -138,8 +145,20 @@ class PointingController:
 
     @property
     def lead_time(self) -> float:
-        """How far ahead the target must be predicted for a command to land on it."""
-        return self.cfg.command_latency_ms / 1000.0 + self.settle_margin_s
+        """
+        The prediction horizon: exactly the command latency.
+
+        A command issued now takes effect one latency from now, so the mount
+        should be sent to where the target will be at that moment -- no more.
+        Padding the horizon further (an earlier version added a settle margin)
+        systematically leads the target: the mount arrives early by the pad,
+        and because the Smith comparison is between two predictions that both
+        land on the commanded point, the loop is structurally blind to that
+        offset. Only the integral path, which watches the *measured* error,
+        can see it -- and it should not be asked to fight a bias the fast path
+        created for itself.
+        """
+        return self.cfg.command_latency_ms / 1000.0
 
     def _low_pass(self, error: np.ndarray, dt: float) -> np.ndarray:
         alpha = 1.0 - np.exp(-2.0 * np.pi * self.bandwidth_hz * max(dt, 1e-6))
@@ -175,29 +194,37 @@ class PointingController:
         else:
             return ControlTelemetry(*self._last_command, 0.0, 0.0, lead, False)
 
-        # The Smith correction. `measured` is the error against where the mount
-        # is *now*, but commands already issued will move it before the next one
-        # lands. Subtracting that in-flight motion leaves only the error still
-        # outstanding -- without this the integrator keeps accumulating an error
-        # that is already being corrected, and the loop overshoots once per dead
-        # time.
-        in_flight = np.array([geo.wrap_pi(predicted_az - reported[0]),
-                              predicted_el - reported[1]])
-        error = measured - in_flight
+        # The Smith comparison is between two *predictions*: where the target
+        # will be when this command lands, and where the mount will be by then
+        # under the commands already in flight. Their difference is the error
+        # still outstanding.
+        #
+        # This framing matters on a moving target. Comparing against the
+        # mount's in-flight motion alone -- as a step-input Smith predictor
+        # does -- misreads target-following motion as correction-in-transit
+        # and injects a permanent bias of -rate x lead into the error signal;
+        # the integrator then winds against it and the mount settles one dead
+        # time behind the target. Measured on a sterile ramp testbed, that
+        # structure lagged by exactly rate x latency (444 urad at 0.75 deg/s)
+        # while this one holds the lag near the noise floor.
+        predicted_target = np.array([
+            reported[0] + measured[0] + target_rates[0] * lead,
+            reported[1] + measured[1] + target_rates[1] * lead])
+        outstanding = np.array([geo.wrap_pi(predicted_target[0] - predicted_az),
+                                predicted_target[1] - predicted_el])
 
-        smoothed = self._low_pass(error, dt)
-        self._integral = np.clip(self._integral + smoothed * dt,
+        smoothed = self._low_pass(outstanding, dt)
+        # Two-path Smith arrangement. The proportional path acts on the model
+        # comparison: fast, and immune to the dead time. The integral path
+        # acts on the MEASURED optical error: slow, but it is the only signal
+        # that reflects where the mount truly is, so it is the only path that
+        # can remove a constant offset the model cannot see -- model mismatch,
+        # calibration bias, or any residual lead/lag of the fast path itself.
+        self._integral = np.clip(self._integral + measured * dt,
                                  -self.integral_limit, self.integral_limit)
 
-        # Feed-forward: where the target moves during the dead time. This term
-        # does the bulk of the work during a fast pass -- feedback alone would
-        # always trail by rate x lead, which at culmination is far larger than
-        # the whole error budget.
-        lead_az = target_rates[0] * lead
-        lead_el = target_rates[1] * lead
-
-        command_az = predicted_az + self.kp * smoothed[0] + self.ki * self._integral[0] + lead_az
-        command_el = predicted_el + self.kp * smoothed[1] + self.ki * self._integral[1] + lead_el
+        command_az = predicted_target[0] + self.kp * smoothed[0] + self.ki * self._integral[0]
+        command_el = predicted_target[1] + self.kp * smoothed[1] + self.ki * self._integral[1]
 
         lo, hi = np.radians(self.cfg.el_limits_deg)
         command_az = float(geo.wrap_pi(command_az))
@@ -206,4 +233,5 @@ class PointingController:
         self.smith.issue(command_az, command_el)
         self._last_command = (command_az, command_el)
         return ControlTelemetry(command_az, command_el,
-                                float(error[0]), float(error[1]), lead, used_optical)
+                                float(outstanding[0]), float(outstanding[1]),
+                                lead, used_optical)
