@@ -67,6 +67,7 @@ class TrackerTelemetry:
     gimbal_rate_frac: float = 0.0              # fraction of the mount's rate limit in use
     on_decoy: bool = False
     modulation_score: float = 0.0
+    ai_score: Optional[float] = None
     mode_probabilities: Tuple[float, float] = (0.5, 0.5)
     command: Optional[Tuple[float, float]] = None
     detection_snr: Optional[float] = None
@@ -86,7 +87,8 @@ class CoarseAlignmentTracker:
                  search_centre: Optional[Tuple[float, float]] = None,
                  cfar_k: float = 5.0, bandwidth_hz: float = 3.0,
                  lock_threshold_px: float = 8.0, lock_frames: int = 5,
-                 coast_frames: int = 15, reacquire_frames: int = 90):
+                 coast_frames: int = 15, reacquire_frames: int = 90,
+                 ai_weights: Optional[str] = "auto"):
         self.cfg = cfg
         cam = cfg.camera
         self.dt = 1.0 / cam.frame_rate_hz
@@ -126,6 +128,18 @@ class CoarseAlignmentTracker:
         # view and slid along with the track's own prediction, so it rejects
         # clutter drifting into frame without pulling against the real target.
         self.locked_prior_sigma = float(np.radians(cam.fov_deg) / 3.0)
+
+        # Optional learned verifier. "auto" loads the shipped weights when
+        # they exist and silently runs classical-only when they do not, so a
+        # source checkout without trained models still works everywhere.
+        self.verifier = None
+        if ai_weights == "auto":
+            import pathlib
+            default = pathlib.Path(__file__).resolve().parents[2] / "models" / "track_verifier.npz"
+            ai_weights = str(default) if default.exists() else None
+        if ai_weights:
+            from .ai.verifier import TrackVerifier
+            self.verifier = TrackVerifier(ai_weights)
 
         self.state = LockState.SEARCH
         self.telemetry: List[TrackerTelemetry] = []
@@ -178,6 +192,25 @@ class CoarseAlignmentTracker:
         cam_az, cam_el = frame.pointing_reported
         detections = [] if frame.dropped else self.detector.detect(frame.image)
         self.tracker.update(detections, cam_az, cam_el, self.dt)
+
+        if self.verifier is not None:
+            live = set()
+            for track in self.tracker.tracks:
+                live.add(track.track_id)
+                # Cut the patch at the track's PREDICTED position on every
+                # frame -- including frames with no detection. The beacon's
+                # blink-off frames are half of its temporal signature; feeding
+                # only detection frames would show the network a source that
+                # never turns off, which is exactly what its training set
+                # labels as "star". (Found live: the shipped verifier scored
+                # the true beacon at 0.001 until this matched training.)
+                az, el = track.angles
+                u, v, visible = geo.project(az, el, cam_az, cam_el,
+                                            self.focal_px, self.width, self.height)
+                if visible:
+                    self.verifier.observe(track.track_id, frame.image, u, v)
+                track.ai_score = self.verifier.score(track.track_id)
+            self.verifier.forget(live)
 
         primary = self.tracker.primary()
         if self._locked_id is not None:
@@ -309,6 +342,7 @@ class CoarseAlignmentTracker:
             beacon_in_fov=bool(truth.in_frame) if truth is not None else False,
             gimbal_rate_frac=0.0,
             modulation_score=primary.modulation_score if primary else 0.0,
+            ai_score=primary.ai_score if primary else None,
             mode_probabilities=tuple(primary.imm.mu) if primary else (0.5, 0.5),
             command=command,
             detection_snr=primary.last_detection.snr

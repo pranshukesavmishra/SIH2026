@@ -85,6 +85,7 @@ class Track:
     innovation_history: deque = field(default_factory=lambda: deque(maxlen=30))
     modulation_score: float = 0.0
     prior_score: float = 0.0
+    ai_score: Optional[float] = None    # learned verifier, when a model is loaded
 
     @property
     def hit_ratio(self) -> float:
@@ -117,6 +118,14 @@ class Track:
             base += 0.55 * self.modulation_score
         elif self.last_detection is not None:
             base += 0.15 * float(np.clip(self.last_detection.snr / 30.0, 0.0, 1.0))
+        if self.ai_score is not None:
+            # The learned verifier's vote. Weighted below the classical
+            # modulation term deliberately: the Goertzel path works from first
+            # principles at any configured frequency, while the network knows
+            # only its training distribution. The network's edge is speed --
+            # it separates beacon from imposter on a 0.27 s window where the
+            # Goertzel has not yet resolved the frequency.
+            base += 0.35 * self.ai_score
         return float(base)
 
 
