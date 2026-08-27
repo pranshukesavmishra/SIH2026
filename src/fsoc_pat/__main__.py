@@ -12,9 +12,9 @@ def main() -> int:
     argv = sys.argv[1:]
     if "--headless" in argv:
         argv.remove("--headless")
-        from .runner import main as headless
+        from fsoc_pat.runner import main as headless
         return headless(argv)
-    from .gui.app import main as gui
+    from fsoc_pat.gui.app import main as gui
     return gui(argv)
 
 
