@@ -111,6 +111,8 @@ class CoarseAlignmentTracker:
         self.search_centre = search_centre if search_centre is not None else (az0, el0)
         if fou_radius_deg is None:
             fou_radius_deg = cfg.acquisition_fou_deg
+        self._base_fou_deg = float(fou_radius_deg)
+        self._current_fou_deg = float(fou_radius_deg)
         self.search = SpiralSearch(fou_radius_deg=fou_radius_deg, fov_deg=cam.fov_deg,
                                    aspect=cam.height / cam.width)
         self.controller = PointingController(cfg.gimbal, cam.frame_rate_hz,
@@ -140,6 +142,8 @@ class CoarseAlignmentTracker:
         if ai_weights:
             from .ai.verifier import TrackVerifier
             self.verifier = TrackVerifier(ai_weights)
+
+        self._last_good: Optional[Tuple[float, float]] = None
 
         self.state = LockState.SEARCH
         self.telemetry: List[TrackerTelemetry] = []
@@ -213,6 +217,19 @@ class CoarseAlignmentTracker:
             self.verifier.forget(live)
 
         primary = self.tracker.primary()
+        # A track with a full flux history and no trace of the beacon's known
+        # modulation is confidently NOT the beacon, whatever its persistence
+        # and brightness say. Without this veto, losing a fast target lets a
+        # star win the election on persistence and the slid-along prior, and
+        # lock hysteresis then holds the wrong object indefinitely -- observed
+        # on the UAV scenario as 70% "lock" pointed 22 degrees from the truth.
+        if (primary is not None and self.tracker.modulation_observable
+                and len(primary.flux_history) >= 60
+                and primary.modulation_score
+                < 0.5 * self.tracker.modulation_threshold):
+            self._locked_id = None
+            primary = None
+
         if self._locked_id is not None:
             held = next((t for t in self.tracker.tracks if t.track_id == self._locked_id), None)
             # Stay with the locked track unless it is gone or another track has
@@ -283,15 +300,40 @@ class CoarseAlignmentTracker:
 
         if self.state in (LockState.TRACK, LockState.COAST, LockState.REACQUIRE) \
                 and self._frames_reacquiring < self.reacquire_frames:
+            if self.state is not LockState.REACQUIRE and self._last_good is not None:
+                # Search where the target was last believed to be, not where
+                # the mission started -- the whole point of having tracked it.
+                self.search_centre = self._last_good
             self.state = LockState.REACQUIRE
             self._frames_reacquiring += 1
         else:
             if self.state is not LockState.SEARCH:
                 self.search.reset()
+                self._current_fou_deg = self._base_fou_deg
+                cam = self.cfg.camera
+                self.search = SpiralSearch(fou_radius_deg=self._base_fou_deg,
+                                           fov_deg=cam.fov_deg,
+                                           aspect=cam.height / cam.width)
             self.state = LockState.SEARCH
             self._frames_reacquiring = 0
             self._frames_coasting = 0
 
+        # Escalating search: a moving target can leave the original Field of
+        # Uncertainty while the spiral is still sweeping it, after which no
+        # number of repeat cycles will ever see it -- measured on the UAV
+        # scenario as a 51 s acquisition stuck at the spiral's edge. Standard
+        # practice, applied here: every completed empty cycle widens the
+        # spiral half again, up to half the elevation range, so a target that
+        # drifted out is caught by the next, wider pass. Reacquisition after a
+        # held lock resets to the tight spiral, centred on the loss point.
+        if self.search.completed_cycles > 0:
+            widened = min(self._current_fou_deg * 1.5, 25.0)
+            if widened > self._current_fou_deg:
+                self._current_fou_deg = widened
+                cam = self.cfg.camera
+                self.search = SpiralSearch(fou_radius_deg=widened,
+                                           fov_deg=cam.fov_deg,
+                                           aspect=cam.height / cam.width)
         self.search.advance()
         return self.search.command(*self.search_centre)
 
@@ -327,6 +369,8 @@ class CoarseAlignmentTracker:
         # while the system was in fact tracking it perfectly throughout.
         locked = (primary is not None and primary.confirmed
                   and self.state in (LockState.TRACK, LockState.COAST))
+        if locked:
+            self._last_good = primary.angles
         if self.state is LockState.TRACK and self.acquisition_frame is None:
             self.acquisition_frame = frame.index
 
