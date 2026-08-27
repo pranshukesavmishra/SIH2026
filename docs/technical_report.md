@@ -221,7 +221,7 @@ steady-state lag from 444 µrad to **4.2 µrad** at 0.75°/s (25.6 µrad at
 
 Four layers, each catching what the previous cannot:
 
-1. **Unit tests (69)** — projection exactness (boresight, round-trip,
+1. **Unit tests (72)** — projection exactness (boresight, round-trip,
    pixel-radius vs true separation, high-elevation behaviour), config
    round-trips, trajectory physics (culmination symmetry, slant range,
    inverse-square, blink Nyquist), gimbal limits actually binding, detector
@@ -256,17 +256,21 @@ Closed loop, 60 s per scenario, all disturbances on:
 | leo_pass_nominal | 1.10 s | 98.8% | ~500 µrad† | 0 |
 | decoy_field | 1.03 s | 99.0% | ~500 µrad† | 0 |
 | turbulence_hard | 1.50 s | 95.3% | 292 µrad | 0 |
-| uav_relay | 4.07 s | 96.2% | 1.3 mrad | 0 |
+| uav_relay | 4.20 s | 95.1% | p95 883 µrad | 0 |
 | iss_pass (SGP4) | 2.27 s | 97.8% | p95 773 µrad | 0 |
 
 † dominated by residual turbulent jitter, which is below the coarse stage's
 Nyquist limit and belongs to the fine stage; the coarse contract (beacon in
 FOV) holds at 100%.
 
-**Monte Carlo (leo_pass family, 64 randomised runs):** see
-`runs/mc-leo/summary.json` — acquisition probability, acquisition-time
-percentiles, lock-retention envelope, pointing-error envelope, wrong-lock
-count. *(Numbers inserted from the campaign output in the submitted PDF.)*
+**Monte Carlo (leo_pass family, 64 randomised runs** — seed, beacon
+brightness 0.4–2.5×, turbulence 0.5–2×, vibration 0.5–2×, initial pointing
+error across the FOU)**:** acquisition probability **64/64 = 100%** with
+median 1.27 s, p95 2.27 s, worst 4.77 s; lock retention median 97.6%, fifth
+percentile 94.7%, worst single run 90.0%; per-run p95 pointing error median
+754 µrad, worst run 2009 µrad; **zero wrong-target locks in any run**. Every
+run's randomisation draws are logged, so any outlier reproduces exactly
+(`runs/mc-leo/`).
 
 **Link closure (the number the exercise exists for).** On the tracked ISS
 pass, with a 250 µrad communications beam and a 15 cm aperture: the coarse
