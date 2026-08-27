@@ -72,17 +72,26 @@ class Gimbal:
         """
         One axis of a trapezoidal profile.
 
-        The braking term ``sqrt(2 a |e|)`` is the fastest speed from which the
-        axis can still stop exactly on target, so the mount decelerates into
-        the setpoint instead of sailing past it. Half a step of acceleration is
-        subtracted from it because the command only takes effect *after* the
-        next integration step: without that correction the axis commits to one
-        more step of travel than it can brake away, and settles with a small
-        but consistent overshoot.
+        The braking speed is the discrete-time solution of
+        ``v dt + v^2 / 2a = |e|`` -- travel one full step at v, then brake at
+        a, and arrive exactly:
+
+            v = -a dt / 2 + sqrt((a dt / 2)^2 + 2 a |e|)
+
+        The continuous-time form ``sqrt(2a|e|)`` commits to one step of travel
+        it cannot brake away and overshoots by ~5 mrad on a large slew; a
+        previous patch subtracted half a step of acceleration from it, which
+        fixed the overshoot but created a ~145 urad deadband where the
+        commanded velocity was zero and the mount parked short of every
+        command it was given. The exact form has neither problem, and the
+        additional ``|e| / dt`` cap lands the final sub-step exactly on the
+        setpoint.
         """
         error = target - position
-        stopping = max(np.sqrt(2.0 * self.max_accel * abs(error)) - 0.5 * self.max_accel * dt, 0.0)
-        desired = np.sign(error) * min(self.max_rate, stopping)
+        half_step = 0.5 * self.max_accel * dt
+        stopping = -half_step + np.sqrt(half_step ** 2
+                                        + 2.0 * self.max_accel * abs(error))
+        desired = np.sign(error) * min(self.max_rate, stopping, abs(error) / dt)
         dv = np.clip(desired - rate, -self.max_accel * dt, self.max_accel * dt)
         rate = rate + dv
         rate = float(np.clip(rate, -self.max_rate, self.max_rate))
