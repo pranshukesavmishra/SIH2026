@@ -60,8 +60,11 @@ class TrackerTelemetry:
     locked: bool           # holding a confirmed track (TRACK or coasting through a gap)
     detected: bool = False  # a fresh detection was associated this frame
     track_id: Optional[int] = None
-    error_rad: Optional[float] = None          # boresight error, if a track exists
-    truth_error_rad: Optional[float] = None    # scored against ground truth
+    error_rad: Optional[float] = None          # filter estimate vs the true boresight
+    truth_error_rad: Optional[float] = None    # filter estimate vs the true beacon
+    pointing_error_rad: Optional[float] = None  # true boresight vs the true beacon
+    beacon_in_fov: bool = False
+    gimbal_rate_frac: float = 0.0              # fraction of the mount's rate limit in use
     on_decoy: bool = False
     modulation_score: float = 0.0
     mode_probabilities: Tuple[float, float] = (0.5, 0.5)
@@ -264,6 +267,14 @@ class CoarseAlignmentTracker:
         truth = frame.primary
         truth_error = None
         on_decoy = False
+        # The error that actually decides whether an optical link closes is the
+        # angle between where the camera is really pointing and where the
+        # beacon really is. Estimate-versus-truth flatters the system: a filter
+        # can be perfectly accurate while the mount lags far behind it.
+        pointing_error = None
+        if truth is not None:
+            pointing_error = float(geo.angular_separation(
+                truth.az, truth.el, frame.pointing_true[0], frame.pointing_true[1]))
         if primary is not None and truth is not None:
             est_az, est_el = primary.angles
             truth_error = float(geo.angular_separation(est_az, est_el, truth.az, truth.el))
@@ -294,6 +305,9 @@ class CoarseAlignmentTracker:
             error_rad=None if primary is None else float(
                 geo.angular_separation(*primary.angles, *frame.pointing_true)),
             truth_error_rad=truth_error, on_decoy=on_decoy,
+            pointing_error_rad=pointing_error,
+            beacon_in_fov=bool(truth.in_frame) if truth is not None else False,
+            gimbal_rate_frac=0.0,
             modulation_score=primary.modulation_score if primary else 0.0,
             mode_probabilities=tuple(primary.imm.mu) if primary else (0.5, 0.5),
             command=command,

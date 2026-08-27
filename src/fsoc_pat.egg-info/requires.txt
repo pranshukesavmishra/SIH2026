@@ -1,0 +1,9 @@
+numpy>=1.26
+opencv-python>=4.9
+PyYAML>=6.0
+
+[dev]
+pytest>=8.0
+
+[gui]
+PySide6>=6.6
