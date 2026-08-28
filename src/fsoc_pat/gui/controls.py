@@ -45,6 +45,7 @@ class ControlPanel(QWidget):
         run_box = QGroupBox("run")
         run_form = QVBoxLayout(run_box)
         self.run_button = QPushButton("start")
+        self.run_button.setObjectName("primary")
         self.pause_button = QPushButton("pause")
         self.pause_button.setCheckable(True)
         self.realtime_check = QCheckBox("real-time pacing")

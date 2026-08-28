@@ -32,10 +32,10 @@ fsoc-pat [scenario.yaml]          # default: scenarios/leo_pass_nominal.yaml
 ```
 | Region | Contents |
 |---|---|
-| Left | Live camera view. Grey cross = boresight. Blue diamonds = current detections. Circle = the locked track, coloured by state, with a half-second velocity vector. Banner: state, time, pointing error, detection count. |
-| Middle | Live plots on a shared time axis: pointing error (log scale; dashed red line = FOV half-width, the failure line), manoeuvre probability and normalised SNR, and the lock-state colour band. |
+| Left | Live camera view. Corner brackets frame the sensor's active area; the gap cross at centre is the boresight. Cyan diamonds = current detections. The locked track wears a double-arc reticle in the state colour — solid while tracking, dashed while coasting on prediction — with an arrowed half-second velocity vector; a ring pulses outward once at the moment of lock. During SEARCH the acquisition spiral and its current dwell point are drawn. Lower right, a 4× magnifier stays centred on the track, because at a 6° FOV the beacon is a handful of pixels. Top left, the state chip and the live numbers. |
+| Middle | Live plots on a shared time axis: pointing error (log scale, filled, with the FOV half-width as the labelled failure line), manoeuvre probability (amber, filled) with normalised SNR behind it, and the lock state as solid coloured spans — the width of an orange COAST span *is* the length of a beacon blink. |
 | Right | Controls (below). |
-| Bottom | Status bar: time, state, pointing error, processing per frame. |
+| Bottom | Status bar: time, state, pointing error, processing per frame (1 s rolling mean). |
 
 **Controls.** *open/save scenario* — load or store any configuration as YAML.
 *start/stop, pause.* *real-time pacing* — off runs the simulation as fast as

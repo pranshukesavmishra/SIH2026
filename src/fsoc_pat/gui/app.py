@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
 
 from ..config import SimConfig
 from ..metrics import PerformanceReport
+from . import theme
 from .controls import ControlPanel
 from .frameview import FrameView
 from .plots import PlotStrip
@@ -200,6 +201,7 @@ def main(argv=None) -> int:
     argv = argv if argv is not None else sys.argv[1:]
     scenario = argv[0] if argv else DEFAULT_SCENARIO
     app = QApplication.instance() or QApplication(sys.argv)
+    app.setStyleSheet(theme.stylesheet())
     window = MainWindow(scenario)
     window.show()
     return app.exec()
