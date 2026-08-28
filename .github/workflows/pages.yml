@@ -1,0 +1,28 @@
+# Auto-publish the showcase site: every push to main redeploys docs/ to
+# GitHub Pages, so the team's link always shows the latest build.
+name: deploy-site
+on:
+  push:
+    branches: [main, claude/sih-problem-selection-w3p3o4]
+    paths: ["docs/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: docs}
+      - id: deployment
+        uses: actions/deploy-pages@v4
