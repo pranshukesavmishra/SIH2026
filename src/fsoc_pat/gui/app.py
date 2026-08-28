@@ -102,9 +102,14 @@ class MainWindow(QMainWindow):
         self.plots.redraw()
         err = ("—" if telemetry.pointing_error_rad is None
                else f"{telemetry.pointing_error_rad * 1e6:.0f} urad")
+        # Rolling-mean processing time: the instantaneous value spikes during
+        # the acquisition transient (many candidate tracks alive at once) and
+        # made the status bar read as a performance problem that wasn't there.
+        recent = self._worker.tracker.telemetry[-30:]
+        proc = sum(t.processing_ms for t in recent) / max(len(recent), 1)
         self.status_label.setText(
             f"t = {telemetry.time_s:6.1f} s   state {telemetry.state.value:9}   "
-            f"pointing error {err}   processing {telemetry.processing_ms:.1f} ms")
+            f"pointing error {err}   processing {proc:.1f} ms (1 s mean)")
 
     @Slot(object)
     def _on_finished(self, report) -> None:

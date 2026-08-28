@@ -11,7 +11,13 @@ argument. It does not reproduce the simulation's microradian precision
 
 ---
 
-## 1. Shopping list (~₹6,000–7,500 total)
+## 1. Shopping list
+
+**Budget path (~₹3,000):** items 2–8 only, with a borrowed 1080p webcam and a
+phone charger for USB power. A working rig, complete demo.
+**Full rig (~₹6,000–7,500):** everything below — the manual-exposure camera is
+the single upgrade that matters most, because auto-exposure hunts on every
+beacon blink.
 
 Order everything at once — shipping is the long pole, parts are commodity.
 
@@ -49,6 +55,11 @@ only as a "webcam" with no sensor named, "laser pointer" beacons (a laser
 speckles and is an eye hazard in a demo hall — the LED is the right beacon).
 
 ---
+
+**Free demo props:** a hair dryer across the optical path is genuine
+atmospheric turbulence; a second LED on *continuous* power is a live decoy the
+tracker must ignore — and will, which is the modulation gate working in front
+of the judges.
 
 ## 2. Wiring
 

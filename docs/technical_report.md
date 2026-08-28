@@ -250,18 +250,20 @@ acquisition time is time-to-TRACK, not time-to-first-detection.
 
 Closed loop, 60 s per scenario, all disturbances on:
 
-| Scenario | Acquisition | Lock retention | Pointing error (mean) | Decoy locks |
-|---|---|---|---|---|
-| static_easy | 0.77 s | 98.6% | 53 µrad | 0 |
-| leo_pass_nominal | 1.10 s | 98.8% | ~500 µrad† | 0 |
-| decoy_field | 1.03 s | 99.0% | ~500 µrad† | 0 |
-| turbulence_hard | 1.50 s | 95.3% | 292 µrad | 0 |
-| uav_relay | 4.20 s | 95.1% | p95 883 µrad | 0 |
-| iss_pass (SGP4) | 2.27 s | 97.8% | p95 773 µrad | 0 |
+| Scenario | Acquisition | Lock retention | Pointing error (p50 / p95) | Beacon in FOV | Decoy locks |
+|---|---|---|---|---|---|
+| static_easy | 0.83 s | 99.2% | 44 / 303 µrad | 100% | 0 |
+| leo_pass_nominal | 1.10 s | 98.8% | 207 / 521 µrad† | 100% | 0 |
+| decoy_field | 1.07 s | 99.0% | 197 / 478 µrad† | 100% | 0 |
+| turbulence_hard | 1.27 s | 94.5% | 399 / 951 µrad‡ | 100% | 0 |
+| uav_relay | 3.83 s | 95.8% | 239 / 885 µrad | 96.6% | 0 |
+| iss_pass (SGP4) | 1.27 s | 98.7% | 197 / 639 µrad | 100% | 0 |
 
-† dominated by residual turbulent jitter, which is below the coarse stage's
-Nyquist limit and belongs to the fine stage; the coarse contract (beacon in
-FOV) holds at 100%.
+† dominated by residual turbulent jitter, which is above the coarse stage's
+closed-loop bandwidth and belongs to the fine stage; the coarse contract
+(beacon in FOV) holds at 100%.
+‡ against 413 µrad RMS of injected disturbance — the error sits at the
+physical floor set by the disturbance itself.
 
 **Monte Carlo (leo_pass family, 64 randomised runs** — seed, beacon
 brightness 0.4–2.5×, turbulence 0.5–2×, vibration 0.5–2×, initial pointing
