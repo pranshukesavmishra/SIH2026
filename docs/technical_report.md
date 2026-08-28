@@ -268,11 +268,13 @@ physical floor set by the disturbance itself.
 **Monte Carlo (leo_pass family, 64 randomised runs** — seed, beacon
 brightness 0.4–2.5×, turbulence 0.5–2×, vibration 0.5–2×, initial pointing
 error across the FOU)**:** acquisition probability **64/64 = 100%** with
-median 1.27 s, p95 2.27 s, worst 4.77 s; lock retention median 97.6%, fifth
-percentile 94.7%, worst single run 90.0%; per-run p95 pointing error median
-754 µrad, worst run 2009 µrad; **zero wrong-target locks in any run**. Every
-run's randomisation draws are logged, so any outlier reproduces exactly
-(`runs/mc-leo/`).
+median 1.27 s, p95 2.66 s, worst 4.0 s; lock retention median 97.6%, fifth
+percentile 94.6%, worst single run 91.6%; per-run p95 pointing error median
+762 µrad, worst run 3841 µrad (a 0.53× dim beacon under 1.74× turbulence and
+1.45× vibration — it still acquired in 2.8 s, held 91.7% lock and kept the
+beacon in the FOV 99.6% of the time); **zero wrong-target locks in any of
+the 64 runs**. Every run's randomisation draws are logged, so any outlier
+reproduces exactly (`runs/mc-leo/`).
 
 **Link closure (the number the exercise exists for).** On the tracked ISS
 pass, with a 250 µrad communications beam and a 15 cm aperture: the coarse
