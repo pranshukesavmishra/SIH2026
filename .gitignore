@@ -9,3 +9,6 @@ runs/
 dist/
 .venv-build/
 *.egg-info/
+
+# Personal contact details - never commit to a public repo
+team_private/
