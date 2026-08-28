@@ -286,11 +286,22 @@ class CoarseAlignmentTracker:
             self.state = LockState.ACQUIRE
 
         self._frames_reacquiring = 0
+        # Feed-forward as an *effective rate* over the command latency, taken
+        # from the IMM's own constant-acceleration extrapolation rather than
+        # the instantaneous rate. For a smooth pass the two agree; at a sharp
+        # manoeuvre the extrapolation bends with the estimated acceleration
+        # while a raw rate keeps pushing in the old direction for the whole
+        # latency horizon.
+        lag = max(self.controller.lead_time, 1e-3)
+        est_az, est_el = primary.angles
+        ahead_az, ahead_el = primary.imm.predict_ahead(lag)
+        rates_eff = (float(geo.wrap_pi(ahead_az - est_az)) / lag,
+                     (ahead_el - est_el) / lag)
         telemetry = self.controller.update(
             reported=(cam_az, cam_el), dt=self.dt,
             optical_error=optical,
             absolute_target=primary.angles if optical is None else None,
-            target_rates=primary.imm.rates)
+            target_rates=rates_eff)
         return telemetry.command_az, telemetry.command_el
 
     def _search_or_lose(self) -> Tuple[float, float]:
