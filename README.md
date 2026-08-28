@@ -113,3 +113,17 @@ analysis/         how this problem statement was chosen (see analysis/README.md)
 
 Roughly **50 fps** at 640×480 on one core — faster than the 30 fps frame rate it
 simulates, so a Monte Carlo campaign of a thousand runs is practical.
+
+## Team ZeroDrift
+
+Smart India Hackathon 2026 · Jabalpur Engineering College · PS **SIH26169** (ISRO, Software, Smart Automation)
+
+| Role | Name |
+|---|---|
+| Team Leader | Aryan Singh |
+| Member | Pranshu Mishra |
+| Member | Aashna Verma |
+| Member | Vivek Rajput |
+| Member | Palak Uikey |
+| Member | Shivanand Sahu |
+| Faculty Mentor | Dr. Jitendra Singh Thakur — Associate Professor & HOD, CSE |
