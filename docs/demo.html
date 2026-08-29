@@ -70,6 +70,7 @@ canvas{width:100%;display:block;cursor:crosshair}
   <button id="tTrail" class="tog on" title="beacon path trail">∿ TRAIL</button>
   <button id="tDecoy" class="tog on" title="show decoys">◇ DECOYS</button>
   <button id="tGrid" class="tog" title="viewport grid">▦ GRID</button>
+  <button id="helpB" title="what am I looking at?">?</button>
 </div>
 <div class="stats" id="tiles"></div>
 <div class="main">
@@ -104,6 +105,21 @@ canvas{width:100%;display:block;cursor:crosshair}
 </div>
 <div class="foot"><a href="about.html">Project page</a> · ZeroDrift · Jabalpur Engineering College · open source —
  <a href="https://github.com/pranshukesavmishra/SIH-2026">github.com/pranshukesavmishra/SIH-2026</a></div>
+<div id="help" hidden style="position:fixed;inset:0;background:rgba(4,8,14,0.94);z-index:9;overflow:auto;padding:26px 8vw;font-size:12.5px;line-height:1.7">
+  <div style="max-width:900px;margin:0 auto">
+  <h2 style="color:#4FC7EA;letter-spacing:2px">WHAT AM I LOOKING AT?</h2>
+  <p style="color:#D4E2EF;margin:8px 0 14px">Two laser terminals must point at each other with micro-radian accuracy before they can talk.
+  Our software finds the other terminal's <b style="color:#4FC7EA">blinking beacon</b> in a noisy sky and steers a virtual camera to keep it centred.
+  This page <b style="color:#FFC24D">replays a logged run of the real engine</b>, frame by frame — nothing here is animated by hand.</p>
+  <div style="color:#D4E2EF">
+  <p><b style="color:#4FC7EA">⌖ VIEWPORT</b> — the camera's view. Glowing dot = the beacon at its <i>recorded</i> position. Arcs around it = our tracker's lock reticle, coloured by state. Red ◇ = decoys (only the "Decoy field" scenario has any). The beacon barely moves — <b>that stillness is the achievement</b>: the mount is following it.</p>
+  <p><b style="color:#4FC7EA">▮ CONSOLE</b> — the big number is the pointing error in µrad (1 µrad ≈ 1 mm sideways per km). Below: how many bright spots were seen, the beacon's signal strength, the 4 Hz blink test score, the AI verifier's confidence, how hard the mount is turning, and compute time per 33 ms frame.</p>
+  <p><b style="color:#4FC7EA">STATES</b> — <b style="color:#5B8DEF">SEARCH</b> spiral-scanning · <b style="color:#FFC24D">ACQUIRE</b> candidate found, confirming · <b style="color:#3BD68C">TRACK</b> locked · <b style="color:#FF9D45">COAST</b> beacon blinked off, pointing from prediction · <b style="color:#FF5555">REACQUIRE</b> lost, recovering. COAST is normal — the beacon is dark half of every blink cycle.</p>
+  <p><b style="color:#4FC7EA">CHARTS</b> — the story over time. Error dives after acquisition and stays ~200 µrad, far below the red FOV-loss line. Click any chart to jump the replay there.</p>
+  <p><b style="color:#FFC24D">HOW TO CHECK IT'S REAL</b> — tiles must read 1.27 s · 98.3 % · 198 µrad · 100 % on the ISS pass; the constants line must say FOV 6°, 30 fps, blink 4 Hz, slew limit 20°/s; every number regenerates from one command in the open-source repo.</p>
+  </div>
+  <button onclick="document.getElementById('help').hidden=true" style="margin-top:14px">✕ CLOSE</button>
+  </div></div>
 <script>
 'use strict';
 const SC={SEARCH:'#5B8DEF',ACQUIRE:'#FFC24D',TRACK:'#3BD68C',COAST:'#FF9D45',REACQUIRE:'#FF5555'};
@@ -112,6 +128,10 @@ const $=id=>document.getElementById(id);
 
 function setup(d){
   D=d;i=0;$('seek').max=d.frames.length-1;delete D._stars;
+  const nd=d.frames.reduce((a,f)=>a+((f.dpx&&f.dpx.length)?1:0),0);
+  const db=$('tDecoy');db.disabled=!nd;db.style.opacity=nd?1:0.35;
+  db.textContent=nd?'◇ DECOYS':'◇ NO DECOYS';
+  db.title=nd?('decoys visible in '+nd+' frames — seek around them'):'this scenario contains no decoys';
   const s=d.summary,c=d.constants;
   const T=(v,l)=>'<div class="stat"><b>'+v+'</b><span>'+l+'</span></div>';
   $('tiles').innerHTML=
@@ -173,11 +193,17 @@ function viewport(f,c0){
   c.strokeStyle='#3A4C66';c.beginPath();
   c.moveTo(w/2-9,h/2);c.lineTo(w/2-3,h/2);c.moveTo(w/2+3,h/2);c.lineTo(w/2+9,h/2);
   c.moveTo(w/2,h/2-9);c.lineTo(w/2,h/2-3);c.moveTo(w/2,h/2+3);c.lineTo(w/2,h/2+9);c.stroke();
-  if(showTrail){c.strokeStyle='rgba(79,199,234,0.30)';c.lineWidth=1;c.beginPath();let mv=false;
+  if(showTrail){c.strokeStyle='rgba(79,199,234,0.35)';c.lineWidth=1;c.beginPath();let mv=false;
+    let u0=1e9,u1=-1e9,v0=1e9,v1=-1e9,np=0;
     for(let k=Math.max(0,i-90);k<=i;k++){const bp=D.frames[k].bpx;
       if(!bp){mv=false;continue}
+      u0=Math.min(u0,bp[0]);u1=Math.max(u1,bp[0]);v0=Math.min(v0,bp[1]);v1=Math.max(v1,bp[1]);np++;
       if(!mv){c.moveTo(X(bp[0]),Y(bp[1]));mv=true}else c.lineTo(X(bp[0]),Y(bp[1]))}
-    c.stroke()}
+    c.stroke();
+    if(np>30&&D.frames[i].bpx){const spread=Math.max(u1-u0,v1-v0);
+      if(spread<12){c.fillStyle='rgba(79,199,234,0.8)';c.font='9.5px monospace';
+        c.fillText('◦ held within ±'+Math.max(1,Math.ceil(spread/2))+' px over 3 s — the trail IS this dot',
+                   X(D.frames[i].bpx[0])+22,Y(D.frames[i].bpx[1])+4)}}}
   if(showDecoy)for(const dp of (f.dpx||[])){const dx=X(dp[0]),dy=Y(dp[1]);
     c.strokeStyle='#FF5555';c.lineWidth=1.4;c.beginPath();
     c.moveTo(dx,dy-6);c.lineTo(dx+6,dy);c.lineTo(dx,dy+6);c.lineTo(dx-6,dy);c.closePath();c.stroke();
@@ -267,7 +293,9 @@ document.querySelectorAll('canvas[data-seek]').forEach(cv=>{cv.addEventListener(
   if(!D)return;const r=cv.getBoundingClientRect();
   i=Math.round((e.clientX-r.left)/r.width*(D.frames.length-1));
   i=Math.max(0,Math.min(D.frames.length-1,i));draw()})});
+$('helpB').onclick=()=>{$('help').hidden=false};
 addEventListener('keydown',e=>{
+  if(e.code==='Escape'){$('help').hidden=true;return}
   if(e.code==='Space'){e.preventDefault();$('play').click()}
   else if(e.code==='ArrowLeft')$('stepB').click();
   else if(e.code==='ArrowRight')$('stepF').click()});
