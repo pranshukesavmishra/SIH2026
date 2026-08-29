@@ -1,0 +1,34 @@
+name: Build standalone app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, claude/sih-problem-selection-w3p3o4]
+    paths: ['src/**', 'packaging/**', 'scenarios/**', 'models/**', '.github/workflows/build-exe.yml']
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: fsoc-pat-windows
+            binary: dist/fsoc-pat
+          - os: macos-latest
+            artifact: fsoc-pat-macos
+            binary: dist/fsoc-pat
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: pip install -e . pyinstaller PySide6 pyqtgraph
+      - name: Build
+        run: pyinstaller --noconfirm --clean packaging/fsoc-pat.spec
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.binary }}
+          retention-days: 90
