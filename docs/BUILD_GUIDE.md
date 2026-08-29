@@ -56,8 +56,8 @@ numbers and chart must be regenerated to match (see §6). Never let the
 deck and the demo disagree.
 
 ## 5. The website (ZD-1 replay console)
-- Root page = `docs/index.html` (identical copy of `docs/demo.html`);
-  old showcase = `docs/about.html`; data = `docs/media/telemetry_*.json`.
+- Site: `index.html` (home) → `console.html` (the ZD-1 replay console, identical copy kept at `demo.html`) →
+  `about.html` (project + team); data = `docs/media/telemetry_*.json`.
 - Test locally: `cd docs && python -m http.server 8000` → http://localhost:8000
 - **Update Netlify**: app.netlify.com → site `zerodrift-fsoc-pat` →
   Deploys → drag-and-drop the whole `docs/` folder.

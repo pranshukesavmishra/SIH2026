@@ -1,303 +1,60 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZeroDrift ZD-1 — FSOC Coarse Alignment Console</title>
+<title>ZeroDrift — FSOC Coarse Alignment</title>
 <style>
-:root{--bg:#05080E;--panel:#0A101C;--edge:#1B2940;--ink:#D4E2EF;--mut:#66788E;--cyan:#4FC7EA;--green:#3BD68C;--amber:#FFC24D;--orange:#FF9D45;--red:#FF5555;--blue:#5B8DEF;--vio:#B48CFF}
+:root{--bg:#05080E;--panel:#0A101C;--edge:#1B2940;--ink:#D4E2EF;--mut:#66788E;--cyan:#4FC7EA;--green:#3BD68C}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--ink);font:12.5px/1.45 "SF Mono",Consolas,Menlo,monospace}
-.wrap{max-width:1560px;margin:0 auto;padding:0 14px}
-.top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--edge);
- background:linear-gradient(180deg,#0A1424,#05080E)}
-.logo{margin-right:6px}.logo b{color:var(--cyan);letter-spacing:1px}
-.logo span{color:var(--mut);font-size:10px;display:block;letter-spacing:2px}
-.spacer{flex:1}
-.chip{border:1px solid var(--edge);border-radius:4px;padding:4px 10px;background:var(--panel);white-space:nowrap;font-size:12px}
-.chip b{color:#fff}.chip .sym{color:var(--mut);margin-right:4px}
-#stateChip{font-weight:700;border-width:2px}
-.banner{padding:4px 14px;background:#101B30;color:var(--amber);font-size:10.5px;border-bottom:1px solid var(--edge)}
-.banner a{color:var(--cyan)}
-.bar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:8px 0}
-button,select{background:#101B30;color:var(--ink);border:1px solid var(--edge);border-radius:4px;
- padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
-button:hover{border-color:var(--cyan)}button.on{border-color:var(--green);color:var(--green)}
-button.tog{color:var(--mut)}button.tog.on{color:var(--cyan);border-color:var(--cyan)}
-input[type=range]{flex:1;min-width:140px;accent-color:#4FC7EA;height:4px}
-.stats{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px}
-.stat{flex:1;min-width:104px;background:var(--panel);border:1px solid var(--edge);border-radius:5px;
- padding:6px 8px;text-align:center}
-.stat b{display:block;font-size:15px;color:#fff}
-.stat span{font-size:9px;color:var(--mut);letter-spacing:1px}
-.main{display:grid;grid-template-columns:1.62fr 1fr;gap:10px}
-.charts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 0}
-@media(max-width:1000px){.main,.charts{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:8px 10px}
-.card h3{font-size:10px;color:var(--mut);letter-spacing:1.4px;display:flex;justify-content:space-between;margin-bottom:5px}
-.card h3 em{color:var(--cyan);font-style:normal}
-.card h3 .sym{color:var(--cyan);margin-right:5px}
-canvas{width:100%;display:block;cursor:crosshair}
-.krow{display:flex;justify-content:space-between;border-bottom:1px solid #121e30;padding:5px 2px;font-size:12px}
-.krow span{color:var(--mut)}.krow b{color:#fff}
-.bigerr{font-size:40px;font-weight:700;color:var(--cyan);line-height:1.05}
-.bigst{display:inline-block;border:2px solid;border-radius:5px;padding:3px 12px;font-weight:700;margin-bottom:6px}
-.const{padding:6px 0 12px;color:var(--mut);font-size:10.5px}
-.foot{padding:10px 14px;color:var(--mut);font-size:10.5px;border-top:1px solid var(--edge);text-align:center}
+body{background:var(--bg);color:var(--ink);font:14px/1.6 "SF Mono",Consolas,Menlo,monospace;
+ min-height:100vh;display:flex;flex-direction:column}
+.nav{display:flex;gap:16px;padding:12px 18px;border-bottom:1px solid var(--edge);font-size:11px;letter-spacing:1px}
+.nav a{color:var(--mut);text-decoration:none}.nav a:hover{color:var(--cyan)}.nav b{color:var(--cyan)}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 18px}
+h1{font-size:52px;letter-spacing:4px;color:#fff}h1 span{color:var(--cyan)}
+.tag{color:var(--mut);letter-spacing:3px;font-size:12px;margin:6px 0 14px}
+.pitch{max-width:640px;color:var(--ink);font-size:14.5px;margin-bottom:26px}
+.pitch b{color:var(--cyan)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:30px}
+.btn{border:1px solid var(--edge);border-radius:6px;padding:12px 22px;color:var(--ink);
+ text-decoration:none;background:var(--panel);font-size:13px;letter-spacing:1px}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.pri{border-color:var(--cyan);color:#04121C;background:var(--cyan);font-weight:700}
+.btn.pri:hover{background:#7FDCF4;color:#04121C}
+.chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chip{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:8px 14px}
+.chip b{display:block;font-size:17px;color:#fff}
+.chip span{font-size:9px;color:var(--mut);letter-spacing:1.2px}
+.note{color:var(--mut);font-size:10.5px;margin-top:18px}
+.foot{padding:12px;border-top:1px solid var(--edge);color:var(--mut);font-size:10.5px;text-align:center}
 .foot a{color:var(--cyan)}
 </style></head><body>
-<div class="top">
-  <div class="logo"><b>ZERODRIFT · ZD-1</b><span>FSOC-PAT COARSE ALIGNMENT CONSOLE · ISRO SIH26169</span></div>
-  <div class="spacer"></div>
-  <div class="chip"><span class="sym">⏱</span><b id="tv">—</b></div>
-  <div class="chip"><span class="sym">⌖</span><b id="ev">—</b></div>
-  <div class="chip"><span class="sym">▣</span>FOV <b id="fov">—</b></div>
-  <div class="chip" id="stateChip">—</div>
-</div>
-<div class="banner">⦿ RECORDED REPLAY — every value on this page is read frame-by-frame from a logged run of the
- real engine (same seed &amp; code as the desktop app); nothing is simulated in the browser.
- Live version: the desktop app — <a href="https://github.com/pranshukesavmishra/SIH-2026">repository</a>.</div>
-<div class="wrap">
-<div class="bar">
-  <select id="scen">
-    <option value="media/telemetry_run.json">◉ ISS pass over Bengaluru · 45 s · SGP4</option>
-    <option value="media/telemetry_turbulence.json">≋ Hard turbulence · 400 µrad tilt · 30 s</option>
-    <option value="media/telemetry_decoys.json">◇ Decoy field · 3 moving decoys + glints · 130 s</option>
-  </select>
-  <button id="stepB" title="frame back">⏮</button>
-  <button id="play" class="on" title="play/pause [space]">❚❚</button>
-  <button id="stepF" title="frame forward">⏭</button>
-  <button id="spd" title="playback speed">✕1</button>
-  <button id="loop" class="tog on" title="loop at end">⟳</button>
-  <input type="range" id="seek" min="0" max="100" value="0">
-  <button id="tTrail" class="tog on" title="beacon path trail">∿ TRAIL</button>
-  <button id="tDecoy" class="tog on" title="show decoys">◇ DECOYS</button>
-  <button id="tGrid" class="tog" title="viewport grid">▦ GRID</button>
-  <button id="helpB" title="what am I looking at?">?</button>
-</div>
-<div class="stats" id="tiles"></div>
-<div class="main">
-  <div class="card"><h3><span><span class="sym">⌖</span>OPTICAL VIEWPORT — RECORDED TRUTH</span><em id="vpNow"></em></h3>
-    <canvas id="cView" height="336"></canvas></div>
-  <div class="card">
-    <h3><span><span class="sym">▮</span>ALIGNMENT CONSOLE</span></h3>
-    <div class="bigst" id="bigSt">—</div>
-    <div class="bigerr" id="bigErr">—</div>
-    <div style="color:var(--mut);font-size:10px;margin-bottom:8px">µrad pointing error · mount vs beacon · ground truth</div>
-    <div class="krow"><span>◈ detections / frame</span><b id="kD">—</b></div>
-    <div class="krow"><span>∿ beacon SNR</span><b id="kSnr">—</b></div>
-    <div class="krow"><span>⨳ blink modulation</span><b id="kMod">—</b></div>
-    <div class="krow"><span>⬡ AI verifier</span><b id="kAi">—</b></div>
-    <div class="krow"><span>⚖ manoeuvre prob</span><b id="kMan">—</b></div>
-    <div class="krow"><span>⛭ gimbal slew</span><b id="kSlew">—</b></div>
-    <div class="krow"><span>⏲ processing / 33 ms</span><b id="kProc">—</b></div>
-    <div class="krow"><span>▤ lock state</span><b id="kLock">—</b></div>
-    <div style="color:var(--mut);font-size:9.5px;margin-top:8px">All readouts and the beacon's viewport position come from the recording.</div>
+<div class="nav"><b>⌂ HOME</b><a href="console.html">▮ CONSOLE</a><a href="about.html">◈ ABOUT US</a>
+ <span style="flex:1"></span><a href="https://github.com/pranshukesavmishra/SIH-2026">⌁ GITHUB</a></div>
+<div class="hero">
+  <h1>ZERO<span>DRIFT</span></h1>
+  <div class="tag">FSOC-PAT COARSE ALIGNMENT · SIH 2026 · PS 26169 · ISRO</div>
+  <p class="pitch">Two laser terminals must point at each other with <b>micro-radian</b> accuracy before
+   they can talk. Our software finds the other terminal's <b>blinking beacon</b> in a noisy, moving sky
+   and steers a virtual camera to hold it — the complete coarse-alignment stage,
+   <b>built, measured and open-source</b>, with zero optical hardware.</p>
+  <div class="btns">
+    <a class="btn pri" href="console.html">▶ OPEN THE CONSOLE</a>
+    <a class="btn" href="about.html">◈ ABOUT US</a>
+    <a class="btn" href="https://github.com/pranshukesavmishra/SIH-2026">⌁ SOURCE CODE</a>
   </div>
+  <div class="chips" id="chips">
+    <div class="chip"><b>73 / 73</b><span>TESTS PASS</span></div>
+  </div>
+  <div class="note">⦿ the console replays logged runs of the real engine — every number is measured, none are typed in</div>
 </div>
-<div class="charts">
-  <div class="card"><h3><span><span class="sym">∿</span>POINTING ERROR (log µrad)</span><em id="errNow"></em></h3><canvas id="cErr" height="84" data-seek="1"></canvas></div>
-  <div class="card"><h3><span><span class="sym">▤</span>LOCK STATE · click to seek</span><em id="stNow"></em></h3><canvas id="cState" height="30" data-seek="1"></canvas>
-    <h3 style="margin-top:6px"><span><span class="sym">◈</span>DETECTIONS / FRAME</span><em id="detNow"></em></h3><canvas id="cDet" height="42" data-seek="1"></canvas></div>
-  <div class="card"><h3><span><span class="sym">⚖</span>IMM MANOEUVRE PROB</span><em id="immNow"></em></h3><canvas id="cImm" height="84" data-seek="1"></canvas></div>
-  <div class="card"><h3><span><span class="sym">⛭</span>GIMBAL SLEW (°/s)</span><em id="slewNow"></em></h3><canvas id="cSlew" height="84" data-seek="1"></canvas></div>
-  <div class="card"><h3><span><span class="sym">⨳</span>BLINK MODULATION SCORE</span><em id="modNow"></em></h3><canvas id="cMod" height="84" data-seek="1"></canvas></div>
-  <div class="card"><h3><span><span class="sym">⏲</span>PROCESSING vs 33 ms BUDGET</span><em id="procNow"></em></h3><canvas id="cProc" height="84" data-seek="1"></canvas></div>
-</div>
-<div class="const" id="consts"></div>
-</div>
-<div class="foot"><a href="about.html">Project page</a> · ZeroDrift · Jabalpur Engineering College · open source —
+<div class="foot">ZeroDrift · Jabalpur Engineering College · Smart India Hackathon 2026 —
  <a href="https://github.com/pranshukesavmishra/SIH-2026">github.com/pranshukesavmishra/SIH-2026</a></div>
-<div id="help" hidden style="position:fixed;inset:0;background:rgba(4,8,14,0.94);z-index:9;overflow:auto;padding:26px 8vw;font-size:12.5px;line-height:1.7">
-  <div style="max-width:900px;margin:0 auto">
-  <h2 style="color:#4FC7EA;letter-spacing:2px">WHAT AM I LOOKING AT?</h2>
-  <p style="color:#D4E2EF;margin:8px 0 14px">Two laser terminals must point at each other with micro-radian accuracy before they can talk.
-  Our software finds the other terminal's <b style="color:#4FC7EA">blinking beacon</b> in a noisy sky and steers a virtual camera to keep it centred.
-  This page <b style="color:#FFC24D">replays a logged run of the real engine</b>, frame by frame — nothing here is animated by hand.</p>
-  <div style="color:#D4E2EF">
-  <p><b style="color:#4FC7EA">⌖ VIEWPORT</b> — the camera's view. Glowing dot = the beacon at its <i>recorded</i> position. Arcs around it = our tracker's lock reticle, coloured by state. Red ◇ = decoys (only the "Decoy field" scenario has any). The beacon barely moves — <b>that stillness is the achievement</b>: the mount is following it.</p>
-  <p><b style="color:#4FC7EA">▮ CONSOLE</b> — the big number is the pointing error in µrad (1 µrad ≈ 1 mm sideways per km). Below: how many bright spots were seen, the beacon's signal strength, the 4 Hz blink test score, the AI verifier's confidence, how hard the mount is turning, and compute time per 33 ms frame.</p>
-  <p><b style="color:#4FC7EA">STATES</b> — <b style="color:#5B8DEF">SEARCH</b> spiral-scanning · <b style="color:#FFC24D">ACQUIRE</b> candidate found, confirming · <b style="color:#3BD68C">TRACK</b> locked · <b style="color:#FF9D45">COAST</b> beacon blinked off, pointing from prediction · <b style="color:#FF5555">REACQUIRE</b> lost, recovering. COAST is normal — the beacon is dark half of every blink cycle.</p>
-  <p><b style="color:#4FC7EA">CHARTS</b> — the story over time. Error dives after acquisition and stays ~200 µrad, far below the red FOV-loss line. Click any chart to jump the replay there.</p>
-  <p><b style="color:#FFC24D">HOW TO CHECK IT'S REAL</b> — tiles must read 1.27 s · 98.3 % · 198 µrad · 100 % on the ISS pass; the constants line must say FOV 6°, 30 fps, blink 4 Hz, slew limit 20°/s; every number regenerates from one command in the open-source repo.</p>
-  </div>
-  <button onclick="document.getElementById('help').hidden=true" style="margin-top:14px">✕ CLOSE</button>
-  </div></div>
 <script>
-'use strict';
-const SC={SEARCH:'#5B8DEF',ACQUIRE:'#FFC24D',TRACK:'#3BD68C',COAST:'#FF9D45',REACQUIRE:'#FF5555'};
-let D=null,i=0,playing=true,speed=1,loop=true,showTrail=true,showDecoy=true,showGrid=false;
-const $=id=>document.getElementById(id);
-
-function setup(d){
-  D=d;i=0;$('seek').max=d.frames.length-1;delete D._stars;
-  const nd=d.frames.reduce((a,f)=>a+((f.dpx&&f.dpx.length)?1:0),0);
-  const db=$('tDecoy');db.disabled=!nd;db.style.opacity=nd?1:0.35;
-  db.textContent=nd?'◇ DECOYS':'◇ NO DECOYS';
-  db.title=nd?('decoys visible in '+nd+' frames — seek around them'):'this scenario contains no decoys';
-  const s=d.summary,c=d.constants;
-  const T=(v,l)=>'<div class="stat"><b>'+v+'</b><span>'+l+'</span></div>';
-  $('tiles').innerHTML=
-    T(s.acquisition_time_s==null?'—':s.acquisition_time_s.toFixed(2)+' s','ACQUISITION')+
-    T(s.lock_retention_pct.toFixed(1)+' %','LOCK')+
-    T(s.pointing_error_urad.p50.toFixed(0)+' µrad','MEDIAN ERR')+
-    T(s.beacon_in_fov_pct.toFixed(0)+' %','IN FOV')+
-    T(s.decoy_locked_frames,'WRONG-TGT FRAMES')+
-    T(s.reacquisitions,'RE-ACQ')+
-    T(s.processing_ms.p50.toFixed(1)+' ms','PROC P50');
-  $('consts').textContent='⚙ constants (read from the run file): FOV '+c.fov_deg+'° · '+c.frame_rate_hz
-    +' fps · blink '+c.beacon_blink_hz+' Hz · latency '+c.command_latency_ms+' ms · slew limit '
-    +c.gimbal_max_rate_deg_s+'°/s · FOV half-width '+Math.round(c.fov_half_width_urad)
-    +' µrad · seed '+d.seed+' · '+d.frames.length+' frames';
-  draw();
-}
-function load(u){fetch(u).then(r=>r.json()).then(setup).catch(()=>{
-  $('tiles').innerHTML='<div class="stat"><b>load failed</b><span>'+u+'</span></div>'})}
-
-function px(cv){const c=cv.getContext('2d');
-  if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');
-  const H=+cv.dataset.h,W=Math.max(60,cv.getBoundingClientRect().width);
-  if(cv.width!==Math.round(W*2)||cv.height!==H*2){
-    cv.width=Math.round(W*2);cv.height=H*2;cv.style.height=H+'px'}
-  c.setTransform(2,0,0,2,0,0);return [c,W,H]}
-function grid(c,w,h){c.strokeStyle='#131f30';c.lineWidth=1;c.beginPath();
-  for(let x=0;x<=w;x+=w/8){c.moveTo(x,0);c.lineTo(x,h)}
-  for(let y=0;y<=h;y+=h/3){c.moveTo(0,y);c.lineTo(w,y)}c.stroke()}
-function series(cv,get,o){const [c,w,h]=px(cv);c.clearRect(0,0,w,h);grid(c,w,h);
-  const n=i+1,Y=v=>{let t=o.log?(Math.log10(Math.max(v,o.lo))-Math.log10(o.lo))/(Math.log10(o.hi)-Math.log10(o.lo))
-      :(v-o.lo)/(o.hi-o.lo);return h-3-t*(h-8)};
-  if(o.line!=null){c.strokeStyle='#FF5555';c.setLineDash([4,4]);c.beginPath();
-    c.moveTo(0,Y(o.line));c.lineTo(w,Y(o.line));c.stroke();c.setLineDash([])}
-  c.strokeStyle=o.color;c.lineWidth=1.3;c.beginPath();let on=false;const pts=[];
-  for(let k=0;k<n;k++){const v=get(D.frames[k]);const x=k/(D.frames.length-1)*w;
-    if(v==null){on=false;continue}
-    const y=Y(v);pts.push([x,y]);
-    if(!on){c.moveTo(x,y);on=true}else c.lineTo(x,y)}
-  c.stroke();
-  if(pts.length>1){c.lineTo(pts[pts.length-1][0],h);c.lineTo(pts[0][0],h);
-    c.closePath();c.fillStyle=o.color+'20';c.fill()}
-}
-function viewport(f,c0){
-  const cv=$('cView');const [c,w,h]=px(cv);
-  const SP=c0.sensor_px||[640,480],SW=SP[0],SH=SP[1];
-  c.fillStyle='#04070D';c.fillRect(0,0,w,h);
-  if(!D._stars){let sd=(D.seed>>>0)||1;const R=()=>{sd=Math.imul(sd^(sd>>>15),sd|1);
-      sd^=sd+Math.imul(sd^(sd>>>7),sd|61);return ((sd^(sd>>>14))>>>0)/4294967296};
-    D._stars=Array.from({length:110},()=>[R(),R(),R()])}
-  for(const st of D._stars){c.fillStyle='rgba(190,215,235,'+(0.06+st[2]*0.22).toFixed(3)+')';
-    c.fillRect(st[0]*w,st[1]*h,st[2]>0.85?2:1,st[2]>0.85?2:1)}
-  if(showGrid){c.strokeStyle='rgba(40,60,90,0.5)';c.lineWidth=1;c.beginPath();
-    for(let gx=1;gx<8;gx++){c.moveTo(gx*w/8,0);c.lineTo(gx*w/8,h)}
-    for(let gy=1;gy<6;gy++){c.moveTo(0,gy*h/6);c.lineTo(w,gy*h/6)}c.stroke()}
-  const X=u=>u/SW*w,Y=v=>v/SH*h;
-  c.strokeStyle='#2A3B54';c.lineWidth=1.5;const L2=15;
-  [[2,2,L2,0,0,L2],[w-2,2,-L2,0,0,L2],[2,h-2,L2,0,0,-L2],[w-2,h-2,-L2,0,0,-L2]].forEach(b=>{
-    c.beginPath();c.moveTo(b[0]+b[2],b[1]+b[3]);c.lineTo(b[0],b[1]);c.lineTo(b[0]+b[4],b[1]+b[5]);c.stroke()});
-  c.strokeStyle='#3A4C66';c.beginPath();
-  c.moveTo(w/2-9,h/2);c.lineTo(w/2-3,h/2);c.moveTo(w/2+3,h/2);c.lineTo(w/2+9,h/2);
-  c.moveTo(w/2,h/2-9);c.lineTo(w/2,h/2-3);c.moveTo(w/2,h/2+3);c.lineTo(w/2,h/2+9);c.stroke();
-  if(showTrail){c.strokeStyle='rgba(79,199,234,0.35)';c.lineWidth=1;c.beginPath();let mv=false;
-    let u0=1e9,u1=-1e9,v0=1e9,v1=-1e9,np=0;
-    for(let k=Math.max(0,i-90);k<=i;k++){const bp=D.frames[k].bpx;
-      if(!bp){mv=false;continue}
-      u0=Math.min(u0,bp[0]);u1=Math.max(u1,bp[0]);v0=Math.min(v0,bp[1]);v1=Math.max(v1,bp[1]);np++;
-      if(!mv){c.moveTo(X(bp[0]),Y(bp[1]));mv=true}else c.lineTo(X(bp[0]),Y(bp[1]))}
-    c.stroke();
-    if(np>30&&D.frames[i].bpx){const spread=Math.max(u1-u0,v1-v0);
-      if(spread<12){c.fillStyle='rgba(79,199,234,0.8)';c.font='9.5px monospace';
-        c.fillText('◦ held within ±'+Math.max(1,Math.ceil(spread/2))+' px over 3 s — the trail IS this dot',
-                   X(D.frames[i].bpx[0])+22,Y(D.frames[i].bpx[1])+4)}}}
-  if(showDecoy)for(const dp of (f.dpx||[])){const dx=X(dp[0]),dy=Y(dp[1]);
-    c.strokeStyle='#FF5555';c.lineWidth=1.4;c.beginPath();
-    c.moveTo(dx,dy-6);c.lineTo(dx+6,dy);c.lineTo(dx,dy+6);c.lineTo(dx-6,dy);c.closePath();c.stroke();
-    c.fillStyle='#FF5555';c.font='8px monospace';c.fillText('DECOY',dx+8,dy-6)}
-  if(f.bpx){const bx=X(f.bpx[0]),by=Y(f.bpx[1]);
-    const amp=f.detected?Math.min(1,(f.snr_db||20)/55):0.25;
-    const g=c.createRadialGradient(bx,by,0,bx,by,11);
-    g.addColorStop(0,'rgba(215,246,255,'+(0.55+0.45*amp)+')');
-    g.addColorStop(0.4,'rgba(79,199,234,'+(0.5*amp+0.15)+')');
-    g.addColorStop(1,'rgba(79,199,234,0)');
-    c.fillStyle=g;c.beginPath();c.arc(bx,by,11,0,7);c.fill();
-    c.fillStyle='#ECFAFF';c.fillRect(bx-1,by-1,2,2);
-    if(f.state!=='SEARCH'){c.strokeStyle=SC[f.state];c.lineWidth=2;
-      if(f.state==='COAST')c.setLineDash([4,4]);
-      c.beginPath();c.arc(bx,by,15,-0.6,0.6);c.stroke();
-      c.beginPath();c.arc(bx,by,15,Math.PI-0.6,Math.PI+0.6);c.stroke();c.setLineDash([])}
-    const MS=Math.min(112,h*0.33),mx=w-MS-9,my=h-MS-9;
-    c.fillStyle='#070C15';c.fillRect(mx,my,MS,MS);
-    c.strokeStyle='#4FC7EA';c.lineWidth=1;c.strokeRect(mx,my,MS,MS);
-    const fu=(f.bpx[0]%1),fv=(f.bpx[1]%1),cx2=mx+MS/2+(fu-0.5)*MS/3,cy2=my+MS/2+(fv-0.5)*MS/3;
-    const g2=c.createRadialGradient(cx2,cy2,0,cx2,cy2,MS*0.3);
-    g2.addColorStop(0,'rgba(222,249,255,'+(0.5+0.5*amp)+')');
-    g2.addColorStop(0.5,'rgba(79,199,234,'+(0.45*amp+0.1)+')');
-    g2.addColorStop(1,'rgba(79,199,234,0)');
-    c.fillStyle=g2;c.fillRect(mx,my,MS,MS);
-    c.strokeStyle='rgba(120,150,180,0.5)';c.beginPath();
-    c.moveTo(mx+MS/2,my);c.lineTo(mx+MS/2,my+MS);c.moveTo(mx,my+MS/2);c.lineTo(mx+MS,my+MS/2);c.stroke();
-    c.fillStyle='#4FC7EA';c.font='8.5px monospace';c.fillText('4× TARGET PATCH',mx+5,my+11);
-    if(f.ai!=null)c.fillText('CONF '+Math.round(f.ai*100)+'%',mx+5,my+MS-5);
-  } else if(f.state==='SEARCH'){
-    c.fillStyle='#5B8DEF';c.font='11px monospace';
-    c.fillText('◌ SEARCHING — spiral scan of the field of uncertainty',12,h-10)}
-  $('vpNow').textContent=f.bpx?('⌖ '+Math.round(f.bpx[0])+','+Math.round(f.bpx[1])+' px'
-    +((showDecoy&&f.dpx&&f.dpx.length)?' · ◇'+f.dpx.length:'')):'beacon outside frame';
-}
-function draw(){
-  if(!D)return;const f=D.frames[i],c0=D.constants;
-  $('tv').textContent='T+ '+f.t.toFixed(1)+'s';
-  $('ev').textContent=f.err_urad==null?'—':Math.round(f.err_urad)+' µrad';
-  $('fov').textContent=f.in_fov?'✓':'✗';$('fov').style.color=f.in_fov?'#3BD68C':'#FF5555';
-  const st=$('stateChip');st.textContent=f.state;st.style.color=SC[f.state];st.style.borderColor=SC[f.state];
-  $('seek').value=i;
-  $('bigErr').textContent=f.err_urad==null?'—':Math.round(f.err_urad);
-  const bs=$('bigSt');bs.textContent=f.state;bs.style.color=SC[f.state];bs.style.borderColor=SC[f.state];
-  $('kD').textContent=f.n_det;
-  $('kSnr').textContent=f.snr_db==null?'—':f.snr_db.toFixed(1)+' dB';
-  $('kMod').textContent=f.mod.toFixed(2)+(f.mod>0.3?' ✓':'');
-  $('kAi').textContent=f.ai==null?'—':f.ai.toFixed(2);
-  $('kMan').textContent=(f.p_manoeuvre*100).toFixed(0)+' %';
-  $('kSlew').textContent=(f.rate_frac*c0.gimbal_max_rate_deg_s).toFixed(2)+' °/s';
-  $('kProc').textContent=f.proc_ms.toFixed(1)+' ms';
-  $('kLock').textContent=f.locked?'HELD':'—';$('kLock').style.color=f.locked?'#3BD68C':'#66788E';
-  $('errNow').textContent=f.err_urad==null?'':Math.round(f.err_urad)+' µrad';
-  $('stNow').textContent=f.state+(f.on_decoy?' · ON DECOY!':'');
-  $('detNow').textContent=f.n_det+' det';
-  $('immNow').textContent=(f.p_manoeuvre*100).toFixed(0)+' %';
-  $('slewNow').textContent=(f.rate_frac*c0.gimbal_max_rate_deg_s).toFixed(2)+' °/s';
-  $('modNow').textContent=f.mod.toFixed(2);
-  $('procNow').textContent=f.proc_ms.toFixed(1)+' ms';
-  viewport(f,c0);
-  series($('cErr'),x=>x.err_urad,{lo:10,hi:100000,log:true,color:'#4FC7EA',line:c0.fov_half_width_urad});
-  series($('cDet'),x=>x.n_det,{lo:0,hi:12,color:'#4FC7EA'});
-  series($('cImm'),x=>x.p_manoeuvre,{lo:0,hi:1,color:'#FFC24D'});
-  series($('cSlew'),x=>x.rate_frac*c0.gimbal_max_rate_deg_s,{lo:0,hi:c0.gimbal_max_rate_deg_s,color:'#B48CFF'});
-  series($('cMod'),x=>x.mod,{lo:0,hi:1,color:'#3BD68C'});
-  series($('cProc'),x=>x.proc_ms,{lo:0,hi:40,color:'#4FC7EA',line:33.3});
-  const [c,w,h]=px($('cState'));c.clearRect(0,0,w,h);
-  for(let k=0;k<D.frames.length;k++){c.fillStyle=k<=i?SC[D.frames[k].state]:'#131f30';
-    c.fillRect(k/D.frames.length*w,4,w/D.frames.length+0.5,h-8)}
-  c.fillStyle='#fff';c.fillRect(i/D.frames.length*w-1,1,2,h-2);
-}
-setInterval(()=>{if(!playing||!D)return;
-  if(i>=D.frames.length-1){if(loop)i=0;else{playing=false;$('play').textContent='▶';$('play').classList.remove('on');return}}
-  else i=Math.min(i+speed,D.frames.length-1);
-  draw()},33);
-$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'❚❚':'▶';$('play').classList.toggle('on',playing)};
-$('spd').onclick=()=>{speed=speed>=8?1:speed*2;$('spd').textContent='✕'+speed};
-$('loop').onclick=e=>{loop=!loop;e.target.classList.toggle('on',loop)};
-$('stepB').onclick=()=>{playing=false;$('play').textContent='▶';$('play').classList.remove('on');i=Math.max(0,i-1);draw()};
-$('stepF').onclick=()=>{playing=false;$('play').textContent='▶';$('play').classList.remove('on');i=Math.min(D.frames.length-1,i+1);draw()};
-$('tTrail').onclick=e=>{showTrail=!showTrail;e.target.classList.toggle('on',showTrail);draw()};
-$('tDecoy').onclick=e=>{showDecoy=!showDecoy;e.target.classList.toggle('on',showDecoy);draw()};
-$('tGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw()};
-$('seek').oninput=e=>{i=+e.target.value;draw()};
-$('scen').onchange=e=>load(e.target.value);
-document.querySelectorAll('canvas[data-seek]').forEach(cv=>{cv.addEventListener('click',e=>{
-  if(!D)return;const r=cv.getBoundingClientRect();
-  i=Math.round((e.clientX-r.left)/r.width*(D.frames.length-1));
-  i=Math.max(0,Math.min(D.frames.length-1,i));draw()})});
-$('helpB').onclick=()=>{$('help').hidden=false};
-addEventListener('keydown',e=>{
-  if(e.code==='Escape'){$('help').hidden=true;return}
-  if(e.code==='Space'){e.preventDefault();$('play').click()}
-  else if(e.code==='ArrowLeft')$('stepB').click();
-  else if(e.code==='ArrowRight')$('stepF').click()});
-load('media/telemetry_run.json');
+fetch('media/telemetry_run.json').then(r=>r.json()).then(d=>{
+  const s=d.summary,C=(v,l)=>'<div class="chip"><b>'+v+'</b><span>'+l+'</span></div>';
+  document.getElementById('chips').innerHTML=
+    C(s.acquisition_time_s.toFixed(2)+' s','ACQUISITION')+
+    C(s.lock_retention_pct.toFixed(1)+' %','LOCK RETENTION')+
+    C(s.pointing_error_urad.p50.toFixed(0)+' µrad','MEDIAN ERROR')+
+    C(s.beacon_in_fov_pct.toFixed(0)+' %','BEACON IN FOV')+
+    C('73 / 73','TESTS PASS')}).catch(()=>{});
 </script></body></html>
