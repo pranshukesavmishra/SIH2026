@@ -14,6 +14,7 @@ import argparse
 import json
 from pathlib import Path
 
+from fsoc_pat import geometry as geo
 from fsoc_pat.config import SimConfig
 from fsoc_pat.runner import run_scenario
 
@@ -21,8 +22,27 @@ from fsoc_pat.runner import run_scenario
 def export(scenario: str, out_path: str, duration: float | None = None) -> dict:
     cfg = SimConfig.load(scenario)
     # Same entry point the GUI and the headless CLI use, so the recording is
-    # the run, not a re-implementation of it.
-    report, tracker = run_scenario(cfg, duration_s=duration)
+    # the run, not a re-implementation of it. The hook additionally records
+    # where the beacon and decoys truly were on the sensor each frame, so a
+    # replay viewer can draw the viewport from ground truth, not invention.
+    focal = geo.focal_px(cfg.camera.fov_deg, cfg.camera.width)
+    W, H = cfg.camera.width, cfg.camera.height
+    positions = []
+
+    def on_frame(frame, tracker):
+        # TargetTruth already carries the APPARENT pixel position (turbulence
+        # included) and visibility — the same truth the scorer uses.
+        b = None
+        d = []
+        for t in frame.targets:
+            if t.is_decoy:
+                if t.in_frame:
+                    d.append([round(t.u), round(t.v)])
+            elif t.in_frame:
+                b = [round(t.u, 1), round(t.v, 1)]
+        positions.append((b, d))
+
+    report, tracker = run_scenario(cfg, duration_s=duration, on_frame=on_frame)
 
     frames = []
     for t in tracker.telemetry:
@@ -45,6 +65,8 @@ def export(scenario: str, out_path: str, duration: float | None = None) -> dict:
             "snr_db": None if t.detection_snr is None
                       else round(float(t.detection_snr), 2),
             "proc_ms": round(float(t.processing_ms), 2),
+            "bpx": positions[t.frame_index][0] if t.frame_index < len(positions) else None,
+            "dpx": positions[t.frame_index][1] if t.frame_index < len(positions) else [],
         })
 
     payload = {
@@ -60,6 +82,7 @@ def export(scenario: str, out_path: str, duration: float | None = None) -> dict:
             "beacon_blink_hz": next((b.blink_hz for b in cfg.beacons
                                      if not b.is_decoy), 0.0),
             "fov_half_width_urad": round(cfg.camera.fov_deg / 2 * 17453.3, 1),
+            "sensor_px": [cfg.camera.width, cfg.camera.height],
         },
         "summary": {
             "acquisition_time_s": report.acquisition_time_s,

@@ -92,6 +92,8 @@ class CoarseAlignmentTracker:
         self.cfg = cfg
         cam = cfg.camera
         self.dt = 1.0 / cam.frame_rate_hz
+        self._prev_reported: Optional[Tuple[float, float]] = None
+        self._prev_time_s: Optional[float] = None
         self.focal_px = geo.focal_px(cam.fov_deg, cam.width)
         self.width, self.height = cam.width, cam.height
 
@@ -385,6 +387,16 @@ class CoarseAlignmentTracker:
         if self.state is LockState.TRACK and self.acquisition_frame is None:
             self.acquisition_frame = frame.index
 
+        rate_frac = 0.0
+        if self._prev_reported is not None and frame.time_s > self._prev_time_s:
+            slew = geo.angular_separation(*self._prev_reported,
+                                          *frame.pointing_reported)
+            rate = slew / (frame.time_s - self._prev_time_s)
+            rate_frac = float(min(1.0, rate / np.radians(
+                self.cfg.gimbal.max_rate_deg_s)))
+        self._prev_reported = frame.pointing_reported
+        self._prev_time_s = frame.time_s
+
         self.telemetry.append(TrackerTelemetry(
             frame_index=frame.index, time_s=frame.time_s, state=self.state,
             n_detections=len(detections), locked=locked,
@@ -395,7 +407,7 @@ class CoarseAlignmentTracker:
             truth_error_rad=truth_error, on_decoy=on_decoy,
             pointing_error_rad=pointing_error,
             beacon_in_fov=bool(truth.in_frame) if truth is not None else False,
-            gimbal_rate_frac=0.0,
+            gimbal_rate_frac=rate_frac,
             modulation_score=primary.modulation_score if primary else 0.0,
             ai_score=primary.ai_score if primary else None,
             mode_probabilities=tuple(primary.imm.mu) if primary else (0.5, 0.5),
