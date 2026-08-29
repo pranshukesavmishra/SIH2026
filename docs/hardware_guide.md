@@ -1,5 +1,9 @@
 # FSOC-PAT hardware-in-the-loop rig — buying & building guide
 
+> **STATUS: NOT PART OF THE PLAN.** The team is software-only by decision
+> and the problem statement asks for validation without optical hardware.
+> This file is kept for reference only — see docs/BUILD_GUIDE.md §9.
+
 SIH 2026 · PS SIH26169 (ISRO) · companion to the software in this repository.
 
 The rig proves one sentence to the judges: **the identical code that drives the
