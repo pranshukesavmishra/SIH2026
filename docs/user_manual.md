@@ -16,7 +16,7 @@ Requires Python 3.10+.
 python -m venv .venv
 .venv\Scripts\activate            # Windows;  source .venv/bin/activate on Linux
 pip install -e ".[gui,dev]"
-pytest                            # 69 tests, ~2 minutes
+pytest                            # 73 tests, ~2 minutes
 python -m fsoc_pat.gui.app        # launch the GUI
 ```
 
@@ -120,16 +120,7 @@ Reacquisitions          count and mean recovery time; flags never-recovered
 State occupancy / detections per frame / processing percentiles
 ```
 
-## 5. Hardware rig (optional)
-
-See `hardware/WIRING.md` for the ₹6–7k parts list, wiring diagrams, ESP32
-firmware flashing, then:
-```
-python -m fsoc_pat.hil.calibrate --port COM5 --camera 0    # measures the rig
-python -m fsoc_pat.hil.live --port COM5 --camera 0         # tracks for real
-```
-
-## 6. Troubleshooting
+## 5. Troubleshooting
 
 | Symptom | Cause and fix |
 |---|---|

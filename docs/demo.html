@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZeroDrift — FSOC Coarse Alignment (Recorded Replay)</title>
+<style>
+:root{--bg:#070B12;--panel:#0C1220;--edge:#1D2A3E;--ink:#D9E4EE;--mut:#6E8098;
+--cyan:#53C8E8;--green:#3FD68F;--amber:#FFC24D;--orange:#FF9D45;--red:#FF5C5C;--blue:#5B8DEF}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:13px/1.5 "SF Mono",Consolas,Menlo,monospace}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 18px;
+ border-bottom:1px solid var(--edge);background:linear-gradient(180deg,#0B1526,#070B12)}
+.logo b{color:var(--cyan)} .logo span{color:var(--mut);font-size:11px;display:block}
+.chip{border:1px solid var(--edge);border-radius:5px;padding:5px 12px;background:var(--panel);white-space:nowrap}
+.chip b{color:#fff} .spacer{flex:1}
+#stateChip{font-weight:700;border-width:2px}
+.banner{padding:6px 18px;background:#122036;color:var(--amber);font-size:11.5px;border-bottom:1px solid var(--edge)}
+.banner a{color:var(--cyan)}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:12px;padding:14px 18px;max-width:1500px;margin:0 auto}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:8px;padding:10px 12px}
+.card h3{font-size:11px;color:var(--mut);letter-spacing:1.5px;display:flex;justify-content:space-between;margin-bottom:6px}
+.card h3 em{color:var(--cyan);font-style:normal}
+canvas{width:100%;display:block}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:0 18px 6px;max-width:1500px;margin:0 auto}
+.tile{background:var(--panel);border:1px solid var(--edge);border-radius:8px;padding:10px;text-align:center}
+.tile b{font-size:19px;color:#fff;display:block}
+.tile span{font-size:10px;color:var(--mut);letter-spacing:1px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 18px;max-width:1500px;margin:0 auto}
+button,select{background:#132038;color:var(--ink);border:1px solid var(--edge);border-radius:5px;
+ padding:7px 14px;font:inherit;cursor:pointer}
+button:hover{border-color:var(--cyan)} button.on{border-color:var(--green);color:var(--green)}
+input[type=range]{flex:1;min-width:160px;accent-color:#53C8E8}
+.const{padding:4px 18px 20px;max-width:1500px;margin:0 auto;color:var(--mut);font-size:11px}
+.err-big{font-size:26px;font-weight:700}
+.scope{display:flex;gap:12px}
+.foot{padding:14px 18px;color:var(--mut);font-size:11px;border-top:1px solid var(--edge);text-align:center}
+.foot a{color:var(--cyan)}
+</style></head><body>
+<div class="top">
+  <div class="logo"><b>ZERO</b>DRIFT<span>FSOC-PAT COARSE ALIGNMENT · ISRO SIH26169</span></div>
+  <div class="spacer"></div>
+  <div class="chip">TIME <b id="tv">—</b></div>
+  <div class="chip">ERROR <b id="ev" class="err-big" style="font-size:13px">—</b></div>
+  <div class="chip">IN FOV <b id="fov">—</b></div>
+  <div class="chip" id="stateChip">—</div>
+</div>
+<div class="banner">RECORDED REPLAY — every value on this page is read frame-by-frame from a logged run of the real
+ Python engine (same seed, same code as the desktop app). Nothing is simulated in the browser.
+ Live interactive version: run the desktop app — see the <a href="https://github.com/pranshukesavmishra/SIH-2026">repository</a>.</div>
+
+<div class="bar">
+  <select id="scen">
+    <option value="media/telemetry_run.json">ISS pass over Bengaluru (45 s, SGP4)</option>
+    <option value="media/telemetry_turbulence.json">Hard turbulence — 400 µrad tilt, heavy scintillation (30 s)</option>
+    <option value="media/telemetry_decoys.json">Decoy field — 3 moving decoys + clutter + glints (30 s)</option>
+  </select>
+  <button id="play" class="on">❚❚ PAUSE</button>
+  <button id="spd">SPEED 1×</button>
+  <input type="range" id="seek" min="0" max="100" value="0">
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="grid">
+  <div class="card"><h3>POINTING ERROR — MOUNT vs BEACON (log µrad) <em id="errNow"></em></h3><canvas id="cErr" height="150"></canvas></div>
+  <div class="card"><h3>LOCK STATE TIMELINE <em id="stNow"></em></h3><canvas id="cState" height="46"></canvas>
+      <h3 style="margin-top:10px">DETECTIONS / FRAME · SNR (dB) <em id="detNow"></em></h3><canvas id="cDet" height="86"></canvas></div>
+  <div class="card"><h3>IMM MANOEUVRE PROBABILITY <em id="immNow"></em></h3><canvas id="cImm" height="90"></canvas></div>
+  <div class="card"><h3>GIMBAL SLEW — FRACTION OF RATE LIMIT <em id="slewNow"></em></h3><canvas id="cSlew" height="90"></canvas></div>
+  <div class="card"><h3>BEACON ID — BLINK MODULATION · AI VERIFIER SCORE <em id="modNow"></em></h3><canvas id="cMod" height="90"></canvas></div>
+  <div class="card"><h3>PROCESSING TIME vs 33 ms FRAME BUDGET <em id="procNow"></em></h3><canvas id="cProc" height="90"></canvas></div>
+</div>
+<div class="const" id="consts"></div>
+<div class="foot">ZeroDrift · Jabalpur Engineering College · open source —
+ <a href="https://github.com/pranshukesavmishra/SIH-2026">github.com/pranshukesavmishra/SIH-2026</a></div>
+
+<script>
+'use strict';
+const SC={SEARCH:'#5B8DEF',ACQUIRE:'#FFC24D',TRACK:'#3FD68F',COAST:'#FF9D45',REACQUIRE:'#FF5C5C'};
+let D=null,i=0,playing=true,speed=1,timer=null;
+const $=id=>document.getElementById(id);
+const fmt=(v,d=0)=>v==null?'—':v.toFixed(d);
+
+function tile(v,l){return '<div class="tile"><b>'+v+'</b><span>'+l+'</span></div>'}
+function setup(d){
+  D=d;i=0;$('seek').max=d.frames.length-1;
+  const s=d.summary,c=d.constants;
+  $('tiles').innerHTML=
+    tile(s.acquisition_time_s==null?'—':s.acquisition_time_s.toFixed(2)+' s','ACQUISITION')+
+    tile(s.lock_retention_pct.toFixed(1)+' %','LOCK RETENTION')+
+    tile(s.pointing_error_urad.p50.toFixed(0)+' µrad','MEDIAN ERROR (P50)')+
+    tile(s.beacon_in_fov_pct.toFixed(0)+' %','BEACON IN FOV')+
+    tile(s.decoy_locked_frames+' frames','ON WRONG TARGET')+
+    tile(s.reacquisitions,'RE-ACQUISITIONS')+
+    tile(s.processing_ms.p50.toFixed(1)+' ms','PROC P50');
+  $('consts').textContent='Scenario constants (from the run file, not typed into this page): FOV '
+    +c.fov_deg+'° · camera '+c.frame_rate_hz+' fps · beacon blink '+c.beacon_blink_hz
+    +' Hz · command latency '+c.command_latency_ms+' ms · gimbal limit '+c.gimbal_max_rate_deg_s
+    +'°/s · FOV half-width '+Math.round(c.fov_half_width_urad)+' µrad · seed '+d.seed+' · '+d.frames.length+' frames';
+  draw();
+}
+function load(url){fetch(url).then(r=>r.json()).then(setup)
+  .catch(()=>{$('tiles').innerHTML='<div class="tile"><b>load failed</b><span>'+url+'</span></div>'})}
+
+function px(cv){const c=cv.getContext('2d');
+  if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');
+  const H=+cv.dataset.h,W=Math.max(60,cv.getBoundingClientRect().width);
+  if(cv.width!==Math.round(W*2)||cv.height!==H*2){
+    cv.width=Math.round(W*2);cv.height=H*2;cv.style.height=H+'px'}
+  c.setTransform(2,0,0,2,0,0);return [c,W,H]}
+function grid(c,w,h){c.strokeStyle='#152134';c.lineWidth=1;c.beginPath();
+  for(let x=0;x<=w;x+=w/8){c.moveTo(x,0);c.lineTo(x,h)}
+  for(let y=0;y<=h;y+=h/4){c.moveTo(0,y);c.lineTo(w,y)}c.stroke()}
+function series(cv,get,opts){const [c,w,h]=px(cv);c.clearRect(0,0,w,h);grid(c,w,h);
+  const n=i+1,{lo,hi,log,color,fill,line}=opts;
+  const Y=v=>{let t=log?(Math.log10(Math.max(v,lo))-Math.log10(lo))/(Math.log10(hi)-Math.log10(lo))
+                     :(v-lo)/(hi-lo);return h-4-t*(h-10)};
+  if(line!=null){c.strokeStyle='#FF5C5C';c.setLineDash([5,4]);c.beginPath();
+    c.moveTo(0,Y(line));c.lineTo(w,Y(line));c.stroke();c.setLineDash([])}
+  c.strokeStyle=color;c.lineWidth=1.4;c.beginPath();let started=false;
+  const pts=[];
+  for(let k=0;k<n;k++){const v=get(D.frames[k]);const x=k/(D.frames.length-1)*w;
+    if(v==null){started=false;continue}
+    const y=Y(v);pts.push([x,y]);
+    if(!started){c.moveTo(x,y);started=true}else c.lineTo(x,y)}
+  c.stroke();
+  if(fill&&pts.length>1){c.lineTo(pts[pts.length-1][0],h);c.lineTo(pts[0][0],h);
+    c.closePath();c.fillStyle=color+'22';c.fill()}
+}
+function draw(){
+  if(!D)return;const f=D.frames[i],c0=D.constants;
+  $('tv').textContent='T+ '+f.t.toFixed(1)+'s';
+  $('ev').textContent=f.err_urad==null?'—':Math.round(f.err_urad)+' µrad';
+  $('fov').textContent=f.in_fov?'YES':'NO';$('fov').style.color=f.in_fov?'#3FD68F':'#FF5C5C';
+  const st=$('stateChip');st.textContent=f.state;st.style.color=SC[f.state];st.style.borderColor=SC[f.state];
+  $('seek').value=i;
+  $('errNow').textContent=f.err_urad==null?'':Math.round(f.err_urad)+' µrad';
+  $('stNow').textContent=f.state+(f.on_decoy?' · ON DECOY!':'');
+  $('detNow').textContent=f.n_det+' det'+(f.snr_db!=null?' · '+f.snr_db.toFixed(1)+' dB':'');
+  $('immNow').textContent=(f.p_manoeuvre*100).toFixed(0)+' % manoeuvre';
+  $('slewNow').textContent=(f.rate_frac*c0.gimbal_max_rate_deg_s).toFixed(2)+' °/s of '+c0.gimbal_max_rate_deg_s;
+  $('modNow').textContent='mod '+f.mod.toFixed(2)+(f.ai!=null?' · AI '+f.ai.toFixed(2):'');
+  $('procNow').textContent=f.proc_ms.toFixed(1)+' ms';
+  series($('cErr'),x=>x.err_urad,{lo:10,hi:100000,log:true,color:'#53C8E8',fill:true,line:c0.fov_half_width_urad});
+  series($('cDet'),x=>x.n_det,{lo:0,hi:12,color:'#53C8E8',fill:true});
+  series($('cImm'),x=>x.p_manoeuvre,{lo:0,hi:1,color:'#FFC24D',fill:true});
+  series($('cSlew'),x=>x.rate_frac*c0.gimbal_max_rate_deg_s,{lo:0,hi:c0.gimbal_max_rate_deg_s,color:'#B48CFF',fill:true});
+  series($('cMod'),x=>x.mod,{lo:0,hi:1,color:'#3FD68F',fill:true});
+  series($('cProc'),x=>x.proc_ms,{lo:0,hi:40,color:'#53C8E8',fill:true,line:33.3});
+  // state timeline
+  const [c,w,h]=px($('cState'));c.clearRect(0,0,w,h);
+  for(let k=0;k<D.frames.length;k++){c.fillStyle=k<=i?SC[D.frames[k].state]:'#152134';
+    c.fillRect(k/D.frames.length*w,8,w/D.frames.length+0.5,h-16)}
+  c.fillStyle='#fff';c.fillRect(i/D.frames.length*w-1,4,2,h-8);
+}
+function tick(){if(!playing||!D)return;i=Math.min(i+speed,D.frames.length-1);draw();
+  if(i>=D.frames.length-1){i=0}}
+timer=setInterval(tick,33);
+$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'❚❚ PAUSE':'▶ PLAY';
+  $('play').classList.toggle('on',playing)};
+$('spd').onclick=()=>{speed=speed===1?2:speed===2?4:1;$('spd').textContent='SPEED '+speed+'×'};
+$('seek').oninput=e=>{i=+e.target.value;draw()};
+$('scen').onchange=e=>load(e.target.value);
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();$('play').click()}});
+load('media/telemetry_run.json');
+</script></body></html>
