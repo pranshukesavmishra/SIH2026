@@ -2,17 +2,8 @@
 # GitHub Pages, so the team's link always shows the latest build.
 name: deploy-site
 on:
-  push:
-    branches: [main, claude/sih-problem-selection-w3p3o4]
-    paths: ["docs/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
