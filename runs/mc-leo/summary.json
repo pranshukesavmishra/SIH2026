@@ -1,0 +1,24 @@
+{
+  "scenario": "scenarios/leo_pass_nominal.yaml",
+  "n_runs": 64,
+  "duration_s": 30.0,
+  "master_seed": 42,
+  "wall_time_s": 2229.001149892807,
+  "acquisition_probability": 1.0,
+  "acquisition_time_s": {
+    "p50": 1.2666666666666666,
+    "p95": 2.6566666666666623,
+    "max": 4.0
+  },
+  "lock_retention_pct": {
+    "p5": 94.57222222222222,
+    "p50": 97.55555555555556,
+    "min": 91.55555555555556
+  },
+  "pointing_error_p95_urad": {
+    "p50": 762.1946834092378,
+    "p95": 1108.612918745847,
+    "max": 3840.7763370226858
+  },
+  "runs_with_any_decoy_lock": 0
+}

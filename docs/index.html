@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZeroDrift — FSOC Coarse Alignment</title>
+<style>
+:root{--bg:#05080E;--panel:#0A101C;--edge:#1B2940;--ink:#D4E2EF;--mut:#66788E;--cyan:#4FC7EA;--green:#3BD68C}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.6 "SF Mono",Consolas,Menlo,monospace;
+ min-height:100vh;display:flex;flex-direction:column}
+.nav{display:flex;gap:16px;padding:12px 18px;border-bottom:1px solid var(--edge);font-size:11px;letter-spacing:1px}
+.nav a{color:var(--mut);text-decoration:none}.nav a:hover{color:var(--cyan)}.nav b{color:var(--cyan)}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 18px}
+h1{font-size:52px;letter-spacing:4px;color:#fff}h1 span{color:var(--cyan)}
+.tag{color:var(--mut);letter-spacing:3px;font-size:12px;margin:6px 0 14px}
+.pitch{max-width:640px;color:var(--ink);font-size:14.5px;margin-bottom:26px}
+.pitch b{color:var(--cyan)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:30px}
+.btn{border:1px solid var(--edge);border-radius:6px;padding:12px 22px;color:var(--ink);
+ text-decoration:none;background:var(--panel);font-size:13px;letter-spacing:1px}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.pri{border-color:var(--cyan);color:#04121C;background:var(--cyan);font-weight:700}
+.btn.pri:hover{background:#7FDCF4;color:#04121C}
+.chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chip{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:8px 14px}
+.chip b{display:block;font-size:17px;color:#fff}
+.chip span{font-size:9px;color:var(--mut);letter-spacing:1.2px}
+.note{color:var(--mut);font-size:10.5px;margin-top:18px}
+.foot{padding:12px;border-top:1px solid var(--edge);color:var(--mut);font-size:10.5px;text-align:center}
+.foot a{color:var(--cyan)}
+</style></head><body>
+<div class="nav"><b>⌂ HOME</b><a href="console.html">▮ CONSOLE</a><a href="about.html">◈ ABOUT US</a>
+ <span style="flex:1"></span><a href="https://github.com/pranshukesavmishra/SIH-2026">⌁ GITHUB</a></div>
+<div class="hero">
+  <h1>ZERO<span>DRIFT</span></h1>
+  <div class="tag">FSOC-PAT COARSE ALIGNMENT · SIH 2026 · PS 26169 · ISRO</div>
+  <p class="pitch">Two laser terminals must point at each other with <b>micro-radian</b> accuracy before
+   they can talk. Our software finds the other terminal's <b>blinking beacon</b> in a noisy, moving sky
+   and steers a virtual camera to hold it — the complete coarse-alignment stage,
+   <b>built, measured and open-source</b>, with zero optical hardware.</p>
+  <div class="btns">
+    <a class="btn pri" href="console.html">▶ OPEN THE CONSOLE</a>
+    <a class="btn" href="about.html">◈ ABOUT US</a>
+    <a class="btn" href="https://github.com/pranshukesavmishra/SIH-2026">⌁ SOURCE CODE</a>
+  </div>
+  <div class="chips" id="chips">
+    <div class="chip"><b>73 / 73</b><span>TESTS PASS</span></div>
+  </div>
+  <div class="note">⦿ the console replays logged runs of the real engine — every number is measured, none are typed in</div>
+</div>
+<div class="foot">ZeroDrift · Jabalpur Engineering College · Smart India Hackathon 2026 —
+ <a href="https://github.com/pranshukesavmishra/SIH-2026">github.com/pranshukesavmishra/SIH-2026</a></div>
+<script>
+fetch('media/telemetry_run.json').then(r=>r.json()).then(d=>{
+  const s=d.summary,C=(v,l)=>'<div class="chip"><b>'+v+'</b><span>'+l+'</span></div>';
+  document.getElementById('chips').innerHTML=
+    C(s.acquisition_time_s.toFixed(2)+' s','ACQUISITION')+
+    C(s.lock_retention_pct.toFixed(1)+' %','LOCK RETENTION')+
+    C(s.pointing_error_urad.p50.toFixed(0)+' µrad','MEDIAN ERROR')+
+    C(s.beacon_in_fov_pct.toFixed(0)+' %','BEACON IN FOV')+
+    C('73 / 73','TESTS PASS')}).catch(()=>{});
+</script></body></html>

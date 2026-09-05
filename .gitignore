@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.spec
+runs/
+dist/
+.venv-build/
+*.egg-info/
+
+# Personal contact details - never commit to a public repo
+team_private/

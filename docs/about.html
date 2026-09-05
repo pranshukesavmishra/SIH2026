@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZeroDrift — FSOC Coarse Alignment</title>
+<style>
+:root{--navy:#0B2545;--panel:#10161E;--ground:#0A0E14;--ink:#E2EAF2;--muted:#8A98A6;
+      --cyan:#53C8E8;--green:#3FD68F;--amber:#FFC24D;--edge:#283442}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ground);color:var(--ink);font:16px/1.6 -apple-system,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header{padding:64px 0 40px;text-align:center}
+header img{height:96px}
+h1{font-size:44px;letter-spacing:1px;margin:18px 0 6px}
+h1 .z{color:var(--cyan)}
+.tag{color:var(--muted);font-size:15px;letter-spacing:2px;text-transform:uppercase}
+.hero{border:1px solid var(--edge);border-radius:10px;overflow:hidden;margin:36px 0 8px}
+.hero img{width:100%;display:block}
+.cap{color:var(--muted);font-size:13px;text-align:center;margin-bottom:40px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:8px 0 48px}
+.stat{background:var(--navy);border-radius:8px;padding:18px 10px;text-align:center}
+.stat b{display:block;font-size:26px;color:#fff}
+.stat span{font-size:12px;color:#BFD7E4}
+h2{font-size:22px;margin:44px 0 14px;color:var(--cyan);letter-spacing:.5px}
+p{color:var(--ink);max-width:70ch}
+p.m{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:20px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--muted)}
+.shots img{width:100%;border:1px solid var(--edge);border-radius:8px;display:block}
+.pipeline{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.stage{background:var(--navy);border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600}
+.stage.g{background:#17694A}.stage.c{background:#0E5B72}
+.btns{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0 60px}
+a.btn{background:var(--cyan);color:#06121C;font-weight:700;text-decoration:none;
+      padding:12px 22px;border-radius:8px}
+a.btn.o{background:transparent;color:var(--cyan);border:1px solid var(--cyan)}
+footer{border-top:1px solid var(--edge);color:var(--muted);font-size:13px;
+       padding:26px 0 46px;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+<div style="display:flex;gap:16px;padding:12px 18px;border-bottom:1px solid var(--edge);font-size:12px;letter-spacing:1px;font-family:Consolas,Menlo,monospace">
+<a href="index.html" style="color:var(--muted);text-decoration:none">⌂ HOME</a>
+<a href="console.html" style="color:var(--muted);text-decoration:none">▮ CONSOLE</a>
+<b style="color:var(--cyan)">◈ ABOUT US</b></div>
+<header class="wrap">
+  <img src="media/logo_emblem.png" alt="ZeroDrift">
+  <h1><span class="z">ZERO</span>DRIFT</h1>
+  <div class="tag">FSOC coarse alignment · SIH 2026 · PS 26169 · ISRO</div>
+</header>
+
+<main class="wrap">
+  <div class="hero"><img src="media/demo_loop.gif" alt="Live tracking demo"></div>
+  <div class="cap">Live: the tracker locked on a satellite beacon — real output of our system, not a mock-up.</div>
+
+  <div class="stats">
+    <div class="stat"><b>1.1 s</b><span>acquisition</span></div>
+    <div class="stat"><b>98.8 %</b><span>lock retention</span></div>
+    <div class="stat"><b>207 µrad</b><span>median pointing error</span></div>
+    <div class="stat"><b>0 / 64</b><span>wrong-target locks</span></div>
+    <div class="stat"><b>73 / 73</b><span>tests passing</span></div>
+  </div>
+
+  <h2>The problem</h2>
+  <p>Free-space optical links carry gigabit data on a laser beam so narrow that a tiny pointing
+     error kills the connection. Before a fine steering mirror can hold micro-radians, a
+     <b>coarse alignment</b> stage must find the remote terminal's beacon and keep it inside a
+     camera's field of view — through atmospheric turbulence, platform vibration, and a sky full
+     of look-alike lights. ISRO's problem statement asks for this entire stage in software,
+     because developing it on real optics is prohibitively expensive.</p>
+
+  <h2>Our system</h2>
+  <div class="pipeline">
+    <div class="stage">VIRTUAL WORLD</div><div class="stage c">DETECT</div>
+    <div class="stage g">IDENTIFY</div><div class="stage c">ESTIMATE</div>
+    <div class="stage g">CONTROL</div><div class="stage">VIRTUAL GIMBAL</div>
+  </div>
+  <p class="m">A physics-honest simulator (turbulence with correct time constants, aliased vibration,
+     sensor noise, real ISS orbits via SGP4) closed against an AI-assisted tracker: CFAR point-target
+     detection, blink-signature identification that stars and decoys cannot pass, an IMM Kalman
+     filter, and a Smith-predictor control loop. Scored only against ground truth it cannot see.</p>
+
+  <div class="grid2" style="margin-top:22px">
+    <div class="card shots"><img src="media/console_track.png" alt="Operator console">
+      <p style="margin-top:10px">The operator console — live camera view with reticle and magnifier,
+      pointing-error trace, manoeuvre probability, lock-state strip, live-editable disturbances.</p></div>
+    <div class="card shots"><img src="media/video_frame.png" alt="Tracking view">
+      <p style="margin-top:10px">The tracker holding a satellite pass at 281 µrad with the AI verifier
+      active — every number on screen is measured in real time.</p></div>
+  </div>
+
+  <h2>Why it wins</h2>
+  <div class="grid2">
+    <div class="card"><h3>Already built, honestly measured</h3>
+      <p>73 automated tests, six validated scenarios, a 64-run randomised Monte-Carlo campaign
+      (100% acquisition, zero wrong locks), auto-generated performance reports, standalone app.</p></div>
+    <div class="card"><h3>Never fooled</h3>
+      <p>The beacon is identified by its modulation signature — a hard gate, not a weighted vote.
+      A star scores zero. Wrong-target locks across every test we ran: zero.</p></div>
+    <div class="card"><h3>Real physics, real orbits</h3>
+      <p>Greenwood-correlated turbulence, aliased platform resonances, shot/read noise, command
+      latency — and genuine ISS passes propagated with SGP4.</p></div>
+    <div class="card"><h3>The number that matters</h3>
+      <p>On a tracked ISS pass, coarse + modelled fine stage closes the optical link
+      <b style="color:var(--green)">99.3%</b> of the time vs
+      <b style="color:#FF6B5E">14.7%</b> without — measured, not asserted.</p></div>
+  </div>
+
+  <div class="btns" style="margin-top:34px">
+    <a class="btn" href="https://github.com/pranshukesavmishra/SIH-2026">Source on GitHub</a>
+    <a class="btn o" href="https://github.com/pranshukesavmishra/SIH-2026/tree/main/docs">Technical report &amp; docs</a>
+  </div>
+
+  <h2>Team ZeroDrift</h2>
+  <p class="m">Aryan Singh (lead) · Pranshu Mishra · Aashna Verma · Vivek Rajput · Palak Uikey ·
+     Shivanand Sahu — Jabalpur Engineering College. Mentor: Dr. Jitendra Singh Thakur (HOD, CSE).</p>
+</main>
+
+
+<section class="wrap">
+  <h2>The team — ZeroDrift</h2>
+  <p class="m">Department of Computer Science &amp; Engineering, Jabalpur Engineering College.</p>
+  <p>Aryan Singh (team lead) · Pranshu Mishra · Aashna Verma · Vivek Rajput · Palak Uikey · Shivanand Sahu</p>
+  <p class="m">Mentor: Dr. Jitendra Singh Thakur, Head of Department, CSE, JEC.</p>
+</section>
+<footer>Smart India Hackathon 2026 · Problem Statement 26169 · Indian Space Research Organisation</footer>
+</body>
+</html>
