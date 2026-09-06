@@ -1,0 +1,2 @@
+# Upstream snapshots are fetched, not vendored -- see README.md
+data/

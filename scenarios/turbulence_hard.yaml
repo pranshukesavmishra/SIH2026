@@ -1,0 +1,82 @@
+name: turbulence_hard
+description: 'Strong seeing: 400 urad tip/tilt at 60 Hz with heavy scintillation.
+  Tests whether the filter rejects jitter instead of chasing it.'
+seed: 20261169
+duration_s: 120.0
+initial_pointing_deg:
+- 12.165
+- 19.169
+acquisition_fou_deg: 2.0
+camera:
+  width: 640
+  height: 480
+  fov_deg: 6.0
+  frame_rate_hz: 30.0
+  exposure_ms: 10.0
+  bit_depth: 12
+  full_well_e: 20000.0
+  read_noise_e: 6.0
+  dark_current_e_per_s: 50.0
+  psf_sigma_px: 1.3
+  hot_pixel_fraction: 0.0002
+gimbal:
+  max_rate_deg_s: 20.0
+  max_accel_deg_s2: 60.0
+  command_latency_ms: 40.0
+  encoder_noise_urad: 25.0
+  az_limits_deg: null
+  el_limits_deg:
+  - -5.0
+  - 89.0
+scene:
+  panorama_width: 1024
+  sky_brightness_e_s: 200000.0
+  cloud_amount: 0.35
+  cloud_contrast: 0.6
+  horizon_el_deg: 0.0
+  terrain_brightness_e_s: 60000.0
+  star_count: 900
+  star_max_e_s: 8000000.0
+  clutter_count: 40
+  clutter_max_e_s: 20000000.0
+  sun_az_deg: 120.0
+  sun_el_deg: 35.0
+  glint_probability: 0.004
+  glint_amplitude_e_s: 40000000.0
+beacons:
+- name: beacon
+  trajectory:
+    kind: leo_pass
+    params:
+      t_rise_s: -30.0
+      t_set_s: 210.0
+      peak_el_deg: 55.0
+      peak_az_deg: 90.0
+      altitude_km: 550.0
+  amplitude_e_s: 4000000.0
+  ref_range_km: 800.0
+  blink_hz: 4.0
+  blink_duty: 0.5
+  is_decoy: false
+turbulence:
+  enabled: true
+  tilt_rms_urad: 400.0
+  greenwood_hz: 60.0
+  scintillation_index: 0.8
+  seeing_blur_px: 1.6
+vibration:
+  enabled: true
+  modes:
+  - - 18.0
+    - 90.0
+    - 0.06
+  - - 47.0
+    - 40.0
+    - 0.08
+  - - 120.0
+    - 15.0
+    - 0.1
+  broadband_rms_urad: 20.0
+noise:
+  enabled: true
+  frame_drop_probability: 0.01
