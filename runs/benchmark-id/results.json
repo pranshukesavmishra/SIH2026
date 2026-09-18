@@ -1,0 +1,249 @@
+{
+  "runs_per_cell": 6,
+  "seed": 7000,
+  "network_window_frames": 8,
+  "note": "network always scores its native window (last K frames); goertzel gets the full window at the true frequency",
+  "cells": [
+    {
+      "window_frames": 8,
+      "blink_hz": 2.0,
+      "amplitude": "dim",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.6952,
+      "auc_goertzel": 0.8619,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 2.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.8857,
+      "auc_goertzel": 0.9524,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 4.0,
+      "amplitude": "dim",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.9333,
+      "auc_goertzel": 0.881,
+      "winner": "network"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 4.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.9714,
+      "auc_goertzel": 0.9143,
+      "winner": "network"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 6.0,
+      "amplitude": "dim",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.8952,
+      "auc_goertzel": 0.8286,
+      "winner": "network"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 6.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.9491,
+      "auc_goertzel": 0.9676,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 10.0,
+      "amplitude": "dim",
+      "samples": 39,
+      "positives": 6,
+      "auc_network": 0.8333,
+      "auc_goertzel": 0.8384,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 8,
+      "blink_hz": 10.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.625,
+      "auc_goertzel": 0.8981,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 2.0,
+      "amplitude": "dim",
+      "samples": 39,
+      "positives": 6,
+      "auc_network": 0.8485,
+      "auc_goertzel": 0.9848,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 2.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.8981,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 4.0,
+      "amplitude": "dim",
+      "samples": 40,
+      "positives": 6,
+      "auc_network": 0.8873,
+      "auc_goertzel": 0.8922,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 4.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.9429,
+      "auc_goertzel": 0.9905,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 6.0,
+      "amplitude": "dim",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.8333,
+      "auc_goertzel": 0.9861,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 6.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 1.0,
+      "auc_goertzel": 0.9381,
+      "winner": "network"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 10.0,
+      "amplitude": "dim",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.9259,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 16,
+      "blink_hz": 10.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.8472,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 2.0,
+      "amplitude": "dim",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.9398,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 2.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 1.0,
+      "auc_goertzel": 1.0,
+      "winner": "tie"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 4.0,
+      "amplitude": "dim",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.8519,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 4.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.9714,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 6.0,
+      "amplitude": "dim",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.9722,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 6.0,
+      "amplitude": "nominal",
+      "samples": 41,
+      "positives": 6,
+      "auc_network": 0.9286,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 10.0,
+      "amplitude": "dim",
+      "samples": 40,
+      "positives": 6,
+      "auc_network": 0.8235,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    },
+    {
+      "window_frames": 32,
+      "blink_hz": 10.0,
+      "amplitude": "nominal",
+      "samples": 42,
+      "positives": 6,
+      "auc_network": 0.412,
+      "auc_goertzel": 1.0,
+      "winner": "goertzel"
+    }
+  ],
+  "wall_time_s": 64.3
+}

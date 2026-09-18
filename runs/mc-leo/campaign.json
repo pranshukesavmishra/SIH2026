@@ -1,0 +1,3548 @@
+{
+ "summary": {
+  "scenario": "scenarios/leo_pass_nominal.yaml",
+  "n_runs": 64,
+  "duration_s": 30.0,
+  "master_seed": 42,
+  "wall_time_s": 1832.7639894485474,
+  "acquisition_probability": 1.0,
+  "acquisition_time_s": {
+   "p50": 1.2666666666666666,
+   "p95": 2.7666666666666666,
+   "max": 4.0
+  },
+  "lock_retention_pct": {
+   "p5": 94.46111111111111,
+   "p50": 97.5,
+   "min": 91.55555555555556
+  },
+  "pointing_error_p95_urad": {
+   "p50": 767.7322364019893,
+   "p95": 1145.8664854993162,
+   "max": 3840.7763370226858
+  },
+  "runs_with_any_decoy_lock": 0
+ },
+ "runs": [
+  {
+   "run": 0,
+   "draws": {
+    "seed": 191664963,
+    "beacon_scale": 1.3216447234793098,
+    "turb_scale": 1.7878968798670738,
+    "vib_scale": 1.546052043589046,
+    "point_err_az_deg": -0.9739743650696411,
+    "point_err_el_deg": 0.8561202329461607
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 20.08093057561057,
+    "acquisition_time_s": 1.5333333333333332,
+    "tracking_error_urad": {
+     "mean": 157.55961368858874,
+     "max": 808.513925777482,
+     "p50": 142.63169283645797,
+     "p95": 332.687409470966,
+     "p99": 496.7046393038688
+    },
+    "pointing_error_urad": {
+     "mean": 714.9095392158349,
+     "max": 45534.89468398409,
+     "p50": 364.23349911803047,
+     "p95": 1040.3054224005243,
+     "p99": 8176.033414267387
+    },
+    "lock_retention_pct": 94.66666666666667,
+    "processing_ms": {
+     "mean": 28.208334054446215,
+     "max": 94.36906000064482,
+     "p50": 25.3584205001971,
+     "p95": 54.4341056500798,
+     "p99": 71.00429132043244
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 17,
+    "reacquisition_mean_s": 0.08627450980392155,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 5.111111111111111,
+     "COAST": 50.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 43.77777777777778
+    },
+    "mean_detections_per_frame": 4.816666666666666
+   }
+  },
+  {
+   "run": 1,
+   "draws": {
+    "seed": 1662057957,
+    "beacon_scale": 1.9983933741797415,
+    "turb_scale": 1.6790964579154308,
+    "vib_scale": 0.6921704490133188,
+    "point_err_az_deg": -0.11907374905063883,
+    "point_err_el_deg": -0.23256355638135373
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 16.138711183431997,
+    "acquisition_time_s": 1.3,
+    "tracking_error_urad": {
+     "mean": 131.5129282836521,
+     "max": 944.2710016871267,
+     "p50": 118.4192111898726,
+     "p95": 268.67397777764694,
+     "p99": 327.658518615495
+    },
+    "pointing_error_urad": {
+     "mean": 333.68158531828436,
+     "max": 19815.416871577225,
+     "p50": 229.62807518119195,
+     "p95": 579.437441840452,
+     "p99": 1158.3244078788819
+    },
+    "lock_retention_pct": 97.44444444444444,
+    "processing_ms": {
+     "mean": 36.60848811554489,
+     "max": 114.19041299996024,
+     "p50": 32.52589249996163,
+     "p95": 72.83161225027469,
+     "p99": 94.52688956009297
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.13333333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.3333333333333335,
+     "COAST": 49.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.55555555555556
+    },
+    "mean_detections_per_frame": 5.11
+   }
+  },
+  {
+   "run": 2,
+   "draws": {
+    "seed": 392022359,
+    "beacon_scale": 1.7521167521693957,
+    "turb_scale": 1.734142419906245,
+    "vib_scale": 1.1651212982409966,
+    "point_err_az_deg": -0.6546270677165354,
+    "point_err_el_deg": 0.0982526166285026
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 18.24729533578651,
+    "acquisition_time_s": 1.0666666666666667,
+    "tracking_error_urad": {
+     "mean": 154.84333560332837,
+     "max": 467.5925900527051,
+     "p50": 140.76214863193871,
+     "p95": 313.81911288201013,
+     "p99": 392.32232765339063
+    },
+    "pointing_error_urad": {
+     "mean": 496.1035688256712,
+     "max": 31190.656528077012,
+     "p50": 329.9404910629108,
+     "p95": 828.570122059382,
+     "p99": 1927.5058340867695
+    },
+    "lock_retention_pct": 97.22222222222223,
+    "processing_ms": {
+     "mean": 32.10824410443719,
+     "max": 110.54721799973777,
+     "p50": 30.108210999969742,
+     "p95": 62.03235560014945,
+     "p99": 78.84387659062666
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.11111111111111116,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.5555555555555554,
+     "COAST": 49.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.55555555555556
+    },
+    "mean_detections_per_frame": 5.221111111111111
+   }
+  },
+  {
+   "run": 3,
+   "draws": {
+    "seed": 1990212658,
+    "beacon_scale": 0.5340162378187682,
+    "turb_scale": 1.741446757988873,
+    "vib_scale": 1.4474965986830972,
+    "point_err_az_deg": 0.6194105762048971,
+    "point_err_el_deg": -0.261853257366237
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 22.90925702819528,
+    "acquisition_time_s": 2.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 574.2530389686823,
+     "max": 56344.700816793615,
+     "p50": 141.31809485242465,
+     "p95": 365.46744972123935,
+     "p99": 7398.260584052441
+    },
+    "pointing_error_urad": {
+     "mean": 1070.6735124882575,
+     "max": 39074.78656283353,
+     "p50": 349.72557764401967,
+     "p95": 3840.7763370226858,
+     "p99": 16679.55612413983
+    },
+    "lock_retention_pct": 91.66666666666667,
+    "processing_ms": {
+     "mean": 24.671913917783158,
+     "max": 83.03744299973914,
+     "p50": 19.63981899962164,
+     "p95": 46.77016449995789,
+     "p99": 63.012142889683666
+    },
+    "beacon_in_fov_pct": 99.55555555555556,
+    "detection_duty_pct": 49.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 14,
+    "reacquisition_mean_s": 0.16190476190476183,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 8.11111111111111,
+     "COAST": 50.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 41.55555555555556
+    },
+    "mean_detections_per_frame": 5.351111111111111
+   }
+  },
+  {
+   "run": 4,
+   "draws": {
+    "seed": 145857092,
+    "beacon_scale": 2.2755543547766153,
+    "turb_scale": 1.6675752456106427,
+    "vib_scale": 0.7919580617779514,
+    "point_err_az_deg": -0.07986959105511793,
+    "point_err_el_deg": -0.8211532215829882
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 19.490392804739194,
+    "acquisition_time_s": 1.0,
+    "tracking_error_urad": {
+     "mean": 237.9389564143391,
+     "max": 33858.46047213589,
+     "p50": 124.55803550190693,
+     "p95": 286.3101723493556,
+     "p99": 860.6497559390167
+    },
+    "pointing_error_urad": {
+     "mean": 512.083935521425,
+     "max": 21152.468747234194,
+     "p50": 264.4752247083602,
+     "p95": 730.7135874232218,
+     "p99": 9457.625788851437
+    },
+    "lock_retention_pct": 96.77777777777777,
+    "processing_ms": {
+     "mean": 28.401014458888515,
+     "max": 77.50807799948234,
+     "p50": 26.485764999961248,
+     "p95": 50.465568849858755,
+     "p99": 65.8091935298853
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 8,
+    "reacquisition_mean_s": 0.10416666666666627,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.0,
+     "COAST": 49.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.888888888888886
+    },
+    "mean_detections_per_frame": 4.685555555555555
+   }
+  },
+  {
+   "run": 5,
+   "draws": {
+    "seed": 2084558133,
+    "beacon_scale": 0.7240079333418505,
+    "turb_scale": 1.524573429863682,
+    "vib_scale": 1.6171432338617258,
+    "point_err_az_deg": 1.1220233578421042,
+    "point_err_el_deg": -0.31351435535132655
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 18.028275037811287,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 183.59605958750416,
+     "max": 1324.0837522046309,
+     "p50": 142.7310205941182,
+     "p95": 443.8338990901254,
+     "p99": 636.7647450337957
+    },
+    "pointing_error_urad": {
+     "mean": 537.6587793863341,
+     "max": 26022.77058616622,
+     "p50": 370.4554656142561,
+     "p95": 889.4104002878059,
+     "p99": 3241.6886098445534
+    },
+    "lock_retention_pct": 96.88888888888889,
+    "processing_ms": {
+     "mean": 33.133294885539925,
+     "max": 129.52639200011618,
+     "p50": 28.37470799977382,
+     "p95": 66.72322730023551,
+     "p99": 89.11910649986564
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 46.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.10666666666666666,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.888888888888889,
+     "COAST": 53.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 43.77777777777778
+    },
+    "mean_detections_per_frame": 5.264444444444444
+   }
+  },
+  {
+   "run": 6,
+   "draws": {
+    "seed": 1944623248,
+    "beacon_scale": 1.3860672036791968,
+    "turb_scale": 0.7842070386264286,
+    "vib_scale": 0.6948822580032075,
+    "point_err_az_deg": -0.058308177057758925,
+    "point_err_el_deg": -0.49156317170840863
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 17.77594591116086,
+    "acquisition_time_s": 1.5333333333333332,
+    "tracking_error_urad": {
+     "mean": 84.52529839082605,
+     "max": 454.7870597092938,
+     "p50": 74.75552435298293,
+     "p95": 177.80526998818223,
+     "p99": 255.14775763926556
+    },
+    "pointing_error_urad": {
+     "mean": 404.5656945913002,
+     "max": 29817.152537768787,
+     "p50": 191.20591703716133,
+     "p95": 654.1564149474241,
+     "p99": 4447.824143987301
+    },
+    "lock_retention_pct": 97.22222222222223,
+    "processing_ms": {
+     "mean": 32.355536494442276,
+     "max": 97.54147500007093,
+     "p50": 27.522892999968462,
+     "p95": 65.05681775029188,
+     "p99": 79.44966675056094
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 8,
+    "reacquisition_mean_s": 0.07499999999999996,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.5555555555555554,
+     "COAST": 51.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.111111111111114
+    },
+    "mean_detections_per_frame": 4.986666666666666
+   }
+  },
+  {
+   "run": 7,
+   "draws": {
+    "seed": 795556160,
+    "beacon_scale": 1.8066093888332717,
+    "turb_scale": 1.155727878308496,
+    "vib_scale": 1.749017294086756,
+    "point_err_az_deg": 0.4806362448053978,
+    "point_err_el_deg": -0.33774004551232606
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 21.030814781861206,
+    "acquisition_time_s": 0.8333333333333334,
+    "tracking_error_urad": {
+     "mean": 144.5367558725216,
+     "max": 1116.6593624532688,
+     "p50": 126.70494799888333,
+     "p95": 303.6633624532099,
+     "p99": 487.44881560143034
+    },
+    "pointing_error_urad": {
+     "mean": 380.7079817914151,
+     "max": 13835.662027702225,
+     "p50": 308.6189320311944,
+     "p95": 652.851467869996,
+     "p99": 1106.8494190545714
+    },
+    "lock_retention_pct": 98.44444444444444,
+    "processing_ms": {
+     "mean": 28.05530008777977,
+     "max": 91.04502699938166,
+     "p50": 24.155647499810584,
+     "p95": 57.05228284973596,
+     "p99": 72.91684093032927
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.08333333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.3333333333333333,
+     "COAST": 48.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 49.55555555555556
+    },
+    "mean_detections_per_frame": 5.463333333333333
+   }
+  },
+  {
+   "run": 8,
+   "draws": {
+    "seed": 1648932249,
+    "beacon_scale": 2.090005150743284,
+    "turb_scale": 1.0812175685452616,
+    "vib_scale": 0.9324921558953662,
+    "point_err_az_deg": 0.43798920953994114,
+    "point_err_el_deg": -0.6484455295032423
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.43941144560569,
+    "acquisition_time_s": 0.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 103.68853960508055,
+     "max": 466.64016757406984,
+     "p50": 96.05263243062608,
+     "p95": 203.09234452942243,
+     "p99": 263.1094999498787
+    },
+    "pointing_error_urad": {
+     "mean": 272.869714951978,
+     "max": 12622.913321151647,
+     "p50": 209.82962599277403,
+     "p95": 484.3689946723067,
+     "p99": 659.1130357705243
+    },
+    "lock_retention_pct": 98.66666666666667,
+    "processing_ms": {
+     "mean": 15.47099920447181,
+     "max": 58.8612830006241,
+     "p50": 15.220511000279657,
+     "p95": 19.751987100198676,
+     "p99": 27.859378730627206
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 2,
+    "reacquisition_mean_s": 0.13333333333333333,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.1111111111111112,
+     "COAST": 49.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.77777777777778
+    },
+    "mean_detections_per_frame": 4.921111111111111
+   }
+  },
+  {
+   "run": 9,
+   "draws": {
+    "seed": 1787264313,
+    "beacon_scale": 0.8198072251977275,
+    "turb_scale": 0.5110434046265082,
+    "vib_scale": 1.6803865662532076,
+    "point_err_az_deg": 0.3956420558208771,
+    "point_err_el_deg": 0.3692976815274033
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.84427729656927,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 138.76111534432206,
+     "max": 2414.9155523510212,
+     "p50": 102.45743751939992,
+     "p95": 399.9437182355177,
+     "p99": 659.7676145019337
+    },
+    "pointing_error_urad": {
+     "mean": 422.93208922319315,
+     "max": 20795.29711101004,
+     "p50": 280.38975927847315,
+     "p95": 696.0230850226034,
+     "p99": 3094.7842045795214
+    },
+    "lock_retention_pct": 97.11111111111111,
+    "processing_ms": {
+     "mean": 15.525616882209256,
+     "max": 47.01454499991087,
+     "p50": 15.362850499968772,
+     "p95": 19.936853400031396,
+     "p99": 22.93936248051068
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 47.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.09333333333333324,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.6666666666666665,
+     "COAST": 52.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 44.77777777777778
+    },
+    "mean_detections_per_frame": 5.624444444444444
+   }
+  },
+  {
+   "run": 10,
+   "draws": {
+    "seed": 595114158,
+    "beacon_scale": 1.363723128630514,
+    "turb_scale": 1.3531117939293407,
+    "vib_scale": 0.7096954971914862,
+    "point_err_az_deg": -0.9251278235136637,
+    "point_err_el_deg": 0.3031253312228489
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.27967674426085,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 125.173884698106,
+     "max": 997.6385555638672,
+     "p50": 111.71114249561559,
+     "p95": 262.58103363669204,
+     "p99": 374.410027899871
+    },
+    "pointing_error_urad": {
+     "mean": 580.6757817473206,
+     "max": 39550.36706318678,
+     "p50": 266.5091238352141,
+     "p95": 875.2059585120459,
+     "p99": 10244.666390853678
+    },
+    "lock_retention_pct": 97.11111111111111,
+    "processing_ms": {
+     "mean": 14.791224803342024,
+     "max": 29.226939999716706,
+     "p50": 14.717975499934255,
+     "p95": 18.43144074978227,
+     "p99": 20.95080270075414
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 11,
+    "reacquisition_mean_s": 0.06666666666666661,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.6666666666666665,
+     "COAST": 49.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.44444444444444
+    },
+    "mean_detections_per_frame": 5.2844444444444445
+   }
+  },
+  {
+   "run": 11,
+   "draws": {
+    "seed": 1676602826,
+    "beacon_scale": 1.3893020329005785,
+    "turb_scale": 1.3478541597217832,
+    "vib_scale": 1.6474982861240384,
+    "point_err_az_deg": 0.32332396800141794,
+    "point_err_el_deg": 0.09644292118439246
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 36.13968759319193,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 134.63715894993564,
+     "max": 531.5744564156345,
+     "p50": 119.68903294759485,
+     "p95": 301.21850249640573,
+     "p99": 399.35207901659606
+    },
+    "pointing_error_urad": {
+     "mean": 444.7547068319932,
+     "max": 20626.624845166323,
+     "p50": 291.51894173758296,
+     "p95": 672.6504279675767,
+     "p99": 4036.3673148318326
+    },
+    "lock_retention_pct": 97.77777777777777,
+    "processing_ms": {
+     "mean": 14.168002428896216,
+     "max": 24.16923000055249,
+     "p50": 14.136173499991855,
+     "p95": 17.49880600000323,
+     "p99": 20.155526430353348
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.0888888888888889,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.0,
+     "COAST": 50.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.44444444444444
+    },
+    "mean_detections_per_frame": 4.802222222222222
+   }
+  },
+  {
+   "run": 12,
+   "draws": {
+    "seed": 194489917,
+    "beacon_scale": 1.0382952059314856,
+    "turb_scale": 0.546226751851909,
+    "vib_scale": 1.1550760838485434,
+    "point_err_az_deg": -0.6849967852331299,
+    "point_err_el_deg": -0.16464844129565492
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.71545316174382,
+    "acquisition_time_s": 2.033333333333333,
+    "tracking_error_urad": {
+     "mean": 88.54806229933298,
+     "max": 684.3519048832031,
+     "p50": 78.69435985731843,
+     "p95": 186.69384673126683,
+     "p99": 278.94610229403645
+    },
+    "pointing_error_urad": {
+     "mean": 697.2316969253884,
+     "max": 47306.82328601358,
+     "p50": 261.18211970970503,
+     "p95": 1078.6003985641319,
+     "p99": 13896.658967328827
+    },
+    "lock_retention_pct": 95.77777777777777,
+    "processing_ms": {
+     "mean": 14.411228853332432,
+     "max": 51.58036500051821,
+     "p50": 14.274554000166972,
+     "p95": 17.54070340002727,
+     "p99": 20.2913428805914
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 11,
+    "reacquisition_mean_s": 0.09393939393939393,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 4.0,
+     "COAST": 50.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.44444444444444
+    },
+    "mean_detections_per_frame": 4.888888888888889
+   }
+  },
+  {
+   "run": 13,
+   "draws": {
+    "seed": 1200888232,
+    "beacon_scale": 2.192146453863149,
+    "turb_scale": 0.8509092287980111,
+    "vib_scale": 0.587454112533599,
+    "point_err_az_deg": -0.5246786591472082,
+    "point_err_el_deg": -0.3715312360199695
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 36.33043846621668,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 76.64208351752956,
+     "max": 481.78382067154695,
+     "p50": 69.55421988839,
+     "p95": 156.8134905584901,
+     "p99": 195.87576146206837
+    },
+    "pointing_error_urad": {
+     "mean": 401.72985164611464,
+     "max": 30683.063279419952,
+     "p50": 182.8273076532668,
+     "p95": 703.5303992948977,
+     "p99": 3215.7399503633774
+    },
+    "lock_retention_pct": 97.88888888888889,
+    "processing_ms": {
+     "mean": 14.08794297445335,
+     "max": 23.509972999818274,
+     "p50": 14.036596000096324,
+     "p95": 17.527684850620062,
+     "p99": 20.564723779471016
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.0,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.125,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.7777777777777777,
+     "COAST": 49.666666666666664,
+     "SEARCH": 0.3333333333333333,
+     "TRACK": 48.22222222222222
+    },
+    "mean_detections_per_frame": 4.8677777777777775
+   }
+  },
+  {
+   "run": 14,
+   "draws": {
+    "seed": 932688237,
+    "beacon_scale": 1.5697675199166845,
+    "turb_scale": 1.6758473136596201,
+    "vib_scale": 1.4964703104910813,
+    "point_err_az_deg": -0.22467153254383077,
+    "point_err_el_deg": 0.5652366923988624
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.94092498701492,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 160.4163050195834,
+     "max": 864.1748073464228,
+     "p50": 141.29687445221325,
+     "p95": 350.17340459284276,
+     "p99": 479.83190141593735
+    },
+    "pointing_error_urad": {
+     "mean": 551.685360299535,
+     "max": 32968.54710822627,
+     "p50": 345.8575564609762,
+     "p95": 813.9773686865931,
+     "p99": 3073.4076252968425
+    },
+    "lock_retention_pct": 97.22222222222223,
+    "processing_ms": {
+     "mean": 14.281178097775815,
+     "max": 25.244541000574827,
+     "p50": 14.247079499909887,
+     "p95": 17.863428700138684,
+     "p99": 20.074278640040575
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.22222222222222,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.09999999999999996,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.5555555555555554,
+     "COAST": 49.55555555555556,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.666666666666664
+    },
+    "mean_detections_per_frame": 4.804444444444444
+   }
+  },
+  {
+   "run": 15,
+   "draws": {
+    "seed": 1421454890,
+    "beacon_scale": 0.7506431318061783,
+    "turb_scale": 0.5340681097007907,
+    "vib_scale": 0.6350717911634627,
+    "point_err_az_deg": 0.5336624414314808,
+    "point_err_el_deg": -0.06862098554750273
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.43997165231004,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 63.87959981131752,
+     "max": 584.5811573165577,
+     "p50": 56.68780894545616,
+     "p95": 130.42373803492143,
+     "p99": 173.74161723648794
+    },
+    "pointing_error_urad": {
+     "mean": 267.9079695503001,
+     "max": 18713.581439114147,
+     "p50": 147.267417054332,
+     "p95": 429.4013660421757,
+     "p99": 1703.47379915812
+    },
+    "lock_retention_pct": 97.44444444444444,
+    "processing_ms": {
+     "mean": 14.587527761102844,
+     "max": 46.3984400003028,
+     "p50": 14.487738000298123,
+     "p95": 18.07922055036215,
+     "p99": 20.158146889607448
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.13333333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.3333333333333335,
+     "COAST": 49.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.22222222222222
+    },
+    "mean_detections_per_frame": 5.097777777777778
+   }
+  },
+  {
+   "run": 16,
+   "draws": {
+    "seed": 1539871429,
+    "beacon_scale": 1.4521940277170633,
+    "turb_scale": 0.7284681540697526,
+    "vib_scale": 1.544480562616604,
+    "point_err_az_deg": -0.1292249386223263,
+    "point_err_el_deg": -0.21416179302633154
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.275192351371146,
+    "acquisition_time_s": 1.3666666666666667,
+    "tracking_error_urad": {
+     "mean": 109.76207541750952,
+     "max": 1103.880975648191,
+     "p50": 99.02909304106922,
+     "p95": 229.56366432344905,
+     "p99": 346.23002826889353
+    },
+    "pointing_error_urad": {
+     "mean": 616.146831746205,
+     "max": 37282.38579629113,
+     "p50": 306.17642167588735,
+     "p95": 922.4632390127259,
+     "p99": 5820.91004077884
+    },
+    "lock_retention_pct": 96.88888888888889,
+    "processing_ms": {
+     "mean": 15.153422678891324,
+     "max": 31.14155999992363,
+     "p50": 15.080429499903403,
+     "p95": 18.791240199379896,
+     "p99": 21.260240579949823
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.09999999999999996,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.888888888888889,
+     "COAST": 50.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.55555555555556
+    },
+    "mean_detections_per_frame": 5.003333333333333
+   }
+  },
+  {
+   "run": 17,
+   "draws": {
+    "seed": 346328507,
+    "beacon_scale": 1.033175387210541,
+    "turb_scale": 1.4454238896783327,
+    "vib_scale": 1.0427189158300856,
+    "point_err_az_deg": -0.9896401936413576,
+    "point_err_el_deg": -0.6875893761830725
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 36.60987510246022,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 127.93562715403912,
+     "max": 453.2630513605967,
+     "p50": 115.11032544678316,
+     "p95": 262.7730923641325,
+     "p99": 343.2747509037398
+    },
+    "pointing_error_urad": {
+     "mean": 532.9092529610004,
+     "max": 36284.534794617095,
+     "p50": 278.64992150335945,
+     "p95": 862.5254090982072,
+     "p99": 3074.7426606504782
+    },
+    "lock_retention_pct": 96.33333333333333,
+    "processing_ms": {
+     "mean": 13.892529827793018,
+     "max": 20.345587000520027,
+     "p50": 13.857254999948054,
+     "p95": 17.1027088493247,
+     "p99": 18.475783410021904
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 12,
+    "reacquisition_mean_s": 0.08055555555555556,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.4444444444444446,
+     "COAST": 50.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.111111111111114
+    },
+    "mean_detections_per_frame": 4.685555555555555
+   }
+  },
+  {
+   "run": 18,
+   "draws": {
+    "seed": 727876280,
+    "beacon_scale": 2.308019450485975,
+    "turb_scale": 1.5495607007161243,
+    "vib_scale": 0.8988049421892794,
+    "point_err_az_deg": 1.1260233056345375,
+    "point_err_el_deg": 0.5017516271384302
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.633009578168824,
+    "acquisition_time_s": 1.0,
+    "tracking_error_urad": {
+     "mean": 160.73753404181724,
+     "max": 1652.4394396522514,
+     "p50": 132.11963291066394,
+     "p95": 351.78331360300314,
+     "p99": 919.5500705895927
+    },
+    "pointing_error_urad": {
+     "mean": 419.57522289661335,
+     "max": 21960.521391088452,
+     "p50": 274.99214398960163,
+     "p95": 715.1081088559092,
+     "p99": 1820.491097319326
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 14.428796797806676,
+     "max": 28.030170999954862,
+     "p50": 14.279986500241648,
+     "p95": 17.888697000353204,
+     "p99": 20.99161295061094
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 47.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.10000000000000013,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 52.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.111111111111114
+    },
+    "mean_detections_per_frame": 4.728888888888889
+   }
+  },
+  {
+   "run": 19,
+   "draws": {
+    "seed": 2065659504,
+    "beacon_scale": 1.9054693972338907,
+    "turb_scale": 1.1740422532156831,
+    "vib_scale": 0.9083623427677385,
+    "point_err_az_deg": -0.9686616908316017,
+    "point_err_el_deg": 0.7246843137789151
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.70325259740855,
+    "acquisition_time_s": 1.8333333333333333,
+    "tracking_error_urad": {
+     "mean": 129.2872140871323,
+     "max": 922.7075122633488,
+     "p50": 119.55335636777201,
+     "p95": 262.3948223436788,
+     "p99": 456.41021964206874
+    },
+    "pointing_error_urad": {
+     "mean": 984.4542242440442,
+     "max": 57141.13564453778,
+     "p50": 265.437328450072,
+     "p95": 1112.4438429730476,
+     "p99": 21116.11415764639
+    },
+    "lock_retention_pct": 95.88888888888889,
+    "processing_ms": {
+     "mean": 14.286586018907757,
+     "max": 32.601308999801404,
+     "p50": 14.134611500139727,
+     "p95": 17.710065100391148,
+     "p99": 19.98059833957086
+    },
+    "beacon_in_fov_pct": 99.44444444444444,
+    "detection_duty_pct": 49.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 13,
+    "reacquisition_mean_s": 0.0769230769230769,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.888888888888889,
+     "COAST": 50.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.22222222222222
+    },
+    "mean_detections_per_frame": 4.602222222222222
+   }
+  },
+  {
+   "run": 20,
+   "draws": {
+    "seed": 273969198,
+    "beacon_scale": 0.8249630660699837,
+    "turb_scale": 0.9589349362259787,
+    "vib_scale": 1.368829353412844,
+    "point_err_az_deg": -0.7757453209458438,
+    "point_err_el_deg": 0.6419057113662759
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.479559056307046,
+    "acquisition_time_s": 1.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 172.82617473820733,
+     "max": 46996.783171691466,
+     "p50": 98.99006702954459,
+     "p95": 239.2924030575324,
+     "p99": 403.45106248486223
+    },
+    "pointing_error_urad": {
+     "mean": 605.3043065259596,
+     "max": 54440.79793128179,
+     "p50": 274.24673221043116,
+     "p95": 768.2670060048011,
+     "p99": 5493.730112670695
+    },
+    "lock_retention_pct": 96.55555555555556,
+    "processing_ms": {
+     "mean": 14.44074304556327,
+     "max": 33.734704999915266,
+     "p50": 14.364626999395114,
+     "p95": 17.86674150021099,
+     "p99": 20.444207660675602
+    },
+    "beacon_in_fov_pct": 99.66666666666667,
+    "detection_duty_pct": 50.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.1285714285714286,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.2222222222222223,
+     "COAST": 49.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.888888888888886
+    },
+    "mean_detections_per_frame": 4.9222222222222225
+   }
+  },
+  {
+   "run": 21,
+   "draws": {
+    "seed": 978772129,
+    "beacon_scale": 1.9928910126539412,
+    "turb_scale": 1.5791944339264052,
+    "vib_scale": 1.1481395596626556,
+    "point_err_az_deg": 0.3055412176858636,
+    "point_err_el_deg": 0.151376344042924
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.63243916024556,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 195.00437472889942,
+     "max": 46580.7545409058,
+     "p50": 127.14493664602944,
+     "p95": 292.6108362430702,
+     "p99": 452.9534855668416
+    },
+    "pointing_error_urad": {
+     "mean": 433.47920060033977,
+     "max": 21512.16770037375,
+     "p50": 281.22826087385397,
+     "p95": 777.9619750192658,
+     "p99": 3595.275337970228
+    },
+    "lock_retention_pct": 97.88888888888889,
+    "processing_ms": {
+     "mean": 14.900346395532122,
+     "max": 31.986044999939622,
+     "p50": 14.786797999931878,
+     "p95": 18.4296755498508,
+     "p99": 19.742567699640855
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.08333333333333333,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.8888888888888888,
+     "COAST": 49.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.0
+    },
+    "mean_detections_per_frame": 5.027777777777778
+   }
+  },
+  {
+   "run": 22,
+   "draws": {
+    "seed": 203355303,
+    "beacon_scale": 0.5773330743937671,
+    "turb_scale": 1.1237111032559144,
+    "vib_scale": 0.5624212607928387,
+    "point_err_az_deg": -0.014422033813154655,
+    "point_err_el_deg": -0.3062498178009865
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.91489860440127,
+    "acquisition_time_s": 0.8,
+    "tracking_error_urad": {
+     "mean": 110.27112360348296,
+     "max": 466.24271660990206,
+     "p50": 100.57914548493224,
+     "p95": 231.16488867132364,
+     "p99": 324.65067562760845
+    },
+    "pointing_error_urad": {
+     "mean": 249.212127152606,
+     "max": 21506.138888041085,
+     "p50": 183.62823148624113,
+     "p95": 426.95090693609455,
+     "p99": 570.4715126376543
+    },
+    "lock_retention_pct": 98.44444444444444,
+    "processing_ms": {
+     "mean": 14.540113883342404,
+     "max": 24.832916999912413,
+     "p50": 14.461386000220955,
+     "p95": 17.776550149937975,
+     "p99": 19.66672508990996
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.0,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.11111111111111112,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.3333333333333333,
+     "COAST": 49.77777777777778,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.666666666666664
+    },
+    "mean_detections_per_frame": 4.728888888888889
+   }
+  },
+  {
+   "run": 23,
+   "draws": {
+    "seed": 1395534949,
+    "beacon_scale": 0.7035007966186986,
+    "turb_scale": 0.6551044515838275,
+    "vib_scale": 1.3814668582665681,
+    "point_err_az_deg": -0.7905768755114733,
+    "point_err_el_deg": 0.7652162130782351
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.68338127899772,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 101.08941644535666,
+     "max": 1005.9423040295278,
+     "p50": 80.83730584005781,
+     "p95": 246.72817245105338,
+     "p99": 413.9622797485333
+    },
+    "pointing_error_urad": {
+     "mean": 571.860933162996,
+     "max": 42054.55941386461,
+     "p50": 255.5293337895263,
+     "p95": 859.813593713362,
+     "p99": 6025.550834297684
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 14.830761262201122,
+     "max": 33.42227700068179,
+     "p50": 14.772794500004238,
+     "p95": 18.094241350490847,
+     "p99": 20.998702560700618
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.0,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.09999999999999999,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 51.77777777777778,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.77777777777778
+    },
+    "mean_detections_per_frame": 4.976666666666667
+   }
+  },
+  {
+   "run": 24,
+   "draws": {
+    "seed": 2125329542,
+    "beacon_scale": 1.128426589523158,
+    "turb_scale": 1.3863732372221251,
+    "vib_scale": 0.5342058065445463,
+    "point_err_az_deg": 1.100542111779469,
+    "point_err_el_deg": -0.031853813502779604
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.921466553508715,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 127.82316640208246,
+     "max": 658.7758796142311,
+     "p50": 114.16960738115358,
+     "p95": 246.7558122530386,
+     "p99": 323.00684634719835
+    },
+    "pointing_error_urad": {
+     "mean": 391.98378858844006,
+     "max": 24323.91012473609,
+     "p50": 240.78835132004974,
+     "p95": 586.2291372713968,
+     "p99": 3477.2365337527517
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 15.444058281105349,
+     "max": 29.988962000061292,
+     "p50": 15.49573700003748,
+     "p95": 18.87496355006988,
+     "p99": 21.536460039815207
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.1,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 49.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.22222222222222
+    },
+    "mean_detections_per_frame": 5.582222222222223
+   }
+  },
+  {
+   "run": 25,
+   "draws": {
+    "seed": 1247819294,
+    "beacon_scale": 2.043743977225601,
+    "turb_scale": 0.6240949998836578,
+    "vib_scale": 1.2299874962572406,
+    "point_err_az_deg": -0.02230321354914988,
+    "point_err_el_deg": 0.7880876189549691
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.27353705011119,
+    "acquisition_time_s": 1.1,
+    "tracking_error_urad": {
+     "mean": 113.58313182378146,
+     "max": 798.8486085025681,
+     "p50": 89.23196556485667,
+     "p95": 295.24363637929446,
+     "p99": 596.1970654807099
+    },
+    "pointing_error_urad": {
+     "mean": 486.7187930612927,
+     "max": 33483.982094785715,
+     "p50": 265.4307875909252,
+     "p95": 747.8268474397364,
+     "p99": 3641.6540848257146
+    },
+    "lock_retention_pct": 98.11111111111111,
+    "processing_ms": {
+     "mean": 14.484973335550725,
+     "max": 30.601702999774716,
+     "p50": 14.418432500406198,
+     "p95": 17.919264600232054,
+     "p99": 20.09434757967028
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.10833333333333335,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.6666666666666667,
+     "COAST": 51.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.666666666666664
+    },
+    "mean_detections_per_frame": 4.671111111111111
+   }
+  },
+  {
+   "run": 26,
+   "draws": {
+    "seed": 345785549,
+    "beacon_scale": 1.3943277422196032,
+    "turb_scale": 0.9004634946378404,
+    "vib_scale": 0.9973534960138283,
+    "point_err_az_deg": 0.049613765931690645,
+    "point_err_el_deg": -0.10995937145091594
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.94109704207543,
+    "acquisition_time_s": 2.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 88.9362639275546,
+     "max": 357.44618949632127,
+     "p50": 82.08752027008202,
+     "p95": 182.89371776072272,
+     "p99": 229.66120170240697
+    },
+    "pointing_error_urad": {
+     "mean": 680.9248866778205,
+     "max": 44215.60753111335,
+     "p50": 268.6173477623158,
+     "p95": 1178.170833808159,
+     "p99": 11412.964781052457
+    },
+    "lock_retention_pct": 94.55555555555556,
+    "processing_ms": {
+     "mean": 14.826700257783362,
+     "max": 26.011248000031628,
+     "p50": 14.824900000348862,
+     "p95": 18.385327350188163,
+     "p99": 19.777823030108266
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 14,
+    "reacquisition_mean_s": 0.10000000000000005,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 5.222222222222222,
+     "COAST": 50.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 44.333333333333336
+    },
+    "mean_detections_per_frame": 5.294444444444444
+   }
+  },
+  {
+   "run": 27,
+   "draws": {
+    "seed": 1227776642,
+    "beacon_scale": 0.4453853677486939,
+    "turb_scale": 1.7394378862915367,
+    "vib_scale": 1.84424115775965,
+    "point_err_az_deg": -0.8634021864033341,
+    "point_err_el_deg": 0.09726505837028887
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.12389701624376,
+    "acquisition_time_s": 1.3666666666666667,
+    "tracking_error_urad": {
+     "mean": 164.0176035538716,
+     "max": 791.0899118014926,
+     "p50": 144.88280001575882,
+     "p95": 366.8216877328103,
+     "p99": 516.2865044091756
+    },
+    "pointing_error_urad": {
+     "mean": 650.3044051407605,
+     "max": 37238.595371206,
+     "p50": 392.1406756190486,
+     "p95": 947.8587341913927,
+     "p99": 7034.673002473077
+    },
+    "lock_retention_pct": 96.0,
+    "processing_ms": {
+     "mean": 14.757216048890566,
+     "max": 22.69733799948881,
+     "p50": 14.78774049974163,
+     "p95": 17.93170219957574,
+     "p99": 19.557856080464262
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 14,
+    "reacquisition_mean_s": 0.07619047619047616,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.7777777777777777,
+     "COAST": 51.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 44.888888888888886
+    },
+    "mean_detections_per_frame": 4.917777777777777
+   }
+  },
+  {
+   "run": 28,
+   "draws": {
+    "seed": 677943770,
+    "beacon_scale": 1.8117041953836046,
+    "turb_scale": 0.9218506757585125,
+    "vib_scale": 1.4891339520378526,
+    "point_err_az_deg": 0.5447870742885184,
+    "point_err_el_deg": 0.4835654854517827
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.81537691161109,
+    "acquisition_time_s": 1.0,
+    "tracking_error_urad": {
+     "mean": 107.92772546169537,
+     "max": 572.5846239566599,
+     "p50": 92.22356354474132,
+     "p95": 242.2792593754849,
+     "p99": 319.1542977614456
+    },
+    "pointing_error_urad": {
+     "mean": 417.0617220422538,
+     "max": 24141.96468252695,
+     "p50": 269.78188554300215,
+     "p95": 638.5255211279207,
+     "p99": 2146.1732458026086
+    },
+    "lock_retention_pct": 98.33333333333333,
+    "processing_ms": {
+     "mean": 15.48187591001604,
+     "max": 57.03598500076623,
+     "p50": 15.007288499873539,
+     "p95": 19.88109754984179,
+     "p99": 33.49503875041591
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.12222222222222223,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.4444444444444444,
+     "COAST": 50.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.888888888888886
+    },
+    "mean_detections_per_frame": 5.163333333333333
+   }
+  },
+  {
+   "run": 29,
+   "draws": {
+    "seed": 233164628,
+    "beacon_scale": 0.6262559865073828,
+    "turb_scale": 1.8740177677064118,
+    "vib_scale": 0.8453209863423212,
+    "point_err_az_deg": -1.1102098651771686,
+    "point_err_el_deg": 0.0987344449046701
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.59970687106519,
+    "acquisition_time_s": 1.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 137.55839120748325,
+     "max": 693.0092702391214,
+     "p50": 122.25095826429128,
+     "p95": 279.80236983946827,
+     "p99": 374.8411655574429
+    },
+    "pointing_error_urad": {
+     "mean": 589.8496852239448,
+     "max": 40891.293419226095,
+     "p50": 296.2440636554005,
+     "p95": 1008.2127201864496,
+     "p99": 4352.238810756898
+    },
+    "lock_retention_pct": 95.66666666666667,
+    "processing_ms": {
+     "mean": 14.426108994451473,
+     "max": 27.714452000509482,
+     "p50": 14.323234999665146,
+     "p95": 17.916266850124885,
+     "p99": 20.056847360610845
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 13,
+    "reacquisition_mean_s": 0.08974358974358974,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 4.111111111111111,
+     "COAST": 50.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.22222222222222
+    },
+    "mean_detections_per_frame": 4.772222222222222
+   }
+  },
+  {
+   "run": 30,
+   "draws": {
+    "seed": 1174251111,
+    "beacon_scale": 2.142558460578068,
+    "turb_scale": 1.7123772080964528,
+    "vib_scale": 0.9757083392340731,
+    "point_err_az_deg": 1.0869585481673878,
+    "point_err_el_deg": -0.37634789134778646
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.362413295825284,
+    "acquisition_time_s": 0.8666666666666667,
+    "tracking_error_urad": {
+     "mean": 182.68768126096188,
+     "max": 39541.45243379217,
+     "p50": 128.001217674719,
+     "p95": 273.21069013364576,
+     "p99": 337.4581145365374
+    },
+    "pointing_error_urad": {
+     "mean": 322.4161561003207,
+     "max": 6874.081213486005,
+     "p50": 266.6045155182308,
+     "p95": 602.3083119778405,
+     "p99": 961.406012178481
+    },
+    "lock_retention_pct": 98.22222222222223,
+    "processing_ms": {
+     "mean": 15.303321281120994,
+     "max": 36.38658599993505,
+     "p50": 15.201274999981251,
+     "p95": 18.87733294984173,
+     "p99": 21.111949850619563
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.10000000000000003,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.5555555555555556,
+     "COAST": 48.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 49.333333333333336
+    },
+    "mean_detections_per_frame": 5.766666666666667
+   }
+  },
+  {
+   "run": 31,
+   "draws": {
+    "seed": 796549538,
+    "beacon_scale": 1.4816199713866007,
+    "turb_scale": 0.8839476358514041,
+    "vib_scale": 1.904065355073445,
+    "point_err_az_deg": -0.8049412378031564,
+    "point_err_el_deg": -0.8191608850938078
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.342872205104705,
+    "acquisition_time_s": 2.0,
+    "tracking_error_urad": {
+     "mean": 139.15365081751597,
+     "max": 888.9481208810907,
+     "p50": 111.99827841570497,
+     "p95": 355.06830345533,
+     "p99": 576.4669002176896
+    },
+    "pointing_error_urad": {
+     "mean": 693.4528232340758,
+     "max": 41292.22713488184,
+     "p50": 364.8038827636002,
+     "p95": 1064.0661889181056,
+     "p99": 8222.859065262337
+    },
+    "lock_retention_pct": 95.77777777777777,
+    "processing_ms": {
+     "mean": 14.50335433778188,
+     "max": 28.754065000612172,
+     "p50": 14.499856999918848,
+     "p95": 17.721098500487642,
+     "p99": 20.62767437981165
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 10,
+    "reacquisition_mean_s": 0.10333333333333335,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 4.0,
+     "COAST": 50.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 44.888888888888886
+    },
+    "mean_detections_per_frame": 4.977777777777778
+   }
+  },
+  {
+   "run": 32,
+   "draws": {
+    "seed": 641663732,
+    "beacon_scale": 2.4839886845172576,
+    "turb_scale": 1.837515899382371,
+    "vib_scale": 1.6229120291854238,
+    "point_err_az_deg": 0.9379019781084594,
+    "point_err_el_deg": 0.7082039514561537
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.847749372009794,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 175.07312847746613,
+     "max": 1016.4107733056128,
+     "p50": 168.44924480719587,
+     "p95": 345.8086989275203,
+     "p99": 462.54958771802615
+    },
+    "pointing_error_urad": {
+     "mean": 535.1837457320918,
+     "max": 25985.296812998527,
+     "p50": 361.96441617764145,
+     "p95": 799.387206889026,
+     "p99": 3336.4736413089595
+    },
+    "lock_retention_pct": 97.22222222222223,
+    "processing_ms": {
+     "mean": 14.633316117756799,
+     "max": 23.395979000270017,
+     "p50": 14.586685000267607,
+     "p95": 18.084906750300426,
+     "p99": 19.97875079975529
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 8,
+    "reacquisition_mean_s": 0.08749999999999966,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.5555555555555554,
+     "COAST": 50.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.111111111111114
+    },
+    "mean_detections_per_frame": 4.788888888888889
+   }
+  },
+  {
+   "run": 33,
+   "draws": {
+    "seed": 934363821,
+    "beacon_scale": 1.4896025568115432,
+    "turb_scale": 0.9738935777461895,
+    "vib_scale": 1.658018648166482,
+    "point_err_az_deg": 0.3879870316026266,
+    "point_err_el_deg": -0.22741608802732183
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.903088258880295,
+    "acquisition_time_s": 3.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 826.6915987884379,
+     "max": 99457.75407791494,
+     "p50": 111.06921937506469,
+     "p95": 301.0277852055852,
+     "p99": 8306.480538411059
+    },
+    "pointing_error_urad": {
+     "mean": 966.798825895087,
+     "max": 59349.04399283561,
+     "p50": 321.67192858857334,
+     "p95": 1151.764598886305,
+     "p99": 19672.42233865679
+    },
+    "lock_retention_pct": 92.77777777777777,
+    "processing_ms": {
+     "mean": 14.589094604432628,
+     "max": 25.500710000414983,
+     "p50": 14.654053999947791,
+     "p95": 17.647329150076985,
+     "p99": 20.201137259664392
+    },
+    "beacon_in_fov_pct": 98.22222222222223,
+    "detection_duty_pct": 49.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 14,
+    "reacquisition_mean_s": 0.13809523809523813,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 7.0,
+     "COAST": 50.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 42.77777777777778
+    },
+    "mean_detections_per_frame": 4.903333333333333
+   }
+  },
+  {
+   "run": 34,
+   "draws": {
+    "seed": 1903305989,
+    "beacon_scale": 1.9682581838329547,
+    "turb_scale": 0.893690773884297,
+    "vib_scale": 1.905219725800669,
+    "point_err_az_deg": -0.6216706199863565,
+    "point_err_el_deg": -0.6790357216593251
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.46773213157891,
+    "acquisition_time_s": 1.3666666666666667,
+    "tracking_error_urad": {
+     "mean": 130.20737252380366,
+     "max": 958.8861795695351,
+     "p50": 111.59927864708102,
+     "p95": 281.2307799856901,
+     "p99": 494.3590631753304
+    },
+    "pointing_error_urad": {
+     "mean": 530.827268995871,
+     "max": 30321.30300513192,
+     "p50": 324.35194850005774,
+     "p95": 849.8560357085703,
+     "p99": 2742.7155202145887
+    },
+    "lock_retention_pct": 97.11111111111111,
+    "processing_ms": {
+     "mean": 14.930786088876225,
+     "max": 31.96918000048754,
+     "p50": 14.771005500278989,
+     "p95": 18.39188899984947,
+     "p99": 20.4173282299962
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.22222222222222,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.10476190476190476,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.6666666666666665,
+     "COAST": 49.55555555555556,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.55555555555556
+    },
+    "mean_detections_per_frame": 5.023333333333333
+   }
+  },
+  {
+   "run": 35,
+   "draws": {
+    "seed": 202865624,
+    "beacon_scale": 2.145336611462303,
+    "turb_scale": 0.7299264749367411,
+    "vib_scale": 0.7689024622366086,
+    "point_err_az_deg": 0.23851869965002437,
+    "point_err_el_deg": 0.674211673507436
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.21709730402451,
+    "acquisition_time_s": 1.0,
+    "tracking_error_urad": {
+     "mean": 153.5206012239433,
+     "max": 64693.60035388173,
+     "p50": 72.32504971511587,
+     "p95": 162.32158775163032,
+     "p99": 214.67599678707475
+    },
+    "pointing_error_urad": {
+     "mean": 286.86232981450695,
+     "max": 29492.8485139785,
+     "p50": 172.43180976619337,
+     "p95": 431.2617629772488,
+     "p99": 732.5437819648298
+    },
+    "lock_retention_pct": 98.11111111111111,
+    "processing_ms": {
+     "mean": 14.99432131446358,
+     "max": 31.86172000005172,
+     "p50": 14.783642499878624,
+     "p95": 18.939793650179126,
+     "p99": 22.11271213024702
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.10833333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.6666666666666667,
+     "COAST": 49.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 49.111111111111114
+    },
+    "mean_detections_per_frame": 4.9622222222222225
+   }
+  },
+  {
+   "run": 36,
+   "draws": {
+    "seed": 96174705,
+    "beacon_scale": 1.051679713090199,
+    "turb_scale": 1.6661072573617663,
+    "vib_scale": 1.957739639091451,
+    "point_err_az_deg": 0.0017788468856214656,
+    "point_err_el_deg": -0.6409844954077486
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.64403870112656,
+    "acquisition_time_s": 0.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 172.86244735266732,
+     "max": 940.821043158473,
+     "p50": 145.16457335413804,
+     "p95": 373.1454442080741,
+     "p99": 592.2068502661227
+    },
+    "pointing_error_urad": {
+     "mean": 499.35104544498347,
+     "max": 20000.179442423156,
+     "p50": 377.19537223436373,
+     "p95": 876.4885296406813,
+     "p99": 1276.3560262992262
+    },
+    "lock_retention_pct": 98.77777777777777,
+    "processing_ms": {
+     "mean": 14.839263392205895,
+     "max": 30.011519999789016,
+     "p50": 14.733966999756376,
+     "p95": 18.462554649750018,
+     "p99": 20.03329354987727
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.07777777777777778,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.0,
+     "COAST": 50.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.77777777777778
+    },
+    "mean_detections_per_frame": 4.743333333333333
+   }
+  },
+  {
+   "run": 37,
+   "draws": {
+    "seed": 421840232,
+    "beacon_scale": 0.4292662041872233,
+    "turb_scale": 0.8444840449982829,
+    "vib_scale": 0.6977333266797816,
+    "point_err_az_deg": 0.42638081667085803,
+    "point_err_el_deg": -0.680701491668644
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.58818138805893,
+    "acquisition_time_s": 0.8666666666666667,
+    "tracking_error_urad": {
+     "mean": 82.13563770267326,
+     "max": 538.5771131332774,
+     "p50": 73.76335900000028,
+     "p95": 162.6868899196704,
+     "p99": 224.15256088524376
+    },
+    "pointing_error_urad": {
+     "mean": 197.46859943991413,
+     "max": 10360.606025204741,
+     "p50": 156.7108584018913,
+     "p95": 362.48038571934904,
+     "p99": 503.19933724112497
+    },
+    "lock_retention_pct": 98.0,
+    "processing_ms": {
+     "mean": 15.71095435555536,
+     "max": 31.955602999914845,
+     "p50": 15.565926999897783,
+     "p95": 19.019444050491074,
+     "p99": 23.597087200578237
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.12222222222222225,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.7777777777777777,
+     "COAST": 49.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.77777777777778
+    },
+    "mean_detections_per_frame": 5.732222222222222
+   }
+  },
+  {
+   "run": 38,
+   "draws": {
+    "seed": 636804503,
+    "beacon_scale": 1.8579511148500618,
+    "turb_scale": 1.3716749138313535,
+    "vib_scale": 0.7996634774900864,
+    "point_err_az_deg": 0.7298988628374306,
+    "point_err_el_deg": 0.387732833308443
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.2808851000598,
+    "acquisition_time_s": 1.0333333333333332,
+    "tracking_error_urad": {
+     "mean": 123.75197935321454,
+     "max": 493.75211122338703,
+     "p50": 114.49979254787341,
+     "p95": 242.94239492202752,
+     "p99": 332.9156401179189
+    },
+    "pointing_error_urad": {
+     "mean": 367.35766764173854,
+     "max": 21223.189294542917,
+     "p50": 232.91837474895127,
+     "p95": 520.6730718544854,
+     "p99": 2992.4185443754754
+    },
+    "lock_retention_pct": 98.11111111111111,
+    "processing_ms": {
+     "mean": 14.640546803333969,
+     "max": 26.76761400016403,
+     "p50": 14.641317999576131,
+     "p95": 17.957667799919363,
+     "p99": 20.297748749962917
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.10833333333333332,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.6666666666666667,
+     "COAST": 49.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.77777777777778
+    },
+    "mean_detections_per_frame": 5.051111111111111
+   }
+  },
+  {
+   "run": 39,
+   "draws": {
+    "seed": 1087335247,
+    "beacon_scale": 1.9518664082226378,
+    "turb_scale": 0.6965866273359699,
+    "vib_scale": 0.6856307054755169,
+    "point_err_az_deg": 1.0261501224156182,
+    "point_err_el_deg": -0.18435925111510687
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.60111180291155,
+    "acquisition_time_s": 1.0333333333333332,
+    "tracking_error_urad": {
+     "mean": 89.44422344572956,
+     "max": 7151.578877605878,
+     "p50": 69.06969675364407,
+     "p95": 182.48469794769514,
+     "p99": 258.4406306886702
+    },
+    "pointing_error_urad": {
+     "mean": 216.52292028042814,
+     "max": 10469.62680527531,
+     "p50": 163.6686690247488,
+     "p95": 402.9397622452864,
+     "p99": 601.4679750183222
+    },
+    "lock_retention_pct": 97.66666666666667,
+    "processing_ms": {
+     "mean": 14.283371409998532,
+     "max": 31.367782999950578,
+     "p50": 14.163712000026862,
+     "p95": 17.62260195041563,
+     "p99": 20.08701793973159
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.07777777777777777,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.0,
+     "COAST": 51.22222222222222,
+     "SEARCH": 0.3333333333333333,
+     "TRACK": 46.44444444444444
+    },
+    "mean_detections_per_frame": 4.553333333333334
+   }
+  },
+  {
+   "run": 40,
+   "draws": {
+    "seed": 2089760398,
+    "beacon_scale": 1.42602649523822,
+    "turb_scale": 1.4942963191453735,
+    "vib_scale": 1.9334348855704548,
+    "point_err_az_deg": -0.5125290554830679,
+    "point_err_el_deg": 0.7646551727616487
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.11654470197757,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 165.52368059975402,
+     "max": 677.5625790526406,
+     "p50": 147.1780337646448,
+     "p95": 352.1031088202592,
+     "p99": 519.5981502280613
+    },
+    "pointing_error_urad": {
+     "mean": 646.7179740187507,
+     "max": 38661.108315492835,
+     "p50": 389.2530363947036,
+     "p95": 961.5500916453597,
+     "p99": 3942.4547331605545
+    },
+    "lock_retention_pct": 97.22222222222223,
+    "processing_ms": {
+     "mean": 15.589452215551015,
+     "max": 27.57323100013309,
+     "p50": 15.4760364998765,
+     "p95": 19.5130424999661,
+     "p99": 22.976888709836203
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.09999999999999999,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.5555555555555554,
+     "COAST": 50.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.55555555555556
+    },
+    "mean_detections_per_frame": 5.876666666666667
+   }
+  },
+  {
+   "run": 41,
+   "draws": {
+    "seed": 646282393,
+    "beacon_scale": 0.4522049319111383,
+    "turb_scale": 1.332797063490237,
+    "vib_scale": 1.4509626675216276,
+    "point_err_az_deg": -0.9458462309981921,
+    "point_err_el_deg": -0.6473887252849573
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.53533212534272,
+    "acquisition_time_s": 1.5333333333333332,
+    "tracking_error_urad": {
+     "mean": 151.3298710299684,
+     "max": 1071.5914203079165,
+     "p50": 126.13044484209314,
+     "p95": 314.17470097636186,
+     "p99": 615.2347384923407
+    },
+    "pointing_error_urad": {
+     "mean": 696.6063796321719,
+     "max": 35687.7764009032,
+     "p50": 323.8586170804627,
+     "p95": 847.4265465229532,
+     "p99": 12622.81609378139
+    },
+    "lock_retention_pct": 96.77777777777777,
+    "processing_ms": {
+     "mean": 14.608236483310167,
+     "max": 22.137661999295233,
+     "p50": 14.531812999848626,
+     "p95": 18.236714049817238,
+     "p99": 20.90458977003436
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 8,
+    "reacquisition_mean_s": 0.10416666666666669,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.0,
+     "COAST": 51.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 45.55555555555556
+    },
+    "mean_detections_per_frame": 5.216666666666667
+   }
+  },
+  {
+   "run": 42,
+   "draws": {
+    "seed": 1608092167,
+    "beacon_scale": 2.4290870155006816,
+    "turb_scale": 1.3940638298515593,
+    "vib_scale": 1.8995348324003167,
+    "point_err_az_deg": 0.7304661974711297,
+    "point_err_el_deg": -0.05871311720047523
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.84276537450213,
+    "acquisition_time_s": 0.8666666666666667,
+    "tracking_error_urad": {
+     "mean": 152.20515816992437,
+     "max": 1705.973397895264,
+     "p50": 137.92878159817684,
+     "p95": 313.575925767275,
+     "p99": 481.38811329633313
+    },
+    "pointing_error_urad": {
+     "mean": 431.95554782240663,
+     "max": 14515.749068038664,
+     "p50": 342.51679568301194,
+     "p95": 784.9482846493067,
+     "p99": 2071.1547173740096
+    },
+    "lock_retention_pct": 98.77777777777777,
+    "processing_ms": {
+     "mean": 15.55595942443991,
+     "max": 27.83639500012214,
+     "p50": 15.418482500081154,
+     "p95": 19.63530139996692,
+     "p99": 21.8556854102917
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.07777777777777779,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.0,
+     "COAST": 51.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.77777777777778
+    },
+    "mean_detections_per_frame": 5.5311111111111115
+   }
+  },
+  {
+   "run": 43,
+   "draws": {
+    "seed": 900041146,
+    "beacon_scale": 2.048003243429594,
+    "turb_scale": 0.5267551759654816,
+    "vib_scale": 0.6637159951486025,
+    "point_err_az_deg": 0.7906286757185672,
+    "point_err_el_deg": 0.5342707589852912
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.29500165697413,
+    "acquisition_time_s": 1.0,
+    "tracking_error_urad": {
+     "mean": 68.89245138808838,
+     "max": 692.4201419777572,
+     "p50": 62.9600000374297,
+     "p95": 135.70613689185913,
+     "p99": 200.02920219550379
+    },
+    "pointing_error_urad": {
+     "mean": 322.40148691650353,
+     "max": 23463.794155859483,
+     "p50": 169.69015027487043,
+     "p95": 540.9891070310842,
+     "p99": 2341.0958866478013
+    },
+    "lock_retention_pct": 98.33333333333333,
+    "processing_ms": {
+     "mean": 15.126002737778334,
+     "max": 30.805691999375995,
+     "p50": 14.96093799960363,
+     "p95": 19.075806000000735,
+     "p99": 21.124231310041065
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 3,
+    "reacquisition_mean_s": 0.12222222222222222,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.4444444444444444,
+     "COAST": 49.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.44444444444444
+    },
+    "mean_detections_per_frame": 5.114444444444445
+   }
+  },
+  {
+   "run": 44,
+   "draws": {
+    "seed": 994301682,
+    "beacon_scale": 1.5146161402580125,
+    "turb_scale": 1.4090237310500164,
+    "vib_scale": 1.8016084306640168,
+    "point_err_az_deg": 0.2474571776129415,
+    "point_err_el_deg": -0.15737117530737543
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.71982107333781,
+    "acquisition_time_s": 0.8333333333333334,
+    "tracking_error_urad": {
+     "mean": 162.31369359061614,
+     "max": 2374.806290706431,
+     "p50": 135.45795991674163,
+     "p95": 326.3948586682931,
+     "p99": 518.8442088922797
+    },
+    "pointing_error_urad": {
+     "mean": 446.7607837235606,
+     "max": 20419.7395071447,
+     "p50": 323.25789451124285,
+     "p95": 752.2446620956599,
+     "p99": 1204.355795447901
+    },
+    "lock_retention_pct": 98.55555555555556,
+    "processing_ms": {
+     "mean": 15.000058968865536,
+     "max": 28.40220399957616,
+     "p50": 14.945684999474906,
+     "p95": 18.87983704978069,
+     "p99": 21.0767445692818
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.08333333333333329,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.2222222222222223,
+     "COAST": 50.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.55555555555556
+    },
+    "mean_detections_per_frame": 5.24
+   }
+  },
+  {
+   "run": 45,
+   "draws": {
+    "seed": 499592188,
+    "beacon_scale": 1.1857864911550837,
+    "turb_scale": 1.1388231295602649,
+    "vib_scale": 1.4778965383699614,
+    "point_err_az_deg": 0.8819775162055798,
+    "point_err_el_deg": -0.08298561226266044
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.705117205366214,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 133.7020779083991,
+     "max": 678.508037735869,
+     "p50": 120.85735249189688,
+     "p95": 285.875147658056,
+     "p99": 369.35072800491236
+    },
+    "pointing_error_urad": {
+     "mean": 394.09437812099515,
+     "max": 19580.260180647932,
+     "p50": 267.97237484848296,
+     "p95": 608.9872723109664,
+     "p99": 3212.6719592718005
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 14.842885940000391,
+     "max": 27.44592500039289,
+     "p50": 14.734550500179466,
+     "p95": 18.52513404965066,
+     "p99": 20.613391339502414
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.1,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 50.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.44444444444444
+    },
+    "mean_detections_per_frame": 5.087777777777778
+   }
+  },
+  {
+   "run": 46,
+   "draws": {
+    "seed": 1140349286,
+    "beacon_scale": 0.8969909622949204,
+    "turb_scale": 1.6190214203651696,
+    "vib_scale": 1.7248531451358655,
+    "point_err_az_deg": -0.9473326083501001,
+    "point_err_el_deg": -0.7801940574806794
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.198522304709535,
+    "acquisition_time_s": 1.5666666666666667,
+    "tracking_error_urad": {
+     "mean": 258.8164025719962,
+     "max": 25088.361809911366,
+     "p50": 139.57908315797795,
+     "p95": 408.5628869409388,
+     "p99": 1670.039311799485
+    },
+    "pointing_error_urad": {
+     "mean": 718.23837117134,
+     "max": 35397.13089569907,
+     "p50": 366.7021858913336,
+     "p95": 1006.595858939931,
+     "p99": 10761.284269079199
+    },
+    "lock_retention_pct": 97.66666666666667,
+    "processing_ms": {
+     "mean": 14.800045093327046,
+     "max": 28.651374999753898,
+     "p50": 14.781067500280187,
+     "p95": 18.149909150088202,
+     "p99": 19.949828239232374
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 10,
+    "reacquisition_mean_s": 0.0566666666666667,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.111111111111111,
+     "COAST": 51.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.22222222222222
+    },
+    "mean_detections_per_frame": 5.092222222222222
+   }
+  },
+  {
+   "run": 47,
+   "draws": {
+    "seed": 532231408,
+    "beacon_scale": 1.6483106938885488,
+    "turb_scale": 0.7192598662890475,
+    "vib_scale": 1.736996285684512,
+    "point_err_az_deg": -0.4551967825822213,
+    "point_err_el_deg": -0.6410305206519433
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.51581285549911,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 155.69528746235824,
+     "max": 23187.98179384277,
+     "p50": 110.0636630534299,
+     "p95": 293.1973414034078,
+     "p99": 434.83383466028886
+    },
+    "pointing_error_urad": {
+     "mean": 476.78771705063593,
+     "max": 27146.274904110873,
+     "p50": 303.5167323863649,
+     "p95": 716.5855164840149,
+     "p99": 4143.39474844391
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 15.01445649000339,
+     "max": 24.250417000075686,
+     "p50": 14.97453799993309,
+     "p95": 18.315187100733965,
+     "p99": 20.407788420461653
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.333333333333336,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.12000000000000002,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 51.44444444444444,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.111111111111114
+    },
+    "mean_detections_per_frame": 5.153333333333333
+   }
+  },
+  {
+   "run": 48,
+   "draws": {
+    "seed": 1965520739,
+    "beacon_scale": 0.7476166177440842,
+    "turb_scale": 0.9270801235069033,
+    "vib_scale": 0.730420092788088,
+    "point_err_az_deg": -0.922823847203148,
+    "point_err_el_deg": -0.861933570594408
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.23747671004248,
+    "acquisition_time_s": 1.5333333333333332,
+    "tracking_error_urad": {
+     "mean": 83.09632694660456,
+     "max": 361.7608555982454,
+     "p50": 75.06503547252558,
+     "p95": 168.67890472412088,
+     "p99": 225.59653093806853
+    },
+    "pointing_error_urad": {
+     "mean": 374.80160859382664,
+     "max": 26137.15633340016,
+     "p50": 211.0670824471428,
+     "p95": 810.8011308830206,
+     "p99": 2489.516924645202
+    },
+    "lock_retention_pct": 96.77777777777777,
+    "processing_ms": {
+     "mean": 14.577829327776676,
+     "max": 34.18195199992624,
+     "p50": 14.504287999898224,
+     "p95": 18.03597595012434,
+     "p99": 19.981476300072245
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 51.0,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 8,
+    "reacquisition_mean_s": 0.09166666666666665,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.0,
+     "COAST": 48.77777777777778,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.0
+    },
+    "mean_detections_per_frame": 4.916666666666667
+   }
+  },
+  {
+   "run": 49,
+   "draws": {
+    "seed": 1977769028,
+    "beacon_scale": 0.5163303592449463,
+    "turb_scale": 0.761962206403779,
+    "vib_scale": 0.5800728989407631,
+    "point_err_az_deg": 0.21874515866633093,
+    "point_err_el_deg": 0.3252861482391115
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.01918955673978,
+    "acquisition_time_s": 3.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 171.96665800367714,
+     "max": 42081.8499469021,
+     "p50": 68.2297530537547,
+     "p95": 156.30769660842643,
+     "p99": 295.7292436396639
+    },
+    "pointing_error_urad": {
+     "mean": 866.8073107329716,
+     "max": 47458.45197303233,
+     "p50": 201.04331269389274,
+     "p95": 1086.904348125045,
+     "p99": 21517.071976814528
+    },
+    "lock_retention_pct": 94.44444444444444,
+    "processing_ms": {
+     "mean": 14.615250723327335,
+     "max": 28.80706599989935,
+     "p50": 14.569654999831982,
+     "p95": 17.928925550450003,
+     "p99": 19.576209129745617
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 16,
+    "reacquisition_mean_s": 0.09791666666666665,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 5.333333333333333,
+     "COAST": 50.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 44.111111111111114
+    },
+    "mean_detections_per_frame": 4.734444444444445
+   }
+  },
+  {
+   "run": 50,
+   "draws": {
+    "seed": 1724646939,
+    "beacon_scale": 1.0677813035993038,
+    "turb_scale": 1.2567893555333451,
+    "vib_scale": 1.8125074133519128,
+    "point_err_az_deg": 0.8427159043732944,
+    "point_err_el_deg": -0.8217448883769746
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.63383659906735,
+    "acquisition_time_s": 0.7666666666666666,
+    "tracking_error_urad": {
+     "mean": 164.68296940090823,
+     "max": 1879.0410948608271,
+     "p50": 130.58611090599288,
+     "p95": 391.90454334314046,
+     "p99": 844.7583068947501
+    },
+    "pointing_error_urad": {
+     "mean": 362.56920586679774,
+     "max": 5982.279632688681,
+     "p50": 307.6002547019699,
+     "p95": 767.1974667991775,
+     "p99": 1426.4864662032608
+    },
+    "lock_retention_pct": 98.77777777777777,
+    "processing_ms": {
+     "mean": 14.844490388862445,
+     "max": 26.156724000429676,
+     "p50": 14.752392499758571,
+     "p95": 18.18731869993826,
+     "p99": 19.922431220211365
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 47.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.038888888888888896,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.0,
+     "COAST": 51.888888888888886,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.888888888888886
+    },
+    "mean_detections_per_frame": 4.714444444444444
+   }
+  },
+  {
+   "run": 51,
+   "draws": {
+    "seed": 845314968,
+    "beacon_scale": 0.7811466601527006,
+    "turb_scale": 0.855117306656594,
+    "vib_scale": 0.8740813637483178,
+    "point_err_az_deg": 0.17095836418265442,
+    "point_err_el_deg": -0.1507276337342539
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.84909045402724,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 94.01280448919553,
+     "max": 308.6708740388813,
+     "p50": 84.93675495888503,
+     "p95": 196.7998870089891,
+     "p99": 259.46395001112234
+    },
+    "pointing_error_urad": {
+     "mean": 421.3151104521818,
+     "max": 30591.2070144842,
+     "p50": 221.87844155407376,
+     "p95": 611.6001692098623,
+     "p99": 4998.367442750582
+    },
+    "lock_retention_pct": 97.55555555555556,
+    "processing_ms": {
+     "mean": 15.530760102240796,
+     "max": 29.961295000248356,
+     "p50": 15.473580499929085,
+     "p95": 19.097143999897526,
+     "p99": 21.999979630691087
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.55555555555556,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.1,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.2222222222222223,
+     "COAST": 50.22222222222222,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.333333333333336
+    },
+    "mean_detections_per_frame": 5.43
+   }
+  },
+  {
+   "run": 52,
+   "draws": {
+    "seed": 606187738,
+    "beacon_scale": 1.1845896907651003,
+    "turb_scale": 1.2856294230764558,
+    "vib_scale": 0.652507854355574,
+    "point_err_az_deg": 0.8003005290925433,
+    "point_err_el_deg": -0.8064686403628124
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.814602576313455,
+    "acquisition_time_s": 0.5666666666666667,
+    "tracking_error_urad": {
+     "mean": 106.48146033161714,
+     "max": 359.9724948991318,
+     "p50": 101.97344729262869,
+     "p95": 213.63094218008573,
+     "p99": 277.11060111300526
+    },
+    "pointing_error_urad": {
+     "mean": 226.17773075957354,
+     "max": 6705.250871571918,
+     "p50": 194.20771122108587,
+     "p95": 466.5168776824865,
+     "p99": 630.7645228580868
+    },
+    "lock_retention_pct": 98.88888888888889,
+    "processing_ms": {
+     "mean": 15.440188455566183,
+     "max": 27.924572999836528,
+     "p50": 15.351260999977967,
+     "p95": 18.95235355004843,
+     "p99": 22.82919809984378
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 2,
+    "reacquisition_mean_s": 0.1,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 0.8888888888888888,
+     "COAST": 49.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 49.77777777777778
+    },
+    "mean_detections_per_frame": 5.011111111111111
+   }
+  },
+  {
+   "run": 53,
+   "draws": {
+    "seed": 105772416,
+    "beacon_scale": 2.3421679249379306,
+    "turb_scale": 0.6486697123698133,
+    "vib_scale": 1.765362427396629,
+    "point_err_az_deg": 0.9663675454262808,
+    "point_err_el_deg": 0.8632272250558669
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.87459119440367,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 116.93475360542006,
+     "max": 643.0682593536812,
+     "p50": 100.49586810785644,
+     "p95": 259.2896350557083,
+     "p99": 360.9460402239091
+    },
+    "pointing_error_urad": {
+     "mean": 489.1158608388821,
+     "max": 28662.63969574301,
+     "p50": 300.5149681611944,
+     "p95": 706.4969747877193,
+     "p99": 3155.6446151760233
+    },
+    "lock_retention_pct": 97.77777777777777,
+    "processing_ms": {
+     "mean": 15.463562378903994,
+     "max": 41.7278630002329,
+     "p50": 15.518444500230544,
+     "p95": 19.23612369955663,
+     "p99": 20.844785549952576
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.13333333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.0,
+     "COAST": 51.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.77777777777778
+    },
+    "mean_detections_per_frame": 5.477777777777778
+   }
+  },
+  {
+   "run": 54,
+   "draws": {
+    "seed": 688690082,
+    "beacon_scale": 2.0369028356197907,
+    "turb_scale": 1.4637249139933215,
+    "vib_scale": 1.6684945318671935,
+    "point_err_az_deg": -0.877074699808447,
+    "point_err_el_deg": 0.06492246470574714
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.15379334111636,
+    "acquisition_time_s": 1.0333333333333332,
+    "tracking_error_urad": {
+     "mean": 161.18175515015383,
+     "max": 1138.2585713392327,
+     "p50": 145.64249976273888,
+     "p95": 329.0858046825718,
+     "p99": 510.734705047781
+    },
+    "pointing_error_urad": {
+     "mean": 410.6965918147692,
+     "max": 11207.019127603598,
+     "p50": 343.1095160973885,
+     "p95": 842.306444401239,
+     "p99": 1150.1020991661114
+    },
+    "lock_retention_pct": 96.77777777777777,
+    "processing_ms": {
+     "mean": 15.328102141088998,
+     "max": 26.629150999724516,
+     "p50": 15.253034499892237,
+     "p95": 19.03406729989001,
+     "p99": 21.11468242934279
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.44444444444444,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 10,
+    "reacquisition_mean_s": 0.0566666666666666,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.0,
+     "COAST": 50.333333333333336,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.44444444444444
+    },
+    "mean_detections_per_frame": 5.335555555555556
+   }
+  },
+  {
+   "run": 55,
+   "draws": {
+    "seed": 1722337462,
+    "beacon_scale": 1.4798680273998706,
+    "turb_scale": 1.7863582161838363,
+    "vib_scale": 1.1941990483902738,
+    "point_err_az_deg": -0.27578520935915163,
+    "point_err_el_deg": 0.25121388822679813
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.21466817634721,
+    "acquisition_time_s": 1.2666666666666666,
+    "tracking_error_urad": {
+     "mean": 166.96194705182745,
+     "max": 1465.3891066807666,
+     "p50": 145.34680559996883,
+     "p95": 346.6963266725592,
+     "p99": 464.96958773618394
+    },
+    "pointing_error_urad": {
+     "mean": 547.5138932154549,
+     "max": 31587.60691418739,
+     "p50": 313.85247213704565,
+     "p95": 757.191900019298,
+     "p99": 4608.316021946424
+    },
+    "lock_retention_pct": 97.88888888888889,
+    "processing_ms": {
+     "mean": 15.063358056686411,
+     "max": 27.98856600020372,
+     "p50": 14.977616000123817,
+     "p95": 18.847058500114144,
+     "p99": 20.83921067963274
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.888888888888886,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 5,
+    "reacquisition_mean_s": 0.1,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.7777777777777777,
+     "COAST": 48.77777777777778,
+     "SEARCH": 0.3333333333333333,
+     "TRACK": 49.111111111111114
+    },
+    "mean_detections_per_frame": 4.722222222222222
+   }
+  },
+  {
+   "run": 56,
+   "draws": {
+    "seed": 536438634,
+    "beacon_scale": 0.6935136630033094,
+    "turb_scale": 1.2168159110356187,
+    "vib_scale": 1.1253340528923275,
+    "point_err_az_deg": -0.6418321427307031,
+    "point_err_el_deg": -0.23847874179276962
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.2563233026154,
+    "acquisition_time_s": 1.1,
+    "tracking_error_urad": {
+     "mean": 117.92083615433157,
+     "max": 632.616938360136,
+     "p50": 104.42714207348355,
+     "p95": 247.99895600417267,
+     "p99": 378.4431519452603
+    },
+    "pointing_error_urad": {
+     "mean": 483.65948452062594,
+     "max": 31814.78784945065,
+     "p50": 257.84303990035534,
+     "p95": 800.7774029867376,
+     "p99": 3824.397483253615
+    },
+    "lock_retention_pct": 98.33333333333333,
+    "processing_ms": {
+     "mean": 14.641571420002542,
+     "max": 30.952013000387524,
+     "p50": 14.54090549987086,
+     "p95": 18.194514050492216,
+     "p99": 22.122382590205234
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.052380952380952396,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.4444444444444444,
+     "COAST": 50.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 48.22222222222222
+    },
+    "mean_detections_per_frame": 4.917777777777777
+   }
+  },
+  {
+   "run": 57,
+   "draws": {
+    "seed": 572225616,
+    "beacon_scale": 1.1694241446351197,
+    "turb_scale": 0.9912433466188182,
+    "vib_scale": 1.0691961195903934,
+    "point_err_az_deg": 0.44578402909426895,
+    "point_err_el_deg": -0.3656223457716865
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.38701063513629,
+    "acquisition_time_s": 1.5666666666666667,
+    "tracking_error_urad": {
+     "mean": 124.79118387271598,
+     "max": 616.9347499523478,
+     "p50": 103.65829751183617,
+     "p95": 298.8663406770096,
+     "p99": 480.4607790009973
+    },
+    "pointing_error_urad": {
+     "mean": 375.163508264467,
+     "max": 27604.7584237609,
+     "p50": 248.83270941159174,
+     "p95": 618.4376212478904,
+     "p99": 2069.288415930441
+    },
+    "lock_retention_pct": 96.33333333333333,
+    "processing_ms": {
+     "mean": 15.06047092777812,
+     "max": 24.495664999449218,
+     "p50": 14.978764499574027,
+     "p95": 18.871769150518954,
+     "p99": 20.972838980233064
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 49.77777777777778,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.08333333333333336,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.4444444444444446,
+     "COAST": 50.0,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.333333333333336
+    },
+    "mean_detections_per_frame": 5.085555555555556
+   }
+  },
+  {
+   "run": 58,
+   "draws": {
+    "seed": 1702421863,
+    "beacon_scale": 2.3243308410301737,
+    "turb_scale": 1.2213656424501178,
+    "vib_scale": 0.9925418075070331,
+    "point_err_az_deg": 0.08504349559200763,
+    "point_err_el_deg": 0.6274088797925242
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 35.55236562946901,
+    "acquisition_time_s": 1.8,
+    "tracking_error_urad": {
+     "mean": 112.67048554873774,
+     "max": 564.137844300733,
+     "p50": 99.91187808198875,
+     "p95": 233.1935501726734,
+     "p99": 355.9429125042984
+    },
+    "pointing_error_urad": {
+     "mean": 570.1132571186295,
+     "max": 32663.036604296176,
+     "p50": 268.17547091931044,
+     "p95": 896.3799620153931,
+     "p99": 7608.8890941768905
+    },
+    "lock_retention_pct": 96.22222222222223,
+    "processing_ms": {
+     "mean": 14.482749631122513,
+     "max": 29.19293899958575,
+     "p50": 14.331909500015172,
+     "p95": 17.928789549478097,
+     "p99": 19.646586909839243
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.10476190476190475,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 3.5555555555555554,
+     "COAST": 49.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 47.111111111111114
+    },
+    "mean_detections_per_frame": 4.9
+   }
+  },
+  {
+   "run": 59,
+   "draws": {
+    "seed": 2037656880,
+    "beacon_scale": 1.7704334151762144,
+    "turb_scale": 1.7065877419206161,
+    "vib_scale": 1.2990834140986103,
+    "point_err_az_deg": 0.31900231024228987,
+    "point_err_el_deg": -0.3813198944715689
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.04947074571843,
+    "acquisition_time_s": 0.8,
+    "tracking_error_urad": {
+     "mean": 172.54393780587247,
+     "max": 1029.1414853331944,
+     "p50": 138.20086037184154,
+     "p95": 415.9101198301051,
+     "p99": 696.9245368661509
+    },
+    "pointing_error_urad": {
+     "mean": 399.3063090786285,
+     "max": 15969.578316611203,
+     "p50": 304.26230778568146,
+     "p95": 747.5661040920058,
+     "p99": 1259.7947771915142
+    },
+    "lock_retention_pct": 98.33333333333333,
+    "processing_ms": {
+     "mean": 15.331760667772365,
+     "max": 25.122222999925725,
+     "p50": 15.350434000083624,
+     "p95": 19.223715749603798,
+     "p99": 21.98174753008061
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 4,
+    "reacquisition_mean_s": 0.09166666666666609,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.4444444444444444,
+     "COAST": 51.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.666666666666664
+    },
+    "mean_detections_per_frame": 5.238888888888889
+   }
+  },
+  {
+   "run": 60,
+   "draws": {
+    "seed": 379501089,
+    "beacon_scale": 0.8250496455640086,
+    "turb_scale": 1.5421971932277474,
+    "vib_scale": 1.7910786024888412,
+    "point_err_az_deg": -0.8829531904762946,
+    "point_err_el_deg": 0.2058835329754557
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.759126795774456,
+    "acquisition_time_s": 4.0,
+    "tracking_error_urad": {
+     "mean": 290.28722963885275,
+     "max": 42034.652257154434,
+     "p50": 135.84513136909618,
+     "p95": 332.33613374971264,
+     "p99": 478.4157659077761
+    },
+    "pointing_error_urad": {
+     "mean": 978.4592737927941,
+     "max": 57409.784095946765,
+     "p50": 378.35950216262006,
+     "p95": 1177.3879925552394,
+     "p99": 14080.084988909588
+    },
+    "lock_retention_pct": 91.55555555555556,
+    "processing_ms": {
+     "mean": 14.988829136696545,
+     "max": 25.99621199988178,
+     "p50": 14.970162999816239,
+     "p95": 18.433176099915723,
+     "p99": 20.871220039743996
+    },
+    "beacon_in_fov_pct": 99.33333333333333,
+    "detection_duty_pct": 51.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 16,
+    "reacquisition_mean_s": 0.13958333333333328,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 8.222222222222221,
+     "COAST": 48.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 42.888888888888886
+    },
+    "mean_detections_per_frame": 5.188888888888889
+   }
+  },
+  {
+   "run": 61,
+   "draws": {
+    "seed": 1578171048,
+    "beacon_scale": 0.5997010712828628,
+    "turb_scale": 1.5885734424071403,
+    "vib_scale": 0.6267398282352803,
+    "point_err_az_deg": 1.0462555744815025,
+    "point_err_el_deg": -0.6526657259319562
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 33.27302761348591,
+    "acquisition_time_s": 0.5,
+    "tracking_error_urad": {
+     "mean": 136.25331971575542,
+     "max": 815.4134791307768,
+     "p50": 119.04111290194217,
+     "p95": 294.69065301993965,
+     "p99": 434.3435319459382
+    },
+    "pointing_error_urad": {
+     "mean": 254.6636113664551,
+     "max": 3087.3245543535145,
+     "p50": 223.99361565171725,
+     "p95": 543.9499320408039,
+     "p99": 695.7859993970533
+    },
+    "lock_retention_pct": 98.77777777777777,
+    "processing_ms": {
+     "mean": 16.004837579999325,
+     "max": 33.28043599958619,
+     "p50": 15.999839499727386,
+     "p95": 19.7917657502785,
+     "p99": 21.828140750185412
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 50.111111111111114,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 2,
+    "reacquisition_mean_s": 0.11666666666666667,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 1.0,
+     "COAST": 49.666666666666664,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 49.111111111111114
+    },
+    "mean_detections_per_frame": 5.8933333333333335
+   }
+  },
+  {
+   "run": 62,
+   "draws": {
+    "seed": 2061452238,
+    "beacon_scale": 2.081856769778703,
+    "turb_scale": 1.390523006699531,
+    "vib_scale": 1.6739361569443203,
+    "point_err_az_deg": 0.7082756135594062,
+    "point_err_el_deg": 0.8028487130711944
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.41931034357714,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 181.09484394995337,
+     "max": 3678.6040620068065,
+     "p50": 149.63655345052402,
+     "p95": 387.724363494584,
+     "p99": 630.1984721658489
+    },
+    "pointing_error_urad": {
+     "mean": 565.5677547804667,
+     "max": 28112.750597241273,
+     "p50": 353.8944588177501,
+     "p95": 851.2408791665348,
+     "p99": 4331.29344824555
+    },
+    "lock_retention_pct": 97.44444444444444,
+    "processing_ms": {
+     "mean": 15.07871841001866,
+     "max": 23.913361999802873,
+     "p50": 15.088885500063043,
+     "p95": 18.593398550092388,
+     "p99": 20.228944900518396
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 45.0,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 6,
+    "reacquisition_mean_s": 0.10555555555555551,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.3333333333333335,
+     "COAST": 54.77777777777778,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 42.666666666666664
+    },
+    "mean_detections_per_frame": 4.878888888888889
+   }
+  },
+  {
+   "run": 63,
+   "draws": {
+    "seed": 2059179647,
+    "beacon_scale": 0.9321050430622931,
+    "turb_scale": 1.3851138430374639,
+    "vib_scale": 0.6425737963466018,
+    "point_err_az_deg": 0.2787976800578911,
+    "point_err_el_deg": -0.5916756526329802
+   },
+   "report": {
+    "scenario_name": "leo_pass_nominal",
+    "simulation_duration_s": 30.0,
+    "frames": 900,
+    "simulated_fps": 30.0,
+    "achieved_fps": 34.28618051115606,
+    "acquisition_time_s": 1.5,
+    "tracking_error_urad": {
+     "mean": 165.92361491340984,
+     "max": 9953.600589659005,
+     "p50": 103.3308254027992,
+     "p95": 230.25942290120955,
+     "p99": 1556.1163092380864
+    },
+    "pointing_error_urad": {
+     "mean": 375.84976714280435,
+     "max": 15394.1895775057,
+     "p50": 203.21831862214847,
+     "p95": 537.9399795022456,
+     "p99": 5564.3065836783535
+    },
+    "lock_retention_pct": 97.77777777777777,
+    "processing_ms": {
+     "mean": 15.215321088894093,
+     "max": 70.02660000034666,
+     "p50": 14.888900999721955,
+     "p95": 19.317598949601233,
+     "p99": 26.153122069881633
+    },
+    "beacon_in_fov_pct": 100.0,
+    "detection_duty_pct": 48.666666666666664,
+    "decoy_locked_frames": 0,
+    "decoy_locked_pct": 0.0,
+    "reacquisitions": 7,
+    "reacquisition_mean_s": 0.07619047619047617,
+    "never_recovered": false,
+    "state_occupancy_pct": {
+     "ACQUIRE": 2.0,
+     "COAST": 51.111111111111114,
+     "SEARCH": 0.2222222222222222,
+     "TRACK": 46.666666666666664
+    },
+    "mean_detections_per_frame": 5.216666666666667
+   }
+  }
+ ]
+}

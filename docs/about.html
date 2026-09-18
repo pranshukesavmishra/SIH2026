@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ZeroDrift — Team &amp; System Architecture · ISRO SIH26169</title>
+<link rel="icon" type="image/png" href="media/logo_emblem.png">
+<style>
+:root {
+  --bg-deep: #02050E;
+  --bg-base: #040915;
+  --panel: rgba(8, 16, 32, 0.78);
+  --panel-solid: #0A1224;
+  --panel-hover: rgba(14, 26, 50, 0.9);
+  --edge: #15263F;
+  --edge-glow: rgba(79, 199, 234, 0.5);
+  --ink-primary: #EAF4FD;
+  --ink-secondary: #8EA4C4;
+  --ink-muted: #536988;
+  --cyan: #4FC7EA;
+  --cyan-bright: #7FE0F8;
+  --green: #3BD68C;
+  --amber: #FFC24D;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --glow-cyan: 0 0 25px rgba(79, 199, 234, 0.55);
+  --glow-card: 0 12px 35px -10px rgba(0, 0, 0, 0.8), 0 0 16px rgba(79, 199, 234, 0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 64px;
+  overflow-x: clip;
+}
+body {
+  background: var(--bg-deep);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: clip;
+}
+
+/* Morphing Square Loading Screen Overlay */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #02050E;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+  pointer-events: all;
+}
+.loading-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.morph-square-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.morph-square {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #4FC7EA 0%, #7FE0F8 100%);
+  box-shadow: 0 0 30px rgba(79, 199, 234, 0.8), 0 0 10px #fff;
+  animation: morphSquareAnim 2s infinite ease-in-out;
+}
+@keyframes morphSquareAnim {
+  0% {
+    border-radius: 6%;
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    border-radius: 50%;
+    transform: rotate(180deg) scale(0.8);
+    box-shadow: 0 0 45px rgba(79, 199, 234, 1), 0 0 15px #fff;
+  }
+  100% {
+    border-radius: 6%;
+    transform: rotate(360deg) scale(1);
+  }
+}
+.loading-brand {
+  text-align: center;
+  font-family: var(--font-mono);
+}
+.loading-brand b {
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #fff;
+  display: block;
+  margin-bottom: 6px;
+}
+.loading-brand b span { color: var(--cyan); }
+.loading-msg {
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: pulseText 1.5s infinite alternate ease-in-out;
+}
+@keyframes pulseText {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+.loading-bar-wrap {
+  width: 140px;
+  height: 2px;
+  background: rgba(21, 38, 63, 0.8);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loading-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--cyan), #fff, var(--cyan), transparent);
+  background-size: 200% 100%;
+  animation: loadProgress 1.2s infinite linear;
+}
+@keyframes loadProgress {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Background Canvas for Cosmic Nebula & Interactive Constellation */
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+/* Sticky Top Navigation Bar */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 32px;
+  background: rgba(3, 7, 15, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--edge);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.brand-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(79, 199, 234, 0.7));
+  transition: transform 0.3s ease;
+}
+.brand-group:hover .brand-logo-img {
+  transform: scale(1.1) rotate(15deg);
+}
+.brand-text b {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+.brand-text b span { color: var(--cyan); }
+.brand-text small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-muted);
+  letter-spacing: 1.5px;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.nav-link svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  opacity: 0.85;
+}
+.nav-link:hover {
+  color: var(--cyan);
+  background: rgba(79, 199, 234, 0.08);
+  border-color: rgba(79, 199, 234, 0.25);
+}
+.nav-link.active {
+  color: var(--cyan);
+  background: rgba(79, 199, 234, 0.14);
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(79, 199, 234, 0.3);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.github-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  color: var(--ink-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.github-icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.github-icon-btn:hover {
+  color: #fff;
+  border-color: var(--cyan);
+  background: rgba(79, 199, 234, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Right-side Floating Section Indicators */
+.section-nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 90;
+}
+.dot-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  transition: all 0.25s ease;
+}
+.dot-label {
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  background: rgba(5, 11, 22, 0.9);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--edge);
+}
+.dot-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-muted);
+  background: transparent;
+  transition: all 0.25s ease;
+}
+.dot-item:hover .dot-label,
+.dot-item.active .dot-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+.dot-item:hover .dot-circle {
+  border-color: var(--cyan);
+  background: rgba(79, 199, 234, 0.3);
+}
+.dot-item.active .dot-circle {
+  border-color: var(--cyan);
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+}
+@media (max-width: 1024px) {
+  .section-nav-dots { display: none; }
+}
+
+/* Full Viewport Sections Container */
+.fullpage-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* Discrete Desktop Section Box */
+.section-view {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px 50px;
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Mission Badge */
+.mission-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  background: rgba(14, 25, 42, 0.85);
+  border: 1px solid rgba(79, 199, 234, 0.35);
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  box-shadow: 0 0 16px rgba(79, 199, 234, 0.2);
+}
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.hero-title {
+  font-family: var(--font-mono);
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 6px;
+  text-align: center;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);
+}
+.hero-title span { color: var(--cyan); text-shadow: var(--glow-cyan); }
+.hero-dept {
+  color: var(--ink-secondary);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* SECTION 1: THE TEAM */
+.team-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 1060px;
+}
+
+/* Top Row: Aryan Singh (Team Head) & Pranshu Mishra */
+.team-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .team-top-row { grid-template-columns: 1fr; }
+}
+
+/* Bottom Row: 4 Members in ONE Single Line */
+.team-bottom-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+@media (max-width: 900px) {
+  .team-bottom-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .team-bottom-row { grid-template-columns: 1fr; }
+}
+
+/* 3D Tilt Member Card */
+.member-card {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  padding: 20px 18px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+  box-shadow: var(--glow-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.member-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.8), 0 0 22px rgba(79, 199, 234, 0.35);
+}
+
+.member-card.team-head-card {
+  border-color: rgba(79, 199, 234, 0.6);
+  background: linear-gradient(180deg, rgba(16, 34, 62, 0.9) 0%, rgba(10, 18, 34, 0.9) 100%);
+}
+.head-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(79, 199, 234, 0.15);
+  border: 1px solid var(--cyan);
+  border-radius: 14px;
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(79, 199, 234, 0.3);
+}
+
+.member-name {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.member-college {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  line-height: 1.4;
+}
+
+/* Mentor Box */
+.mentor-banner {
+  background: rgba(12, 24, 42, 0.8);
+  border: 1px solid rgba(79, 199, 234, 0.35);
+  border-radius: 12px;
+  padding: 14px 22px;
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  box-shadow: var(--glow-card);
+}
+.mentor-banner b { color: #fff; }
+.mentor-banner span { color: var(--cyan); font-weight: 700; }
+
+/* Scroll Prompts at Bottom of Sections */
+.scroll-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  margin-top: 24px;
+  background: rgba(14, 25, 44, 0.85);
+  border: 1px solid var(--edge);
+  border-radius: 20px;
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: var(--glow-card);
+  cursor: pointer;
+}
+.scroll-nav-btn:hover {
+  background: rgba(79, 199, 234, 0.15);
+  border-color: var(--cyan);
+  transform: translateY(2px);
+}
+.scroll-nav-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  animation: bounceDown 1.8s infinite ease-in-out;
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* SECTION 2: VERTICAL CONNECTED LINE ARCHITECTURE */
+.points-section-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.section-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+/* Vertical Timeline Graphic Flow */
+.pipeline-flow {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px;
+  padding-left: 36px;
+}
+.pipeline-spine {
+  position: absolute;
+  top: 15px;
+  bottom: 15px;
+  left: 11px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--cyan) 0%, rgba(79, 199, 234, 0.8) 50%, rgba(59, 214, 140, 0.9) 100%);
+  box-shadow: 0 0 12px rgba(79, 199, 234, 0.6);
+}
+.spine-pulse {
+  position: absolute;
+  width: 6px;
+  height: 30px;
+  left: -2px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 14px #fff, 0 0 20px var(--cyan);
+  animation: spineTravel 3.5s infinite linear;
+}
+@keyframes spineTravel {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 95%; opacity: 0; }
+}
+
+.flow-step {
+  position: relative;
+  margin-bottom: 14px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--glow-card);
+  backdrop-filter: blur(14px);
+  transition: all 0.25s ease;
+}
+.flow-step:hover {
+  border-color: var(--cyan);
+  transform: translateX(4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 16px rgba(79, 199, 234, 0.2);
+}
+.flow-node-dot {
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #060E1C;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.flow-node-dot::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan-bright);
+}
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--cyan);
+  background: rgba(79, 199, 234, 0.12);
+  border: 1px solid rgba(79, 199, 234, 0.3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  flex-shrink: 0;
+}
+.step-body { flex: 1; }
+.step-body h4 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.step-body p {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  line-height: 1.45;
+}
+.step-metric-badge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--green);
+  background: rgba(59, 214, 140, 0.1);
+  border: 1px solid rgba(59, 214, 140, 0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Center Console Action Button */
+.center-cta-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 8px 0 16px;
+}
+.btn-console-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--cyan);
+  color: #030B14;
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-decoration: none;
+  box-shadow: 0 4px 22px rgba(79, 199, 234, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-console-main:hover {
+  background: var(--cyan-bright);
+  box-shadow: 0 6px 28px rgba(79, 199, 234, 0.7);
+  transform: translateY(-2px);
+}
+.btn-console-main svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* SECTION 3: INSTRUMENTATION & LIVE DEMO LOOP */
+.instrumentation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1060px;
+  margin: 16px 0 24px;
+}
+@media (max-width: 980px) {
+  .instrumentation-grid { grid-template-columns: 1fr; }
+}
+
+.visual-card {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--glow-card);
+  transition: all 0.25s ease;
+}
+.visual-card:hover {
+  border-color: var(--edge-glow);
+  transform: translateY(-3px);
+}
+.visual-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--edge);
+  display: block;
+}
+.visual-card-body {
+  padding: 14px;
+  flex: 1;
+}
+.visual-card-body h4 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.visual-card-body p {
+  font-size: 11.5px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+/* Compact Live Loop Frame */
+.live-loop-card {
+  background: #020710;
+  border: 1px solid rgba(79, 199, 234, 0.45);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.8), 0 0 20px rgba(79, 199, 234, 0.25);
+  transition: all 0.25s ease;
+}
+.live-loop-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-3px);
+}
+.live-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(12, 22, 38, 0.95);
+  border-bottom: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-secondary);
+}
+.live-dots { display: flex; gap: 5px; }
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--edge);
+}
+.live-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.live-loop-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Footer */
+.page-footer {
+  position: relative;
+  z-index: 10;
+  padding: 24px 20px 36px;
+  border-top: 1px solid var(--edge);
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  background: var(--bg-base);
+}
+.page-footer a { color: var(--cyan); text-decoration: none; }
+.page-footer a:hover { text-decoration: underline; color: #fff; }
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(3, 7, 15, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--edge);
+  z-index: 200;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
+}
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  flex: 1;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+.mobile-nav-item svg { width: 18px; height: 18px; fill: currentColor; }
+.mobile-nav-item:hover, .mobile-nav-item.active { color: var(--cyan); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-bottom-nav { display: flex; }
+  .section-view { min-height: auto; padding: 36px 16px 50px; }
+  .flow-step { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .step-metric-badge { align-self: flex-start; }
+  .fullpage-container { padding-bottom: 70px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Full-Screen Morphing Square Loading Screen (Pure Minimalist Spinner, No Text) -->
+<div id="loading-screen" class="loading-overlay">
+  <div class="morph-square"></div>
+</div>
+
+<!-- Dynamic Cosmic Nebula & Interactive Constellation Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Floating Section Indicator Dots on Desktop -->
+<nav class="section-nav-dots">
+  <a href="#sec-team" class="dot-item active" id="dot-sec-team" title="Team ZeroDrift">
+    <span class="dot-label">01 TEAM</span>
+    <span class="dot-circle"></span>
+  </a>
+  <a href="#sec-architecture" class="dot-item" id="dot-sec-architecture" title="System Capabilities">
+    <span class="dot-label">02 SPECS</span>
+    <span class="dot-circle"></span>
+  </a>
+  <a href="#sec-replay" class="dot-item" id="dot-sec-replay" title="Live Telemetry">
+    <span class="dot-label">03 REPLAY</span>
+    <span class="dot-circle"></span>
+  </a>
+</nav>
+
+<!-- Sticky Top Navigation -->
+<header class="top-nav">
+  <a href="index.html" class="brand-group">
+    <img src="media/logo_emblem.png" alt="ZeroDrift Logo" class="brand-logo-img">
+    <div class="brand-text">
+      <b>ZERO<span>DRIFT</span></b>
+      <small>FSOC COARSE ALIGNMENT · ISRO SIH26169</small>
+    </div>
+  </a>
+
+  <nav class="nav-links">
+    <a href="index.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      HOME
+    </a>
+    <a href="console.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2zm0 4v10h16V8H4zm3 2h2v2H7v-2zm0 4h10v2H7v-2zm4-4h6v2h-6v-2z"/></svg>
+      CONSOLE
+    </a>
+    <a href="live.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M12 15.2A3.2 3.2 0 1 0 12 8.8a3.2 3.2 0 0 0 0 6.4zM9 3l-1.8 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 15a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg>
+      LIVE DEMO
+    </a>
+    <a href="about.html" class="nav-link active">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      ABOUT US
+    </a>
+  </nav>
+
+  <div class="nav-right">
+    <a href="https://github.com/pranshukesavmishra/SIH-2026" class="github-icon-btn" title="View Source on GitHub" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+    </a>
+  </div>
+</header>
+
+<div class="fullpage-container">
+  <!-- SECTION 1: THE TEAM -->
+  <section class="section-view" id="sec-team">
+    <div class="mission-badge">
+      <span class="badge-dot"></span>
+      PROJECT DOSSIER · ISRO SIH26169
+    </div>
+    <h1 class="hero-title">TEAM <span>ZERODRIFT</span></h1>
+    <p class="hero-dept">Department of Computer Science &amp; Engineering · Jabalpur Engineering College (JEC)</p>
+
+    <div class="team-layout">
+      <!-- Top Row: Aryan Singh (Team Head) & Pranshu Mishra -->
+      <div class="team-top-row">
+        <div class="member-card team-head-card">
+          <span class="head-badge">★ TEAM HEAD</span>
+          <div class="member-name">Aryan Singh</div>
+          <div class="member-college">Department of Computer Science &amp; Engineering<br>Jabalpur Engineering College</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-name" style="margin-top: 14px;">Pranshu Mishra</div>
+          <div class="member-college">Department of Computer Science &amp; Engineering<br>Jabalpur Engineering College</div>
+        </div>
+      </div>
+
+      <!-- Second Row: All 4 Members in ONE Horizontal Line -->
+      <div class="team-bottom-row">
+        <div class="member-card">
+          <div class="member-name">Aashna Verma</div>
+          <div class="member-college">Department of CSE · JEC</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-name">Vivek Rajput</div>
+          <div class="member-college">Department of CSE · JEC</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-name">Palak Uikey</div>
+          <div class="member-college">Department of CSE · JEC</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-name">Shivanand Sahu</div>
+          <div class="member-college">Department of CSE · JEC</div>
+        </div>
+      </div>
+
+      <!-- Faculty Mentor Banner -->
+      <div class="mentor-banner">
+        <span>FACULTY MENTOR:</span> <b>Dr. Jitendra Singh Thakur</b> — Head of Department, Computer Science &amp; Engineering, Jabalpur Engineering College.
+      </div>
+    </div>
+
+    <button class="scroll-nav-btn" data-target="#sec-architecture">
+      SYSTEM CAPABILITIES &amp; ARCHITECTURE
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+    </button>
+  </section>
+
+  <!-- SECTION 2: SYSTEM CAPABILITIES & ARCHITECTURE (VERTICAL CONNECTED LINE FLOW) -->
+  <section class="section-view" id="sec-architecture">
+    <div class="points-section-header">
+      <div class="section-tag">ENGINE OVERVIEW &amp; METRICS</div>
+      <h2 class="section-title">Core Capabilities &amp; Validated Architecture</h2>
+    </div>
+
+    <!-- Vertical Line Connected Points Graphic -->
+    <div class="pipeline-flow">
+      <div class="pipeline-spine">
+        <div class="spine-pulse"></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-node-dot"></div>
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h4>Sub-Pixel Target Acquisition</h4>
+          <p>Cold-start detection convergence in 1.1s under severe orbital rate dynamics and photon noise.</p>
+        </div>
+        <div class="step-metric-badge">1.1 s Acquisition</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-node-dot"></div>
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h4>Fourier Modulation Discrimination</h4>
+          <p>4 Hz beacon frequency signature gating completely suppresses high-intensity false targets and crossing decoys.</p>
+        </div>
+        <div class="step-metric-badge">0 / 64 Decoy Rejection</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-node-dot"></div>
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h4>Adaptive IMM State Estimation</h4>
+          <p>Interacting Multiple Model Kalman filter maintains sub-microradian accuracy through dynamic orbital slew regimes.</p>
+        </div>
+        <div class="step-metric-badge">98.8% Lock Retention</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-node-dot"></div>
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h4>Smith Predictor Dead-Time Control</h4>
+          <p>Internal delay model eliminates the 40 ms transport dead-time, stabilizing closed-loop gimbal execution.</p>
+        </div>
+        <div class="step-metric-badge">40 ms Delay Fixed</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-node-dot"></div>
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h4>Deterministic Verification Suite</h4>
+          <p>73 comprehensive unit and physics-honest tests validating SGP4 orbital tracking across ISS and GEO passes.</p>
+        </div>
+        <div class="step-metric-badge">73 / 73 Tests Pass</div>
+      </div>
+    </div>
+
+    <!-- Center Button linking to Console -->
+    <div class="center-cta-wrap">
+      <a class="btn-console-main" href="console.html">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        OPEN THE REPLAY CONSOLE
+      </a>
+    </div>
+
+    <button class="scroll-nav-btn" data-target="#sec-replay">
+      VIEW LIVE TELEMETRY &amp; REPLAY
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+    </button>
+  </section>
+
+  <!-- SECTION 3: INSTRUMENTATION & LIVE REPLAY -->
+  <section class="section-view" id="sec-replay">
+    <div class="points-section-header">
+      <div class="section-tag">HARDWARE-IN-THE-LOOP INSTRUMENTATION</div>
+      <h2 class="section-title">Telemetry &amp; Live Tracking Replay</h2>
+    </div>
+
+    <div class="instrumentation-grid">
+      <!-- Left: Console Screenshot -->
+      <div class="visual-card">
+        <img src="media/console_track.png" alt="Operator Replay Console">
+        <div class="visual-card-body">
+          <h4>Operator Replay Console</h4>
+          <p>Real-time optical viewport with reticle overlay, 4× target patch magnifier, pointing error trace, and timeline strip.</p>
+        </div>
+      </div>
+
+      <!-- Center: Scaled-down Live Loop in between -->
+      <div class="live-loop-card">
+        <div class="live-hud-header">
+          <div class="live-dots">
+            <span class="live-dot active"></span>
+            <span class="live-dot"></span>
+            <span class="live-dot"></span>
+          </div>
+          <div>HIL TELEMETRY TRACKING</div>
+          <div style="color:var(--green)">● LIVE LOOP</div>
+        </div>
+        <img src="media/demo_loop.gif" alt="Live tracking demonstration">
+        <div class="visual-card-body">
+          <h4>Live Beacon Lock</h4>
+          <p>Autonomous mount holding lock on a satellite beacon with real-time 4 Hz modulation gating.</p>
+        </div>
+      </div>
+
+      <!-- Right: Telemetry Frame Screenshot -->
+      <div class="visual-card">
+        <img src="media/video_frame.png" alt="Orbital AI Verification">
+        <div class="visual-card-body">
+          <h4>Orbital AI Verification</h4>
+          <p>Continuous lock maintenance on an ISS orbital pass at 281 µrad pointing error with active confidence scoring.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="center-cta-wrap">
+      <a class="btn-console-main" href="console.html">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        LAUNCH ZD-1 REPLAY CONSOLE
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- Bottom Navigation for Mobile Devices -->
+<nav class="mobile-bottom-nav">
+  <a href="index.html" class="mobile-nav-item">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="console.html" class="mobile-nav-item">
+    <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2zm0 4v10h16V8H4zm3 2h2v2H7v-2zm0 4h10v2H7v-2zm4-4h6v2h-6v-2z"/></svg>
+    <span>Console</span>
+  </a>
+  <a href="live.html" class="mobile-nav-item">
+    <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+    <span>Live</span>
+  </a>
+  <a href="about.html" class="mobile-nav-item active">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+    <span>About</span>
+  </a>
+  <a href="https://github.com/pranshukesavmishra/SIH-2026" class="mobile-nav-item" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+    <span>Code</span>
+  </a>
+</nav>
+
+<footer class="page-footer">
+  ZeroDrift · Jabalpur Engineering College · Smart India Hackathon 2026 — 
+  <a href="https://github.com/pranshukesavmishra/SIH-2026" target="_blank" rel="noopener">github.com/pranshukesavmishra/SIH-2026</a>
+</footer>
+
+<script>
+// 1. Guaranteed Fullpage Section Auto-Scroll & Snapping Engine
+(function initSectionAutoScroll() {
+  const sections = Array.from(document.querySelectorAll('.section-view'));
+  if (!sections.length) return;
+
+  let activeIndex = 0;
+  let isSnapping = false;
+  let snapTimeout = null;
+
+  function getClosestSectionIndex() {
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    sections.forEach((sec, idx) => {
+      const topPos = sec.getBoundingClientRect().top + scrollY - 64;
+      const diff = Math.abs(topPos - scrollY);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = idx;
+      }
+    });
+    return closestIdx;
+  }
+
+  function goToSection(index) {
+    if (index < 0 || index >= sections.length) return;
+    activeIndex = index;
+    isSnapping = true;
+    clearTimeout(snapTimeout);
+
+    const target = sections[activeIndex];
+    const headerOffset = 64;
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - headerOffset);
+
+    // Update active nav dot immediately
+    const navDots = {
+      'sec-team': document.getElementById('dot-sec-team'),
+      'sec-architecture': document.getElementById('dot-sec-architecture'),
+      'sec-replay': document.getElementById('dot-sec-replay')
+    };
+    Object.values(navDots).forEach(dot => dot && dot.classList.remove('active'));
+    if (navDots[target.id]) navDots[target.id].classList.add('active');
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+
+    snapTimeout = setTimeout(() => {
+      isSnapping = false;
+    }, 700);
+  }
+
+  // Intercept Mouse Wheel for single-scroll full section glide
+  window.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) < 12) return;
+    e.preventDefault();
+
+    if (isSnapping) return;
+
+    activeIndex = getClosestSectionIndex();
+    if (e.deltaY > 0) {
+      if (activeIndex < sections.length - 1) {
+        goToSection(activeIndex + 1);
+      }
+    } else {
+      if (activeIndex > 0) {
+        goToSection(activeIndex - 1);
+      }
+    }
+  }, { passive: false });
+
+  // Touch gesture support for mobile / tablet
+  let touchStartY = 0;
+  let touchStartX = 0;
+
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isSnapping && e.cancelable) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchend', (e) => {
+    if (isSnapping) return;
+    if (e.changedTouches.length === 1) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffY = touchStartY - touchEndY;
+      const diffX = touchStartX - touchEndX;
+
+      if (Math.abs(diffY) > 30 && Math.abs(diffY) > Math.abs(diffX)) {
+        activeIndex = getClosestSectionIndex();
+        if (diffY > 0) {
+          if (activeIndex < sections.length - 1) {
+            goToSection(activeIndex + 1);
+          }
+        } else {
+          if (activeIndex > 0) {
+            goToSection(activeIndex - 1);
+          }
+        }
+      }
+    }
+  }, { passive: true });
+
+  // Keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'PageDown', 'Space'].includes(e.code)) {
+      activeIndex = getClosestSectionIndex();
+      if (activeIndex < sections.length - 1) {
+        e.preventDefault();
+        goToSection(activeIndex + 1);
+      }
+    } else if (['ArrowUp', 'PageUp'].includes(e.code)) {
+      activeIndex = getClosestSectionIndex();
+      if (activeIndex > 0) {
+        e.preventDefault();
+        goToSection(activeIndex - 1);
+      }
+    }
+  });
+
+  // Global helper used by button clicks & dots
+  window.scrollToSection = function(id) {
+    const idx = sections.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      goToSection(idx);
+    } else {
+      const target = document.getElementById(id);
+      if (target) {
+        const offsetPosition = target.getBoundingClientRect().top + window.pageYOffset - 64;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+    }
+  };
+})();
+
+// 2. Loading Screen Dismissal
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loading-screen');
+    if (loader) loader.classList.add('hidden');
+  }, 450);
+});
+setTimeout(() => {
+  const loader = document.getElementById('loading-screen');
+  if (loader) loader.classList.add('hidden');
+}, 1200);
+
+(function() {
+  // 1. Smooth Auto-Scroll Buttons Handler
+  document.querySelectorAll('.scroll-nav-btn, .dot-item').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = (btn.getAttribute('data-target') || btn.getAttribute('href') || '').replace('#', '');
+      if (targetId) window.scrollToSection(targetId);
+    });
+  });
+
+  // 2. 3D Card Hover Tilt
+  const cards = document.querySelectorAll('.member-card, .visual-card, .live-loop-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const rotateX = -(y / (rect.height / 2)) * 6;
+      const rotateY = (x / (rect.width / 2)) * 6;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    });
+  });
+
+  // 3. Cosmic Starfield Nebula Canvas
+  const canvas = document.getElementById('bg-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const numParticles = 60;
+    let mouse = { x: -1000, y: -1000 };
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 0.5,
+        alpha: Math.random() * 0.6 + 0.2
+      });
+    }
+
+    let time = 0;
+    function renderParticles() {
+      time += 0.005;
+      ctx.clearRect(0, 0, width, height);
+
+      // Deep glowing cosmic nebula gradients
+      const neb1 = ctx.createRadialGradient(width * 0.3 + Math.sin(time) * 50, height * 0.3 + Math.cos(time) * 40, 50, width * 0.3, height * 0.3, width * 0.6);
+      neb1.addColorStop(0, 'rgba(18, 48, 88, 0.28)');
+      neb1.addColorStop(1, 'transparent');
+      ctx.fillStyle = neb1;
+      ctx.fillRect(0, 0, width, height);
+
+      const neb2 = ctx.createRadialGradient(width * 0.8 + Math.cos(time * 0.7) * 60, height * 0.7 + Math.sin(time * 0.7) * 50, 40, width * 0.8, height * 0.7, width * 0.5);
+      neb2.addColorStop(0, 'rgba(79, 199, 234, 0.15)');
+      neb2.addColorStop(1, 'transparent');
+      ctx.fillStyle = neb2;
+      ctx.fillRect(0, 0, width, height);
+
+      // Connecting lines
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(79, 199, 234, ${(1 - dist / 140) * 0.16})`;
+            ctx.lineWidth = 0.85;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Mouse interactive laser beam lines
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
+        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (mdist < 180) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(127, 224, 248, ${(1 - mdist / 180) * 0.35})`;
+          ctx.lineWidth = 1;
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      }
+
+      // Stars
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(140, 230, 255, ${p.alpha})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#4FC7EA';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      requestAnimationFrame(renderParticles);
+    }
+    renderParticles();
+  }
+
+  // 4. Active Section Dot Indicator on Scroll
+  const sections = document.querySelectorAll('.section-view');
+  const navDots = {
+    'sec-team': document.getElementById('dot-sec-team'),
+    'sec-architecture': document.getElementById('dot-sec-architecture'),
+    'sec-replay': document.getElementById('dot-sec-replay')
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        Object.values(navDots).forEach(dot => dot && dot.classList.remove('active'));
+        if (navDots[id]) navDots[id].classList.add('active');
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(sec => observer.observe(sec));
+
+  // 5. Instant Morphing Square Loading Screen Trigger on Navigation Links
+  document.querySelectorAll('a[href$=".html"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const href = link.getAttribute('href');
+      if (href && !href.startsWith('http') && !href.startsWith('#') && !link.getAttribute('target')) {
+        const loader = document.getElementById('loading-screen');
+        if (loader) {
+          loader.classList.remove('hidden');
+          loader.style.opacity = '1';
+          loader.style.visibility = 'visible';
+        }
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

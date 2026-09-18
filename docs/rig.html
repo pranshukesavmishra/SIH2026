@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZeroDrift ZD-1 — RIG LIVE</title>
+<style>
+:root{--bg:#060b14;--panel:#0a1220;--edge:#16233a;--ink:#c9d6e6;--ink-muted:#5f7288;
+--cyan:#4FC7EA;--green:#3BD68C;--amber:#FFC24D;--red:#FF5555;--blue:#5B8DEF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:13px/1.45 "SF Mono","Cascadia Code",Consolas,monospace}
+a{color:var(--cyan);text-decoration:none}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--edge)}
+header .wm{font-size:17px;font-weight:700;letter-spacing:1px}
+header .wm b{color:var(--cyan)}
+header .sub{color:var(--ink-muted);font-size:10px}
+.livebadge{margin-left:auto;padding:3px 10px;border:1px solid var(--red);color:var(--red);
+border-radius:4px;font-weight:700;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.45}}
+nav a{margin-left:10px;color:var(--ink-muted)}nav a:hover{color:var(--cyan)}
+.banner{padding:6px 16px;background:#101a2c;color:var(--amber);font-size:11.5px;border-bottom:1px solid var(--edge)}
+.banner b{color:var(--cyan)}
+.tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:10px 16px}
+.tile{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:8px 10px;text-align:center}
+.tile .v{font-size:21px;font-weight:700;color:var(--cyan)}
+.tile .l{font-size:9px;color:var(--ink-muted);letter-spacing:1px;margin-top:2px}
+.main{display:grid;grid-template-columns:1fr 330px;gap:10px;padding:0 16px 10px}
+.panel{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:10px}
+.panel h3{font-size:11px;color:var(--ink-muted);letter-spacing:1px;margin-bottom:8px}
+#cam{width:100%;border-radius:4px;background:#000;min-height:300px;display:block}
+.krow{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #0e1828;font-size:12px}
+.krow span{color:var(--ink-muted)}.krow b{color:var(--ink)}
+.state{font-size:26px;font-weight:700;margin:2px 0 8px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}
+canvas{width:100%;height:110px;background:var(--panel);border:1px solid var(--edge);border-radius:6px}
+.note{color:var(--ink-muted);font-size:10px;padding:0 16px 14px}
+.S{color:var(--blue)}.A{color:var(--amber)}.T{color:var(--green)}.C{color:var(--amber)}.R{color:var(--red)}
+@media(max-width:820px){.main{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="wm">ZERO<b>DRIFT</b> · ZD-1</div>
+  <div class="sub">RIG LIVE CONSOLE · ISRO SIH26169</div></div>
+  <nav><a href="index.html">HOME</a><a href="console.html">REPLAY</a><a href="about.html">ABOUT</a></nav>
+  <div class="livebadge">● LIVE</div>
+</header>
+<div class="banner"><b>LIVE — real camera, real engine.</b> Every readout is measured on this
+machine right now by the same CoarseAlignmentTracker that produced the replay numbers.
+The real world has no ground truth, so truth-referenced tiles (pointing error vs beacon,
+in-FOV, wrong-target) are deliberately absent — nothing here is invented.
+<span id="metaLine" style="color:#5f7288"></span></div>
+
+<div class="tiles">
+  <div class="tile"><div class="v" id="tState">—</div><div class="l">STATE</div></div>
+  <div class="tile"><div class="v" id="tDet">—</div><div class="l">DETECTIONS / FRAME</div></div>
+  <div class="tile"><div class="v" id="tSnr">—</div><div class="l">BEACON SNR</div></div>
+  <div class="tile"><div class="v" id="tEhz">—</div><div class="l">MEASURED BLINK</div></div>
+  <div class="tile"><div class="v" id="tOff">—</div><div class="l">TARGET OFFSET µrad</div></div>
+  <div class="tile"><div class="v" id="tProc">—</div><div class="l">PROC / 33 ms</div></div>
+</div>
+
+<div class="main">
+  <div class="panel"><h3>◉ CAMERA — LIVE VIEW · detection rings + lock marker drawn by the engine</h3>
+    <img id="cam" alt="live camera">
+  </div>
+  <div class="panel"><h3>▮ ALIGNMENT CONSOLE — LIVE</h3>
+    <div class="state" id="bigState">CONNECTING…</div>
+    <div class="krow"><span>◈ detections / frame</span><b id="kD">—</b></div>
+    <div class="krow"><span>∿ beacon SNR</span><b id="kSnr">—</b></div>
+    <div class="krow"><span>⨳ blink modulation</span><b id="kMod">—</b></div>
+    <div class="krow"><span>≈ measured blink</span><b id="kEhz">—</b></div>
+    <div class="krow"><span>⬡ AI verifier</span><b id="kAi">—</b></div>
+    <div class="krow"><span>⌖ target offset</span><b id="kOff">—</b></div>
+    <div class="krow"><span>⛭ commanded az/el</span><b id="kCmd">—</b></div>
+    <div class="krow"><span>◎ laser</span><b id="kLaser">—</b></div>
+    <div class="krow"><span>⏲ processing / 33 ms</span><b id="kProc">—</b></div>
+    <div class="krow"><span>▤ lock state</span><b id="kLock">—</b></div>
+    <div style="color:var(--ink-muted);font-size:9.5px;margin-top:8px">
+      AI verifier is trained on simulated star fields — indoors it may abstain (—),
+      which is it refusing to guess, not failing.</div>
+  </div>
+</div>
+
+<div class="charts">
+  <canvas id="chOff" height="110"></canvas>
+  <canvas id="chProc" height="110"></canvas>
+</div>
+<div class="note">left: target offset from boresight (µrad, log) · right: processing time per frame vs the
+33 ms budget (red line). Start the server with <b>python -m fsoc_pat.hil.serve</b> — see docs/rig_live.md.</div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const SC={S:"S",ACQUIRE:"A",TRACK:"T",COAST:"C",REACQUIRE:"R",SEARCH:"S"};
+let offH=[],procH=[];
+const base = location.origin.startsWith("http") ? "" : "http://localhost:8765";
+
+fetch(base+"/live/meta").then(r=>r.json()).then(m=>{
+  $("metaLine").textContent=` · ${m.source} · rig ${m.rig} · FOV ${m.fov_deg}° · `+
+    (m.adaptive?"blink: ADAPTIVE (no assumed frequency)":`expected blink ${m.blink_hz} Hz`);
+}).catch(()=>{ $("bigState").textContent="SERVER OFFLINE"; });
+
+$("cam").src = base+"/live/video";
+
+function draw(cv,data,opts){
+  const c=cv.getContext("2d");
+  if(!cv.dataset.w||+cv.dataset.w!==cv.clientWidth){cv.width=cv.clientWidth*2;cv.height=220;cv.dataset.w=cv.clientWidth}
+  const W=cv.width,H=cv.height;c.clearRect(0,0,W,H);
+  c.font="18px monospace";c.fillStyle="#5f7288";c.fillText(opts.label,12,22);
+  if(opts.budget){const y=H-(opts.budget/opts.max)*(H-34)-6;c.strokeStyle="#FF5555";
+    c.setLineDash([6,5]);c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();c.setLineDash([])}
+  c.strokeStyle="#4FC7EA";c.lineWidth=2;c.beginPath();
+  const n=data.length;
+  for(let i=0;i<n;i++){const v=Math.min(data[i]??0,opts.max);
+    const x=W-(n-i)*3, y=H-(opts.log?Math.log10(Math.max(v,1))/Math.log10(opts.max):v/opts.max)*(H-34)-6;
+    i?c.lineTo(x,y):c.moveTo(x,y)}
+  c.stroke();
+}
+
+const es=new EventSource(base+"/live/stream");
+es.onmessage=e=>{
+  const f=JSON.parse(e.data);
+  const st=f.state;
+  $("tState").textContent=st; $("tState").className="v "+(SC[st]||"");
+  $("bigState").textContent=st; $("bigState").className="state "+(SC[st]||"");
+  $("tDet").textContent=f.n_det; $("kD").textContent=f.n_det;
+  $("tSnr").textContent=f.snr_db!=null?f.snr_db.toFixed(1)+" dB":"—";
+  $("kSnr").textContent=$("tSnr").textContent;
+  $("kMod").textContent=f.mod.toFixed(2)+(f.mod>0.22?" ✓":"");
+  const hz=(f.ehz!=null&&f.ehzc>0.2)?f.ehz.toFixed(1)+" Hz":"—";
+  $("tEhz").textContent=hz; $("kEhz").textContent=hz;
+  $("kAi").textContent=f.ai!=null?f.ai.toFixed(2):"—";
+  const off=f.off_urad!=null?Math.round(f.off_urad):null;
+  $("tOff").textContent=off!=null?off.toLocaleString():"—";
+  $("kOff").textContent=off!=null?off.toLocaleString()+" µrad":"—";
+  $("kCmd").textContent=f.cmd?f.cmd[0].toFixed(2)+"° / "+f.cmd[1].toFixed(2)+"°":"—";
+  $("kLaser").textContent=f.laser?"ON":"off";
+  $("kLaser").style.color=f.laser?"#3BD68C":"";
+  $("tProc").textContent=f.proc_ms.toFixed(1); $("kProc").textContent=f.proc_ms.toFixed(1)+" ms";
+  $("kLock").textContent=f.locked?"HELD":"—";
+  $("kLock").style.color=f.locked?"#3BD68C":"";
+  offH.push(off); procH.push(f.proc_ms);
+  if(offH.length>400){offH.shift();procH.shift()}
+  draw($("chOff"),offH,{label:"TARGET OFFSET (µrad, log)",max:100000,log:true});
+  draw($("chProc"),procH,{label:"PROCESSING ms · budget 33",max:66,budget:33});
+};
+es.onerror=()=>{ $("bigState").textContent="RECONNECTING…"; };
+</script>
+</body>
+</html>

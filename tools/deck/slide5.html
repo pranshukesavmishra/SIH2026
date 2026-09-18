@@ -1,0 +1,215 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --navy:#0F2E4E; --navy2:#173F66; --blue:#1B75BB; --blueL:#EAF3FB;
+    --cyan:#0E9BC4; --green:#1E9E63; --greenL:#E8F6EF; --amber:#DE8A22;
+    --red:#C8443C; --ink:#14202C; --muted:#5C6B7A; --line:#D9E3ED; --panel:#F6F9FC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:2320px;height:1040px}
+  body{font-family:"Liberation Sans",Arial,"DejaVu Sans",sans-serif;color:var(--ink);background:#fff;
+       -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:1040px}
+  .eyebrow{font-size:24px;font-weight:700;letter-spacing:2.1px;text-transform:uppercase;color:var(--blue);white-space:nowrap}
+  .rule{height:3px;flex:1;border-radius:2px;
+        background:linear-gradient(90deg,var(--blue),#8FC3E8 60%,rgba(255,255,255,0))}
+  .plabel{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex:0 0 auto}
+  .note{font-size:24px;color:var(--muted);white-space:nowrap}
+  .note b{color:var(--navy)}
+
+  .mid{display:grid;grid-template-columns:1.22fr 1fr;gap:22px;flex:1 1 auto;margin-bottom:22px}
+
+  /* hero: does the link close */
+  .hero{background:linear-gradient(180deg,#0F2E4E,#16416B);border-radius:16px;color:#fff;
+        padding:22px 26px 20px;display:flex;flex-direction:column;justify-content:space-between}
+  .hero .ht{font-size:34px;font-weight:700;letter-spacing:-.2px}
+  .hero .hs{font-size:23px;color:#A8C2D8;margin-top:5px;line-height:1.3}
+  .bars{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:12px 0 4px}
+  .beam{margin-top:10px}
+  .beam svg{width:100%;display:block}
+  .hstep{flex:1 1 0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.19);
+         border-radius:11px;padding:11px 14px}
+  .hstep .n{font-size:19px;font-weight:700;color:#7FA8C8;letter-spacing:1.4px}
+  .hstep .t{font-size:23px;font-weight:700;color:#E4EEF7;margin-top:3px;line-height:1.2}
+  .hstep .d{font-size:21px;color:#96B2CA;margin-top:3px;line-height:1.25}
+  .harr{display:flex;align-items:center;color:#5F7D99;font-size:26px;font-weight:700}
+  .brow{margin-bottom:26px}
+  .brow:last-child{margin-bottom:0}
+  .bhead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px}
+  .bname{font-size:27px;font-weight:700;color:#DCE9F4}
+  .bname small{display:block;font-size:21px;color:#8FAAC4;font-weight:400;margin-top:2px}
+  .bval{font-size:58px;font-weight:700;letter-spacing:-1px;line-height:1}
+  .bval.low{color:#FF9C95}
+  .bval.high{color:#6EE0AE}
+  .track{height:32px;border-radius:16px;background:rgba(255,255,255,.13);overflow:hidden}
+  .fill{height:100%;border-radius:16px}
+  .fill.low{width:14.7%;background:linear-gradient(90deg,#C8443C,#E4736B)}
+  .fill.high{width:99.3%;background:linear-gradient(90deg,#158A55,#5FD0A6)}
+  .hfoot{display:flex;align-items:center;gap:16px;margin-top:18px;padding-top:14px;
+         border-top:1px solid rgba(255,255,255,.16)}
+  .delta{flex:0 0 auto;background:rgba(110,224,174,.16);border:1px solid rgba(110,224,174,.5);
+         color:#6EE0AE;border-radius:10px;padding:9px 16px;font-size:29px;font-weight:700}
+  .hfoot .fc{font-size:22px;color:#BAD1E3;line-height:1.32}
+  .hfoot .fc b{color:#fff}
+
+  /* replaces panel */
+  .repl{border:1.5px solid var(--line);border-radius:16px;background:#fff;padding:20px 22px;
+        display:flex;flex-direction:column;box-shadow:0 2px 5px rgba(16,40,66,.05)}
+  .repl .rt{font-size:32px;font-weight:700;color:var(--navy)}
+  .vs{margin-top:16px;flex:1 1 auto;display:flex;flex-direction:column;gap:14px}
+  .vrow{border-radius:12px;padding:16px 20px;border:1.5px solid;flex:1 1 auto;
+        display:flex;flex-direction:column;justify-content:center}
+  .vrow.old{background:#FBF2F1;border-color:#EBC8C4}
+  .vrow.new{background:var(--greenL);border-color:#BFE5D2}
+  .vrow .vh{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .vrow .vn{font-size:28px;font-weight:700}
+  .vrow.old .vn{color:#8E332C}
+  .vrow.new .vn{color:#0E5636}
+  .vrow .vp{font-size:38px;font-weight:700;letter-spacing:-.4px}
+  .vrow.old .vp{color:#C8443C}
+  .vrow.new .vp{color:var(--green)}
+  .vrow .vd{font-size:25px;margin-top:6px;line-height:1.33}
+  .vrow.old .vd{color:#8A5B56}
+  .vrow.new .vd{color:#3C6B55}
+  .costbar{width:100%;height:16px;display:block;margin-top:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+  .ch{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 13px;
+      font-size:21px;font-weight:700;color:var(--navy)}
+
+  /* benefits */
+  .bens{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;flex:0 0 auto}
+  .ben{border:1.5px solid var(--line);border-top:5px solid var(--blue);border-radius:14px;
+       background:#fff;padding:16px 18px;box-shadow:0 2px 5px rgba(16,40,66,.05)}
+  .ben:nth-child(2){border-top-color:var(--green)}
+  .ben:nth-child(3){border-top-color:var(--cyan)}
+  .ben:nth-child(4){border-top-color:var(--amber)}
+  .ben .bh{display:flex;align-items:center;gap:11px}
+  .ben .bh h3{font-size:25px;font-weight:700;color:var(--navy);letter-spacing:.4px}
+  .ben p{font-size:24px;color:#33475B;line-height:1.32;margin-top:8px}
+
+  /* audience */
+  .aud{display:flex;align-items:center;gap:14px;margin-top:16px;flex:0 0 auto}
+  .aud .lab{font-size:23px;font-weight:700;color:var(--navy);white-space:nowrap}
+  .aud .pill{background:var(--blueL);border:1px solid #C6DEF3;color:#134A75;border-radius:20px;
+             padding:9px 18px;font-size:22px;font-weight:700}
+</style>
+
+<div class="plabel">
+  <div class="eyebrow">Potential impact on the target audience</div>
+  <div class="rule"></div>
+  <div class="note">two-stage architecture, <b>justified by measurement</b></div>
+</div>
+
+<div class="mid">
+  <div class="hero">
+    <div>
+      <div class="ht">Does the optical link actually close?</div>
+      <div class="hs">Fraction of a real ISS pass with the modelled link closed.</div>
+      <div class="beam">
+        <svg viewBox="0 0 900 210">
+          <g transform="translate(150,105)">
+            <circle r="88" fill="none" stroke="#FF9C95" stroke-width="3" stroke-dasharray="9 8"/>
+            <circle r="30" fill="none" stroke="#4FC7EA" stroke-width="4"/>
+            <circle r="23" fill="#6EE0AE" opacity=".85"/>
+          </g>
+          <g font-family="Liberation Sans" font-size="24" fill="#BAD1E3">
+            <path d="M238 40h58" stroke="#FF9C95" stroke-width="2.5"/>
+            <text x="308" y="48" fill="#FF9C95" font-weight="bold">coarse wanders to 762 µrad (p95)</text>
+            <path d="M186 105h110" stroke="#4FC7EA" stroke-width="2.5"/>
+            <text x="308" y="113" fill="#8FE6FF" font-weight="bold">comms beam — only 250 µrad wide</text>
+            <path d="M172 168h124" stroke="#6EE0AE" stroke-width="2.5"/>
+            <text x="308" y="176" fill="#6EE0AE" font-weight="bold">ZeroDrift median error 198 µrad</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="bars">
+      <div class="brow">
+        <div class="bhead">
+          <div class="bname">Coarse alignment alone</div>
+          <div class="bval low">14.7 %</div>
+        </div>
+        <div class="track"><div class="fill low"></div></div>
+      </div>
+      <div class="brow">
+        <div class="bhead">
+          <div class="bname">Coarse + modelled fine stage</div>
+          <div class="bval high">99.3 %</div>
+        </div>
+        <div class="track"><div class="fill high"></div></div>
+      </div>
+    </div>
+    <div class="hfoot">
+      <div class="delta">6.8× more link time</div>
+      <div class="fc">Tracked ISS pass · 250 µrad beam · 3.1 dB margin · zero outages.<br><b>Measured, not asserted.</b></div>
+    </div>
+  </div>
+
+  <div class="repl">
+    <div class="rt">What it replaces</div>
+    <div class="vs">
+      <div class="vrow old">
+        <div class="vh"><div class="vn">An optical test bench</div><div class="vp">₹ lakhs</div></div>
+        <div class="vd">Cameras, gimbals, optics, lab time. One team at a time.</div>
+        <svg class="costbar" viewBox="0 0 400 16" preserveAspectRatio="none"><rect width="400" height="16" rx="8" fill="#EFD6D3"/><rect width="400" height="16" rx="8" fill="#C8443C"/></svg>
+      </div>
+      <div class="vrow new">
+        <div class="vh"><div class="vn">ZeroDrift</div><div class="vp">₹ 0</div></div>
+        <div class="vd">A laptop you already own. One command. A whole class at once.</div>
+        <svg class="costbar" viewBox="0 0 400 16" preserveAspectRatio="none"><rect width="400" height="16" rx="8" fill="#D5EBE0"/><rect width="7" height="16" rx="3.5" fill="#1E9E63"/></svg>
+      </div>
+    </div>
+    <div class="chips">
+      <div class="ch">no GPU</div><div class="ch">no cloud</div><div class="ch">no dataset</div>
+      <div class="ch">no consumables</div><div class="ch">open source</div>
+    </div>
+  </div>
+</div>
+
+<div class="plabel">
+  <div class="eyebrow">Benefits of the solution (social, economic, environmental, etc.)</div>
+  <div class="rule"></div>
+</div>
+
+<div class="bens">
+  <div class="ben">
+    <div class="bh">
+      <svg width="34" height="34" viewBox="0 0 34 34"><path d="M17 3l11 4.4v8.8c0 7.2-4.7 12.4-11 14.8-6.3-2.4-11-7.6-11-14.8V7.4z"
+        fill="#EAF3FB" stroke="#1B75BB" stroke-width="2.2"/></svg>
+      <h3>STRATEGIC</h3>
+    </div>
+    <p>Sovereign FSOC pointing capability, developed in India.</p>
+  </div>
+  <div class="ben">
+    <div class="bh">
+      <svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="14" fill="#E8F6EF" stroke="#1E9E63" stroke-width="2.2"/>
+        <text x="17" y="24" text-anchor="middle" font-size="19" font-weight="bold" fill="#1E9E63" font-family="DejaVu Sans">₹</text></svg>
+      <h3>ECONOMIC</h3>
+    </div>
+    <p>Lakhs of rupees of hardware → zero recurring cost.</p>
+  </div>
+  <div class="ben">
+    <div class="bh">
+      <svg width="34" height="34" viewBox="0 0 34 34"><path d="M4 8h11a4 4 0 014 4v16a4 4 0 00-4-3H4z" fill="#E6F6FA" stroke="#0E9BC4" stroke-width="2.2"/>
+        <path d="M30 8H19a4 4 0 00-4 4v16a4 4 0 014-3h11z" fill="#E6F6FA" stroke="#0E9BC4" stroke-width="2.2"/></svg>
+      <h3>RESEARCH &amp; EDUCATION</h3>
+    </div>
+    <p>Any lab or student can test PAT algorithms today.</p>
+  </div>
+  <div class="ben">
+    <div class="bh">
+      <svg width="34" height="34" viewBox="0 0 34 34"><path d="M28 5C13 5 5 12 5 22c0 3 1 5 1 5s4-12 22-14c0 0-9 4-14 11-2 3-3 5-3 5s10 3 16-3c5-5 4-16 1-21z"
+        fill="#FDF3E4" stroke="#DE8A22" stroke-width="2.2" stroke-linejoin="round"/></svg>
+      <h3>SCALABLE &amp; GREEN</h3>
+    </div>
+    <p>Satellite, UAV, ground, maritime — one pure-software engine.</p>
+  </div>
+</div>
+
+<div class="aud">
+  <div class="lab">Who it serves:</div>
+  <div class="pill">ISRO / IN-SPACe optical-communication teams</div>
+  <div class="pill">DRDO</div>
+  <div class="pill">IITs &amp; engineering colleges</div>
+  <div class="pill">India's space-tech start-ups</div>
+</div>

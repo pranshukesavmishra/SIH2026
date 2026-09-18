@@ -1,0 +1,1792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ZeroDrift — Live Camera Demo · ISRO SIH26169</title>
+<link rel="icon" type="image/png" href="media/logo_emblem.png">
+<style>
+:root {
+  --bg-deep: #02050E;
+  --bg-base: #040915;
+  --panel: rgba(8, 16, 32, 0.85);
+  --panel-solid: #0A1224;
+  --edge: #15263F;
+  --ink-primary: #EAF4FD;
+  --ink-secondary: #8EA4C4;
+  --ink-muted: #536988;
+  --cyan: #4FC7EA;
+  --cyan-bright: #7FE0F8;
+  --green: #3BD68C;
+  --amber: #FFC24D;
+  --red: #FF6B6B;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --glow-card: 0 12px 35px -10px rgba(0,0,0,.8), 0 0 16px rgba(79,199,234,.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-deep); color: var(--ink-primary);
+  font-family: var(--font-sans); min-height: 100vh;
+}
+
+/* ---------- nav (matches the rest of the site) ---------- */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 24px;
+  padding: 10px 22px; background: rgba(4,9,21,.92);
+  backdrop-filter: blur(12px); border-bottom: 1px solid var(--edge);
+}
+.brand-group { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+.brand-logo-img { width: 34px; height: 34px; object-fit: contain; }
+.brand-text b { display: block; font-size: 15px; letter-spacing: .13em; color: var(--ink-primary); }
+.brand-text b span { color: var(--cyan); }
+.brand-text small { display: block; font-family: var(--font-mono); font-size: 8.5px;
+  letter-spacing: .17em; color: var(--ink-muted); }
+.nav-links { display: flex; gap: 4px; margin-left: auto; }
+.nav-link {
+  display: flex; align-items: center; gap: 7px; padding: 8px 14px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--ink-secondary); text-decoration: none; border-radius: 7px;
+  border: 1px solid transparent; transition: .18s;
+}
+.nav-link svg { width: 14px; height: 14px; fill: currentColor; }
+.nav-link:hover { color: var(--ink-primary); background: rgba(79,199,234,.08); }
+.nav-link.active { color: var(--cyan); background: rgba(79,199,234,.1);
+  border-color: rgba(79,199,234,.3); }
+
+/* ---------- layout ---------- */
+.wrap { max-width: 1180px; margin: 0 auto; padding: 34px 22px 70px; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .22em;
+  color: var(--cyan); margin-bottom: 12px; }
+h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.12; letter-spacing: -.02em; }
+.lede { color: var(--ink-secondary); max-width: 70ch; margin-top: 14px; line-height: 1.65; font-size: 15px; }
+
+.stage { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 20px; margin-top: 30px; }
+@media (max-width: 900px) { .stage { grid-template-columns: 1fr; } }
+
+.viewport {
+  position: relative; background: #000; border: 1px solid var(--edge);
+  border-radius: 14px; overflow: hidden; box-shadow: var(--glow-card);
+  aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+}
+.viewport canvas { width: 100%; height: 100%; object-fit: contain; display: block; }
+.placeholder { text-align: center; padding: 30px; }
+.placeholder svg { width: 54px; height: 54px; fill: var(--ink-muted); margin-bottom: 16px; }
+.placeholder p { color: var(--ink-muted); font-size: 14px; max-width: 40ch; line-height: 1.6; }
+
+.side { display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; padding: 16px; }
+.card h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .18em;
+  color: var(--ink-muted); margin-bottom: 13px; font-weight: 600; }
+
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
+  padding: 14px 18px; border-radius: 10px; border: 1px solid var(--cyan);
+  background: linear-gradient(180deg, rgba(79,199,234,.2), rgba(79,199,234,.08));
+  color: var(--cyan-bright); font-family: var(--font-mono); font-size: 12.5px;
+  letter-spacing: .12em; cursor: pointer; transition: .18s;
+}
+.btn:hover:not(:disabled) { background: rgba(79,199,234,.28); box-shadow: 0 0 22px rgba(79,199,234,.35); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn svg { width: 16px; height: 16px; fill: currentColor; }
+.btn.ghost { border-color: var(--edge); background: rgba(255,255,255,.03); color: var(--ink-secondary); }
+.btn.ghost:hover:not(:disabled) { border-color: var(--ink-muted); background: rgba(255,255,255,.06); box-shadow: none; }
+.btn + .btn { margin-top: 9px; }
+
+.readout { display: flex; justify-content: space-between; align-items: baseline;
+  padding: 7px 0; border-bottom: 1px solid rgba(21,38,63,.6); }
+.readout:last-child { border-bottom: 0; }
+.readout span { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; color: var(--ink-muted); }
+.readout b { font-family: var(--font-mono); font-size: 13px; color: var(--ink-primary); font-weight: 500; }
+.readout b.good { color: var(--green); }
+.readout b.warn { color: var(--amber); }
+
+.state-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+  border-radius: 8px; font-family: var(--font-mono); font-size: 13px; letter-spacing: .14em;
+  border: 1px solid; width: 100%; justify-content: center; }
+.state-chip.searching { color: var(--ink-secondary); border-color: var(--edge); background: rgba(255,255,255,.03); }
+.state-chip.locked { color: var(--green); border-color: rgba(59,214,140,.45); background: rgba(59,214,140,.12); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.state-chip.locked .dot { animation: pulse 1.1s infinite; }
+.state-chip.coasting { color: var(--amber, #FFC24D); border-color: rgba(255,194,77,.45); background: rgba(255,194,77,.10); }
+.state-chip.coasting .dot { animation: pulse .6s infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+
+select, input[type=range] { width: 100%; }
+select { background: var(--panel-solid); color: var(--ink-primary); border: 1px solid var(--edge);
+  border-radius: 7px; padding: 9px 11px; font-family: var(--font-mono); font-size: 12px; }
+
+.note { margin-top: 12px; padding: 12px 14px; border-radius: 9px; font-size: 12.5px; line-height: 1.6;
+  border: 1px solid rgba(255,194,77,.3); background: rgba(255,194,77,.08); color: #F5D89B; }
+.note.err { border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.09); color: #FFB4B4; }
+
+.steps { margin-top: 34px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; }
+.step { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; padding: 18px; }
+.step-n { font-family: var(--font-mono); font-size: 11px; color: var(--cyan); letter-spacing: .16em; margin-bottom: 9px; }
+.step p { color: var(--ink-secondary); font-size: 13.5px; line-height: 1.6; }
+.step p b { color: var(--ink-primary); font-weight: 600; }
+
+/* ---------- beacon mode ---------- */
+.beacon-overlay { position: fixed; inset: 0; z-index: 9999; background: #000;
+  display: none; align-items: center; justify-content: center; flex-direction: column; }
+.beacon-overlay.on { display: flex; }
+.beacon-overlay .exit { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+  padding: 11px 20px; border-radius: 9px; border: 1px solid #444; background: #111; color: #bbb;
+  font-family: var(--font-mono); font-size: 12px; cursor: pointer; z-index: 2; }
+
+/* Fullscreen demo-video player. Same shape as the beacon overlay above: a
+   fixed black sheet over everything, so it still fills the screen on a
+   projector even if the browser refuses the real Fullscreen API. */
+.video-overlay { position: fixed; inset: 0; z-index: 10000; background: #000;
+  display: none; align-items: center; justify-content: center; }
+.video-overlay.on { display: flex; }
+.video-overlay video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.video-overlay .exit { position: fixed; top: 18px; right: 20px;
+  padding: 9px 16px; border-radius: 9px; border: 1px solid #444; background: rgba(17,17,17,.85);
+  color: #ddd; font-family: var(--font-mono); font-size: 12px; cursor: pointer; z-index: 2; }
+.video-overlay .exit:hover { border-color: #888; color: #fff; }
+.btn-note { margin: 7px 2px 0; font-size: 11px; line-height: 1.5; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <a href="index.html" class="brand-group">
+    <img src="media/logo_emblem.png" alt="ZeroDrift Logo" class="brand-logo-img">
+    <div class="brand-text">
+      <b>ZERO<span>DRIFT</span></b>
+      <small>FSOC COARSE ALIGNMENT · ISRO SIH26169</small>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>HOME</a>
+    <a href="console.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2zm0 4v10h16V8H4z"/></svg>CONSOLE</a>
+    <a href="live.html" class="nav-link active">
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>LIVE DEMO</a>
+    <a href="about.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>ABOUT US</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="eyebrow">LIVE HARDWARE-FREE DEMONSTRATION</div>
+  <h1>Find the beacon by how it blinks,<br>not by how bright it is.</h1>
+  <p class="lede">
+    This runs the coarse-acquisition principle live on your own camera. Every pixel is asked
+    what fraction of its variance sits at the beacon's blink frequency — so a bright lamp, a
+    face or a hand scores near zero, while a modulating source is found even when it is dimmer
+    than everything around it. That is the same identity test the full simulator applies to a
+    satellite beacon against stars, cloud and sun glint.
+  </p>
+
+  <div class="stage">
+    <div class="viewport" id="viewport">
+      <div class="placeholder" id="placeholder">
+        <svg viewBox="0 0 24 24"><path d="M12 15.2A3.2 3.2 0 1 0 12 8.8a3.2 3.2 0 0 0 0 6.4zM9 2 7.17 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.17L15 2H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+        <p>Press <b style="color:var(--cyan)">START CAMERA</b> to begin. Your browser will ask
+           permission — the video never leaves this device.</p>
+      </div>
+      <canvas id="view" style="display:none"></canvas>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <h3>CONTROL</h3>
+        <button class="btn" id="startBtn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>START CAMERA</button>
+        <button class="btn ghost" id="demoVidBtn">
+          <svg viewBox="0 0 24 24"><path d="M18 4v1h-2V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H6V4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2v-1h2v1h8v-1h2v1a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM8 18H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V8h2v2zm7 3-5 3V10l5 3zm3 5h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2z"/></svg>DEMO VIDEO</button>
+        <p class="btn-note">This is our demo video showing how it works. It plays full screen.</p>
+        <button class="btn ghost" id="rigBtn" title="Chrome or Edge only">
+          <svg viewBox="0 0 24 24"><path d="M17 3H7a2 2 0 0 0-2 2v14l7-3 7 3V5a2 2 0 0 0-2-2z"/></svg>CONNECT RIG</button>
+        <button class="btn ghost" id="testRigBtn" disabled>
+          <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>TEST RIG (no camera)</button>
+        <button class="btn ghost" id="engineBtn">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-6l1 2h2v2H7v-2h2l1-2H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v8h14V7H5z"/></svg>RIG CAMERA VIEW</button>
+        <p class="btn-note" id="engineNote">What the physical rig's camera sees, tracked by the <b>full desktop
+        engine</b> (CFAR · IMM · adaptive blink). Start it on this machine with
+        <span style="font-family:var(--font-mono)">python -m fsoc_pat.hil.serve</span>, then this button opens it.</p>
+        <button class="btn ghost" id="beaconBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>USE AS BEACON</button>
+      </div>
+
+      <div class="card">
+        <h3>STATUS</h3>
+        <div class="state-chip searching" id="stateChip"><i class="dot"></i><span id="stateText">STANDBY</span></div>
+        <div style="margin-top:13px">
+          <div class="readout"><span>BLINK MATCH</span><b id="rScore">—</b></div>
+          <div class="readout"><span>MARGIN vs NOISE</span><b id="rMargin">—</b></div>
+          <div class="readout"><span>MOD. DEPTH</span><b id="rDepth">—</b></div>
+          <div class="readout"><span>BRIGHTNESS</span><b id="rBright">—</b></div>
+          <div class="readout"><span>DETECTED RATE</span><b id="rFreq">—</b></div>
+          <div class="readout"><span>FRAME RATE</span><b id="rFps">—</b></div>
+          <div class="readout"><span>RIG</span><b id="rRig">not connected</b></div>
+          <div class="readout"><span>EXPOSURE</span><b id="rExp">—</b></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>BEACON RATE</h3>
+        <select id="hzSel">
+          <option value="3">3 Hz</option>
+          <option value="4" selected>4 Hz</option>
+          <option value="5">5 Hz</option>
+          <option value="6">6 Hz</option>
+        </select>
+        <p style="color:var(--ink-muted);font-size:11.5px;margin-top:10px;line-height:1.55">
+          Must match the blink rate of your beacon. A band around this value is searched, so it
+          does not need to be exact.</p>
+      </div>
+
+      <div class="card">
+        <h3>DETECTION TUNING</h3>
+        <p style="color:var(--ink-muted);font-size:11.5px;line-height:1.55;margin-bottom:10px">
+          The right values depend on the room, so tune these live on-site rather than trusting a
+          fixed default. <b style="color:var(--ink-primary)">Locks the wrong thing</b> (a face,
+          shirt, wall)? Raise brightness and/or depth. <b style="color:var(--ink-primary)">Won't
+          lock the real beacon</b> in a bright room? Lower them — starting with brightness.</p>
+        <div>
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">MIN BRIGHTNESS <b id="brightVal" style="color:var(--ink-primary)">165</b></span>
+          <input type="range" id="brightSlider" min="80" max="250" step="5" value="165" style="margin-top:6px">
+        </div>
+        <div style="margin-top:8px">
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">MIN DEPTH <b id="depthVal" style="color:var(--ink-primary)">0.30</b></span>
+          <input type="range" id="depthSlider" min="0.10" max="0.70" step="0.05" value="0.30" style="margin-top:6px">
+        </div>
+      </div>
+
+      <div class="card" id="calCard" style="display:none">
+        <h3>RIG CALIBRATION</h3>
+        <p style="color:var(--ink-muted);font-size:11.5px;line-height:1.55;margin-bottom:10px">
+          If the laser moves <b style="color:var(--ink-primary)">the wrong way</b> relative to the
+          beacon, the camera and servo axes are mirrored for your physical mount — flip these
+          until it tracks correctly. Use <b style="color:var(--ink-primary)">TEST RIG</b> first to
+          confirm the servos move at all.</p>
+        <label style="display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--ink-secondary);padding:6px 0">
+          <input type="checkbox" id="invPan"> INVERT PAN (left/right)</label>
+        <label style="display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--ink-secondary);padding:6px 0">
+          <input type="checkbox" id="invTilt"> INVERT TILT (up/down)</label>
+        <label style="display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--ink-secondary);padding:6px 0">
+          <input type="checkbox" id="swapAxes"> SWAP PAN/TILT (camera rotated 90°)</label>
+        <p style="color:var(--ink-muted);font-size:11.5px;line-height:1.55;margin:12px 0 8px">
+          <b style="color:var(--ink-primary)">Camera field of view</b> — how many degrees the full
+          frame covers. This converts the beacon's pixel position into a real angle for the laser,
+          so if the dot consistently lands <i>too far</i> from the beacon, lower these; if it
+          doesn't move <i>far enough</i>, raise them.</p>
+        <div>
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">FOV HORIZONTAL <b id="fovHVal" style="color:var(--ink-primary)">60°</b></span>
+          <input type="range" id="fovHSlider" min="30" max="90" step="1" value="60" style="margin-top:6px">
+        </div>
+        <div style="margin-top:8px">
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">FOV VERTICAL <b id="fovVVal" style="color:var(--ink-primary)">45°</b></span>
+          <input type="range" id="fovVSlider" min="20" max="70" step="1" value="45" style="margin-top:6px">
+        </div>
+
+        <p style="color:var(--ink-muted);font-size:11.5px;line-height:1.55;margin:14px 0 8px;border-top:1px solid var(--edge);padding-top:12px">
+          <b style="color:var(--ink-primary)">Once the laser is mounted permanently:</b> the camera
+          and laser sit at slightly different points, so even a perfect track lands the dot a
+          little off the beacon (parallax). Lock onto a real beacon, then nudge these until the
+          dot sits exactly on it — that offset stays fixed after that.</p>
+        <div>
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">PAN TRIM <b id="trimPanVal" style="color:var(--ink-primary)">0°</b></span>
+          <input type="range" id="trimPan" min="-20" max="20" step="0.5" value="0" style="margin-top:6px">
+        </div>
+        <div style="margin-top:8px">
+          <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-muted)">TILT TRIM <b id="trimTiltVal" style="color:var(--ink-primary)">0°</b></span>
+          <input type="range" id="trimTilt" min="-20" max="20" step="0.5" value="0" style="margin-top:6px">
+        </div>
+
+        <button class="btn ghost" id="centreBtn" style="margin-top:11px">
+          <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0-6a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z"/></svg>CENTRE (90°/90°)</button>
+      </div>
+
+      <div id="noteSlot"></div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">STEP 01</div>
+      <p>Press <b>START CAMERA</b> and allow access. You will see your live feed with a status bar.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">STEP 02</div>
+      <p>Make a beacon. Open this same page on a <b>phone</b> and press <b>USE AS BEACON</b> — its
+         screen will flash at the selected rate. A strobe app or any blinking LED works too.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">STEP 03</div>
+      <p>Hold the beacon in view, roughly 1–3 m away. Within a couple of seconds the status turns
+         <b style="color:var(--green)">LOCKED</b> and a ring marks it — even with brighter objects in frame.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">STEP 04 · OPTIONAL</div>
+      <p>Press <b>CONNECT RIG</b> to drive the physical pan-tilt laser straight from this page over
+         USB. Chrome or Edge only.</p>
+    </div>
+  </div>
+</div>
+
+<div class="beacon-overlay" id="beaconOverlay">
+  <button class="exit" id="beaconExit">TAP TO STOP BEACON</button>
+</div>
+
+<div class="video-overlay" id="videoOverlay">
+  <!-- preload="none" so 20 MB is not pulled on every page load; it is only
+       fetched when someone actually presses the button. playsinline stops
+       iOS hijacking it into its own player, which would bypass our exit. -->
+  <video id="demoVideo" src="demo-video.mp4" controls playsinline preload="none"></video>
+  <button class="exit" id="videoExit">CLOSE &times;</button>
+</div>
+
+<script>
+"use strict";
+/* ------------------------------------------------------------------
+   Detection: per-pixel modulation analysis.
+
+   Rather than "find the brightest spot, then check whether it blinks"
+   -- which picks the wrong object before the blink test ever runs --
+   every pixel is asked how much of its variance sits at the beacon
+   frequency. Two corrections make that trustworthy in a real room:
+
+     * each frame is divided by its own mean, and whatever global swing
+       survives is regressed out, so a camera whose auto-exposure chases
+       the blink cannot make the entire frame look like a beacon;
+     * a peak is only believed if it stands well clear of what the rest
+       of the frame is scoring (a constant-false-alarm-rate test), since
+       with tens of thousands of pixels the best pure-noise pixel scores
+       higher than intuition suggests.
+------------------------------------------------------------------- */
+/* Cost of one analysis pass is bins x N x P, all in scalar JS on the main
+   thread -- every millisecond here is a millisecond the video, the HUD and
+   the servo commands are all frozen. These are sized so a pass stays a few
+   milliseconds rather than a visible stall. */
+// Tried raising this to fight depth dilution on a small beacon; it cost real
+// performance (18fps, 92ms worst-case analysis) without fixing the actual
+// test case, so the dilution isn't primarily a resolution problem -- reverted.
+// Brightness no longer depends on this resolution at all (it samples the
+// full-resolution video directly at the candidate location); only depth still
+// does, and that's compensated by keeping MIN_DEPTH live-adjustable rather
+// than by paying for a bigger grid that didn't actually help.
+const W = 96, H = 72, P = W * H;    // analysis resolution
+const N = 40;                        // frames per window
+const BAND_STEP = 0.5;               // Hz between candidate frequencies
+/* Which statistic actually separates a beacon from noise, measured on real
+   hardware rather than assumed:
+
+       sensor noise, no beacon : score 0.344, margin 3.13x
+       real beacon on camera   : score 0.22 , margin 4.90x
+
+   The absolute score is worse than useless here -- noise scored HIGHER than a
+   genuine beacon, so a floor set above 0.22 rejects the real thing while
+   letting noise through. It only earns its keep as a sanity floor against
+   dead-flat pixels. The margin over the surrounding background is what
+   actually discriminates, so that carries the decision, backed by the
+   requirement to reappear in the same place several analyses running. */
+const LOCK_MIN = 0.12;               // sanity floor only -- NOT the discriminator
+const CFAR = 3.8;                    // peak must beat its background by this
+/* A face locked at 5.0 Hz -- the exact edge of the default 3-5 Hz search band
+   -- with a large margin (10.7x). That pattern is the signature of genuine
+   periodic light (e.g. LED room lighting flicker aliasing into the search
+   range), not sensor noise: a bright, reflective surface like skin shows the
+   LARGEST ABSOLUTE swing under ambient flicker simply because it is bright,
+   even though the light source, not the face, is what's actually modulating.
+   Margin over background can't tell those apart -- both are real, spatially
+   local peaks. What does distinguish them is RELATIVE depth: a deliberate
+   on/off beacon swings close to 100% of its own brightness, while ambient
+   flicker on a diffusely-lit surface is a much shallower fraction of it.
+   0.22 let real flicker through; raised well above typical flicker depth
+   while staying under what an actual on/off source produces. */
+/* A beacon's "off" state is not actually dark in a lit room -- ambient light
+   still fills that spot -- so its swing as a fraction of its own brightness
+   shrinks well below what the same beacon shows in a dark room. 0.55 was
+   tuned against one failure mode (ambient flicker false-locking) and broke
+   the opposite case (a real beacon losing contrast under room lighting): a
+   beacon with realistic reduced depth under bright ambient light measured
+   0 here against real data.
+
+   The edge-of-band rejection now does most of the work against aliased
+   ambient flicker (it targets where the false signal sits in frequency, not
+   how strong it is), so depth no longer has to carry that defense alone and
+   can go back to being permissive. Live-adjustable below since the actual
+   venue's lighting can't be replicated here -- raise it if something
+   ambient locks, lower it if the real beacon does not. */
+let MIN_DEPTH = 0.30;
+// A real camera flash saturates; a shirt, wall, or face essentially never
+// does. Live-adjustable for the same reason as MIN_DEPTH -- the actual venue
+// can't be tested from here. Lower if a dim real beacon (e.g. a phone
+// screen, not the flash) is being rejected; raise if something merely
+// bright but not the beacon keeps winning.
+let MIN_BRIGHT = 165;
+// The window's darkest reading at the candidate must drop to at most this
+// fraction of its brightest -- a real beacon's off phase is genuinely dim,
+// not just slightly less saturated. Not exposed as a slider: unlike
+// MIN_DEPTH/MIN_BRIGHT this isn't a room-lighting tradeoff, it's a direct
+// physical property of a real on/off beacon.
+const MAX_OFF_RATIO = 0.75;
+// Fraction of frames where a candidate's bright/dark state must match our
+// own recorded laser-on/off history before it's rejected as "that's just our
+// laser." A genuine external beacon's timing is unrelated to our own output,
+// so it matches our laser history only by chance (~50%); only something
+// that's actually tracking OUR toggle sequence -- i.e. is our own laser seen
+// by the camera -- will consistently clear a high bar like this.
+const SELF_LASER_MATCH = 0.85;
+const ANALYSE_EVERY = 4;
+const TRACK_ROI = 46;                // px radius for the cheap per-frame follow
+const ROI_MAX = 96;                  // ceiling for the speed-grown follow radius
+const MAX_SPEED = 22;                // px/frame the estimator will believe
+const PREDICT_LEAD_MAX = 10;         // frames of lead the SEARCH may run ahead
+const LEAD_MAX_PX = 42;              // ...and never more than this far ahead
+const RESCUE_PULL = 0.4;             // how hard a LOST follower is pulled back
+                                     // onto the modulation map's answer
+const BLIND_CONTRAST_DECAY = 0.96;   // how fast the learned "lit" bar relaxes
+                                     // while nothing is clearing it
+const DARK_PHASE_FRAMES = 6;         // blind frames a normal blink-off explains
+const MAX_MAP_SILENCE = 20;          // analyses (~2.7 s) the map may stay quiet
+                                     // while the follower is still seeing the light
+const REFINER_ALIVE_FRAMES = 16;     // frames (~0.5 s) since the follower last
+                                     // measured the light and still counts as live
+const MAP_REBUILD_GRACE = 15;        // extra analyses of patience while the map's
+                                     // window is still washing out recent motion
+const SEARCH_TETHER = 40;            // px the search centre may sit from the anchor
+const ANCHOR_LAG_CAP = 26;           // px the map's answer may be nudged forward
+// The per-frame follower is allowed to sharpen the position, never to decide
+// it. These three numbers are what keep it subordinate to the modulation map:
+const ANCHOR_MAX = 38;               // px it may sit from the last confirmed detection
+const ANCHOR_PULL = 0.25;            // how hard the map pulls when brightness says nothing
+const REFINE_STEP = 22;              // px of motion in one frame that is still "the beacon moved"
+const REFINE_SMOOTH = 0.4;           // fraction of the way to the new estimate per frame
+const OFF_PHASE_RATIO = 0.55;        // below this share of the beacon's own ON contrast = dark
+const MIN_CONTRAST = 10;             // luma above local background that counts as "lit at all"
+// These two are really ANGLES, written as pixel counts at a 640-wide frame.
+// A beacon subtends the same angle whatever the sensor resolution, so on a
+// 320-wide camera a fixed 12 px disc spans twice the angle and swallows lamps
+// it has no business including -- measured as a 3.3%-of-frame error at 320x240
+// against 0.07% at 640. Scaling by frame width keeps the behaviour identical
+// across cameras; the clamp stops an absurd resolution producing a useless
+// radius either way.
+const LOCAL_R_REF = 12;              // "px around the lock that is the tracked light itself", at 640 wide
+const FOCUS_SIGMA_REF = 8;           // "px over which a neighbour's vote falls off", at 640 wide
+function resScale() {
+  return Math.max(0.5, Math.min(3, (els.view.width || 640) / 640));
+}
+const MIN_WEIGHT = 6;                // too little evidence to move on -- hold instead
+const HOLD_MIN = 0.07;               // once locked, what it takes to stay locked
+const HOLD_CFAR = 2.2;
+const CONFIRM_HITS = 3;              // analyses agreeing before a lock is believed
+const CONFIRM_RADIUS = 45;           // px the peak may wander and still be "the same thing"
+const DROP_MISSES = 4;               // analyses without it before the lock is abandoned
+
+const els = {
+  view: document.getElementById('view'),
+  placeholder: document.getElementById('placeholder'),
+  start: document.getElementById('startBtn'),
+  rig: document.getElementById('rigBtn'),
+  testRig: document.getElementById('testRigBtn'),
+  beacon: document.getElementById('beaconBtn'),
+  chip: document.getElementById('stateChip'),
+  chipText: document.getElementById('stateText'),
+  score: document.getElementById('rScore'),
+  margin: document.getElementById('rMargin'),
+  depth: document.getElementById('rDepth'),
+  bright: document.getElementById('rBright'),
+  freq: document.getElementById('rFreq'),
+  fps: document.getElementById('rFps'),
+  rigState: document.getElementById('rRig'),
+  exp: document.getElementById('rExp'),
+  hz: document.getElementById('hzSel'),
+  note: document.getElementById('noteSlot'),
+  overlay: document.getElementById('beaconOverlay'),
+  demoVidBtn: document.getElementById('demoVidBtn'),
+  videoOverlay: document.getElementById('videoOverlay'),
+  demoVideo: document.getElementById('demoVideo'),
+  videoExit: document.getElementById('videoExit'),
+  beaconExit: document.getElementById('beaconExit'),
+  calCard: document.getElementById('calCard'),
+  invPan: document.getElementById('invPan'),
+  invTilt: document.getElementById('invTilt'),
+  swapAxes: document.getElementById('swapAxes'),
+  fovHSlider: document.getElementById('fovHSlider'),
+  fovHVal: document.getElementById('fovHVal'),
+  fovVSlider: document.getElementById('fovVSlider'),
+  fovVVal: document.getElementById('fovVVal'),
+  trimPan: document.getElementById('trimPan'),
+  trimPanVal: document.getElementById('trimPanVal'),
+  trimTilt: document.getElementById('trimTilt'),
+  trimTiltVal: document.getElementById('trimTiltVal'),
+  centre: document.getElementById('centreBtn'),
+  brightSlider: document.getElementById('brightSlider'),
+  brightVal: document.getElementById('brightVal'),
+  depthSlider: document.getElementById('depthSlider'),
+  depthVal: document.getElementById('depthVal'),
+  engineBtn: document.getElementById('engineBtn'),
+  engineNote: document.getElementById('engineNote'),
+};
+
+/* Calibration is a per-rig physical fact (how the camera happens to be
+   mounted relative to the servos), not a session setting -- keep it across
+   reloads so it does not have to be rediscovered every time the page opens. */
+const cal = {
+  invPan: localStorage.getItem('zd_invPan') === '1',
+  invTilt: localStorage.getItem('zd_invTilt') === '1',
+  swap: localStorage.getItem('zd_swap') === '1',
+  // A fixed servo-degree offset, not a tracking correction -- it compensates
+  // for the camera and laser never sitting at exactly the same point in
+  // space (parallax), which stays constant once the mount is fixed and so
+  // is set once here rather than computed per frame.
+  trimPan: parseFloat(localStorage.getItem('zd_trimPan') || '0'),
+  trimTilt: parseFloat(localStorage.getItem('zd_trimTilt') || '0'),
+  // How many degrees of the real world the camera's full frame width/height
+  // covers. This is what converts "beacon is 150 px right of centre" into
+  // "beacon is 14 degrees right of the camera axis", so the laser can be
+  // commanded to that angle directly. Laptop webcams vary (roughly 50-70
+  // degrees horizontally), and getting it wrong scales every pointing
+  // command -- so it's adjustable rather than hard-coded.
+  fovH: parseFloat(localStorage.getItem('zd_fovH') || '60'),
+  fovV: parseFloat(localStorage.getItem('zd_fovV') || '45'),
+};
+els.invPan.checked = cal.invPan;
+els.invTilt.checked = cal.invTilt;
+els.swapAxes.checked = cal.swap;
+els.trimPan.value = cal.trimPan;
+els.trimPanVal.textContent = cal.trimPan.toFixed(1) + '°';
+els.trimTilt.value = cal.trimTilt;
+els.trimTiltVal.textContent = cal.trimTilt.toFixed(1) + '°';
+els.trimPan.oninput = () => {
+  cal.trimPan = parseFloat(els.trimPan.value);
+  els.trimPanVal.textContent = cal.trimPan.toFixed(1) + '°';
+  localStorage.setItem('zd_trimPan', cal.trimPan);
+};
+els.trimTilt.oninput = () => {
+  cal.trimTilt = parseFloat(els.trimTilt.value);
+  els.trimTiltVal.textContent = cal.trimTilt.toFixed(1) + '°';
+  localStorage.setItem('zd_trimTilt', cal.trimTilt);
+};
+els.fovHSlider.value = cal.fovH;
+els.fovHVal.textContent = cal.fovH.toFixed(0) + '°';
+els.fovVSlider.value = cal.fovV;
+els.fovVVal.textContent = cal.fovV.toFixed(0) + '°';
+els.invPan.onchange = () => { cal.invPan = els.invPan.checked; localStorage.setItem('zd_invPan', cal.invPan ? '1' : '0'); };
+els.invTilt.onchange = () => { cal.invTilt = els.invTilt.checked; localStorage.setItem('zd_invTilt', cal.invTilt ? '1' : '0'); };
+els.swapAxes.onchange = () => { cal.swap = els.swapAxes.checked; localStorage.setItem('zd_swap', cal.swap ? '1' : '0'); };
+els.fovHSlider.oninput = () => {
+  cal.fovH = parseFloat(els.fovHSlider.value);
+  els.fovHVal.textContent = cal.fovH.toFixed(0) + '°';
+  localStorage.setItem('zd_fovH', cal.fovH);
+};
+els.fovVSlider.oninput = () => {
+  cal.fovV = parseFloat(els.fovVSlider.value);
+  els.fovVVal.textContent = cal.fovV.toFixed(0) + '°';
+  localStorage.setItem('zd_fovV', cal.fovV);
+};
+els.centre.onclick = () => { pan = 90; tilt = 90; sendRig(90, 90, laserOn); };
+
+/* ---------------- demo video, played full screen ----------------
+   Two layers on purpose. The real Fullscreen API is what the judges should
+   see, but browsers refuse it in some contexts (an iframe without the right
+   permission, some managed-device policies) and the refusal is a silent
+   rejected promise. So the overlay itself is a full-viewport black sheet:
+   if the API is refused the video still fills the window, and the demo
+   carries on rather than appearing to do nothing. */
+function openDemoVideo() {
+  els.videoOverlay.classList.add('on');
+  // Without this the page scrollbar stays visible beside the black sheet
+  // whenever real fullscreen is refused, which looks like a half-open dialog.
+  document.body.style.overflow = 'hidden';
+  const fs = els.videoOverlay.requestFullscreen || els.videoOverlay.webkitRequestFullscreen;
+  if (fs) { const r = fs.call(els.videoOverlay); if (r && r.catch) r.catch(() => {}); }
+  els.demoVideo.currentTime = 0;
+  const p = els.demoVideo.play();
+  if (p && p.catch) p.catch(() => {});   // autoplay refusal: the controls still work
+}
+
+function closeDemoVideo() {
+  els.demoVideo.pause();
+  els.videoOverlay.classList.remove('on');
+  document.body.style.overflow = '';
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    const ex = document.exitFullscreen || document.webkitExitFullscreen;
+    if (ex) { const r = ex.call(document); if (r && r.catch) r.catch(() => {}); }
+  }
+}
+
+els.demoVidBtn.onclick = openDemoVideo;
+els.videoExit.onclick = closeDemoVideo;
+// Leaving fullscreen with Esc or the browser's own control should dismiss the
+// whole overlay too, otherwise the page is left with a black sheet over it and
+// no obvious way back -- an easy way to lose thirty seconds on stage.
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && els.videoOverlay.classList.contains('on')) closeDemoVideo();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && els.videoOverlay.classList.contains('on')) closeDemoVideo();
+});
+
+/* Same reasoning as the calibration block above: the right detection
+   thresholds depend on the actual room, which can't be tested from outside
+   it, so they're tunable live rather than baked in. Persisted so a value
+   found during on-site setup survives a reload. */
+MIN_BRIGHT = parseFloat(localStorage.getItem('zd_minBright') || '165');
+MIN_DEPTH = parseFloat(localStorage.getItem('zd_minDepth') || '0.30');
+els.brightSlider.value = MIN_BRIGHT;
+els.brightVal.textContent = MIN_BRIGHT.toFixed(0);
+els.depthSlider.value = MIN_DEPTH;
+els.depthVal.textContent = MIN_DEPTH.toFixed(2);
+els.brightSlider.oninput = () => {
+  MIN_BRIGHT = parseFloat(els.brightSlider.value);
+  els.brightVal.textContent = MIN_BRIGHT.toFixed(0);
+  localStorage.setItem('zd_minBright', MIN_BRIGHT);
+};
+els.depthSlider.oninput = () => {
+  MIN_DEPTH = parseFloat(els.depthSlider.value);
+  els.depthVal.textContent = MIN_DEPTH.toFixed(2);
+  localStorage.setItem('zd_minDepth', MIN_DEPTH);
+};
+
+const ring = new Float32Array(N * P);   // rolling window of downscaled frames
+const stamps = new Float64Array(N);
+const frameMean = new Float32Array(N);
+// Our own record of whether WE commanded the laser on or off each frame --
+// ground truth no external analysis could have, and the direct fix for the
+// camera locking onto its own laser: a candidate whose brightness pattern
+// matches this recorded sequence isn't a beacon, it's a reflection of us.
+const laserHist = new Uint8Array(N);
+
+/* Scratch space for the analysis, allocated once. Re-allocating these per
+   pass churns well over a megabyte every few frames, and the resulting
+   garbage collections are exactly the periodic stalls that make the tracker
+   feel slow even when the arithmetic itself is fast. */
+const buf = {
+  pmean: new Float32Array(P), cen: new Float32Array(N * P), g: new Float64Array(N),
+  coef: new Float32Array(P), power: new Float32Array(P), best: new Float32Array(P),
+  bestDepth: new Float32Array(P), bestFreqAt: new Float32Array(P),
+  re: new Float32Array(P), im: new Float32Array(P),
+  cs: new Float32Array(N), sn: new Float32Array(N), sortBuf: new Float32Array(P),
+};
+let filled = 0, head = 0, frameNo = 0;
+
+let video, work, workCtx, outCtx, probe, probeCtx, trackCv, trackCtx, stream = null;
+const PROBE_SIZE = 24;
+// A webcam shows you the scene as the camera sees it, which reads as
+// backwards to anyone watching themselves -- move the beacon left, the dot on
+// screen goes right. Mirroring the DISPLAY only fixes that. Tracking, steering
+// and every servo command stay in true camera coordinates, so this changes
+// what the operator sees and nothing about where the laser goes.
+const MIRROR_VIEW = true;
+let state = 'SEARCHING', pos = null, vel = {x: 0, y: 0};
+let cand = null, confirm = 0;        // peak awaiting confirmation, and its hit count
+// Where the modulation map last said the beacon is -- the only evidence in
+// this program that actually identifies the beacon. The per-frame follower is
+// tethered to it so a run of bad frames cannot walk the lock away.
+let anchor = null;
+// How far this particular beacon rises ABOVE its own local background when
+// lit -- learned from the beacon itself rather than assumed. Contrast, not
+// absolute brightness: in a lit hall the bare wall already reads 120, so any
+// fixed brightness bar is cleared by the empty room and stops meaning
+// anything. What still separates a lit beacon from a dark one is that it
+// stands out from what surrounds it.
+let onContrast = 0;
+// Reused so the per-frame background estimate allocates nothing.
+const bgHist = new Uint16Array(256);
+let exposurePinned = false;
+let score = 0, margin = 0, detectedHz = 0, fps = 0, peakDepth = 0, peakBright = 0;
+// Frames since the refiner last actually SAW the tracked light. While the
+// beacon is dark (half of every blink cycle) this ticks up and resets; if it
+// stays up -- fast motion, occlusion -- the lock is being carried by
+// prediction alone, and saying green LOCKED with blink 0.00 would be a lie.
+let coastFrames = 0;
+// Last ACCEPTED centroid measurement and the frame it landed on: velocity is
+// learned from measured position deltas over elapsed frames -- the only
+// estimator that converges to the target's TRUE velocity. (Learning from the
+// post-smoothing residual, as first tried, converges to roughly half of it,
+// which reads as the ring forever lagging a moving beacon.)
+let lastMeas = null;
+// Why the last lock was abandoned. Read it from the console (ZeroDriftDrop())
+// when a lock dies unexpectedly on someone else's laptop -- "it just dropped"
+// is not diagnosable, this is.
+let lastDrop = null;
+// The identification readouts of the CURRENT lock, held between confirmations.
+// The map scores a track once every ANALYSE_EVERY frames and reports zero on
+// the cycles where nothing cleared threshold -- so a healthy lock flickers
+// "blink 0.00" between perfectly good confirmations, which reads as a dead
+// lock and was reported as exactly that. Showing the last real measurement is
+// both clearer and more honest than showing a transient zero; they are reset
+// the moment the lock is abandoned, so they can never describe a lock that no
+// longer exists.
+let heldScore = 0, heldMargin = 0, heldDepth = 0;
+// Frames since the scene last moved meaningfully. The modulation map scores a
+// pixel over an N-frame window, so right after a sweep its window is still
+// full of smeared motion and it legitimately has nothing to say for about a
+// second and a half. Silence that motion EXPLAINS must not kill a lock the
+// follower is still holding; silence with no such excuse must.
+let stillFrames = 0;
+window.ZeroDriftDrop = () => lastDrop;
+function displayState() {
+  if (state !== 'LOCKED') return state;
+  const mapStale = cand ? cand.misses > 0 : true;
+  return (coastFrames > 6 && mapStale) ? 'COASTING' : 'LOCKED';
+}
+let serialWriter = null, pan = 90, tilt = 90, laserOn = false;
+
+function note(msg, isErr) {
+  els.note.innerHTML = '<div class="note' + (isErr ? ' err' : '') + '">' + msg + '</div>';
+}
+
+/* Ask the camera to stop adjusting itself.
+
+   Auto-exposure is the worst thing that can happen to this measurement: the
+   camera reacts to the beacon's own blink, so the whole frame brightens and
+   darkens in step with it and *every* pixel looks like it is modulating at
+   the beacon frequency. Not every browser or webcam allows manual control, so
+   the common-mode maths still has to cope -- but where it is offered, taking
+   it removes the problem at the source rather than correcting for it. */
+async function pinExposure() {
+  const track = stream.getVideoTracks()[0];
+  if (!track || !track.getCapabilities) return;
+  let caps = {};
+  try { caps = track.getCapabilities() || {}; } catch (e) { return; }
+  const wanted = [];
+  if (caps.exposureMode && caps.exposureMode.includes('manual')) wanted.push({ exposureMode: 'manual' });
+  if (caps.whiteBalanceMode && caps.whiteBalanceMode.includes('manual')) wanted.push({ whiteBalanceMode: 'manual' });
+  if (caps.focusMode && caps.focusMode.includes('manual')) wanted.push({ focusMode: 'manual' });
+  if (!wanted.length) { exposurePinned = false; return; }
+  try {
+    await track.applyConstraints({ advanced: wanted });
+    exposurePinned = true;
+  } catch (e) { exposurePinned = false; }
+}
+
+/* ---------------- camera ---------------- */
+async function start() {
+  els.start.disabled = true;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: {ideal: 640}, height: {ideal: 480}, facingMode: 'user' }, audio: false
+    });
+  } catch (e) {
+    els.start.disabled = false;
+    note('Camera blocked: <b>' + e.name + '</b>. Allow camera access for this site, close any '
+       + 'other app using the webcam, and try again.', true);
+    return;
+  }
+  video = document.createElement('video');
+  video.srcObject = stream; video.playsInline = true; video.muted = true;
+  await video.play();
+  await pinExposure();
+
+  work = document.createElement('canvas'); work.width = W; work.height = H;
+  workCtx = work.getContext('2d', { willReadFrequently: true });
+  // A small full-resolution crop straight from the video, used only to get
+  // an undiluted brightness reading at a candidate point -- the W x H
+  // analysis buffer is downsampled for speed, which spreads out a small
+  // beacon's true peak value across neighbouring cells before any brightness
+  // check ever sees it.
+  probe = document.createElement('canvas'); probe.width = probe.height = PROBE_SIZE;
+  probeCtx = probe.getContext('2d', { willReadFrequently: true });
+  trackCv = document.createElement('canvas');
+  trackCv.width = trackCv.height = ROI_MAX * 2 + 2;
+  trackCtx = trackCv.getContext('2d', { willReadFrequently: true });
+
+  els.view.width = video.videoWidth || 640;
+  els.view.height = video.videoHeight || 480;
+  outCtx = els.view.getContext('2d');
+  els.placeholder.style.display = 'none';
+  els.view.style.display = 'block';
+  els.start.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>STOP CAMERA';
+  els.start.disabled = false;
+  els.start.onclick = stop;
+  els.exp.textContent = exposurePinned ? 'pinned (manual)' : 'auto — browser cannot pin';
+  els.exp.className = exposurePinned ? 'good' : 'warn';
+  if (exposurePinned) {
+    note('Camera running with exposure pinned. Show it a blinking light — open this page on '
+       + 'your phone and press <b>USE AS BEACON</b> if you do not have a strobe app.');
+  } else {
+    // Worth saying plainly: this is the known weak point of running in a
+    // browser rather than a fault in the tracking, and it is why the desktop
+    // version can be steadier in a difficult room.
+    note('Camera running, but this browser will not let the page fix the exposure, so the '
+       + 'camera keeps auto-adjusting to the blinking beacon. The maths compensates for '
+       + 'that, but in a dark or strongly backlit room it is the most likely reason a lock '
+       + 'is slow or unsteady. <b>Even, indirect light and a beacon that fills more of the '
+       + 'frame both help a lot.</b>');
+  }
+  pump();
+}
+
+/* Drive sampling from a timer, not requestAnimationFrame or
+   requestVideoFrameCallback. Both of those are tied to the browser actually
+   painting, so they stall the moment it decides not to repaint -- which
+   silently freezes the analysis with no error anywhere. A timer keeps
+   sampling regardless of what the compositor is doing. */
+function pump() {
+  if (!stream) return;
+  const t0 = performance.now();
+  try { loop(); } catch (e) { console.error('loop', e); }
+  // Never queue faster than the work takes, or the loop starves the page.
+  setTimeout(pump, Math.max(8, 33 - (performance.now() - t0)));
+}
+
+function stop() {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = null; filled = 0; head = 0; pos = null; state = 'SEARCHING';
+  els.view.style.display = 'none'; els.placeholder.style.display = 'block';
+  els.start.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>START CAMERA';
+  els.start.onclick = start;
+  setState('STANDBY');
+  if (serialWriter) sendRig(90, 90, false);
+}
+
+/* ---------------- analysis ---------------- */
+function analyse() {
+  if (filled < N) return;
+  const span = stamps[(head + N - 1) % N] - stamps[head % N];
+  if (span <= 0) return;
+  fps = (N - 1) / span;
+
+  const target = parseFloat(els.hz.value);
+  const band = [];
+  for (let f = target - 1; f <= target + 1.001; f += BAND_STEP) if (f > 0.5) band.push(f);
+  if (fps < 2.5 * (target + 1)) return;      // below Nyquist plus margin
+
+  // Per-pixel mean of the mean-normalised frames.
+  const pmean = buf.pmean; pmean.fill(0);
+  for (let i = 0; i < N; i++) {
+    const off = ((head + i) % N) * P, inv = 1 / (frameMean[(head + i) % N] + 1e-6);
+    for (let p = 0; p < P; p++) pmean[p] += ring[off + p] * inv;
+  }
+  for (let p = 0; p < P; p++) pmean[p] /= N;
+
+  // Centre, and measure the residual global swing (what survives dividing by
+  // the frame mean, e.g. clipped highlights riding the camera's gain).
+  const cen = buf.cen, g = buf.g;
+  for (let i = 0; i < N; i++) {
+    const src = ((head + i) % N) * P, inv = 1 / (frameMean[(head + i) % N] + 1e-6);
+    let acc = 0;
+    for (let p = 0; p < P; p++) {
+      const v = ring[src + p] * inv - pmean[p];
+      cen[i * P + p] = v; acc += v;
+    }
+    g[i] = acc / P;
+  }
+  let gg = 0; for (let i = 0; i < N; i++) gg += g[i] * g[i];
+  if (gg > 1e-12) {                           // regress the common mode out
+    const coef = buf.coef; coef.fill(0);
+    for (let i = 0; i < N; i++) {
+      const gi = g[i], base = i * P;
+      for (let p = 0; p < P; p++) coef[p] += cen[base + p] * gi;
+    }
+    for (let p = 0; p < P; p++) coef[p] /= gg;
+    for (let i = 0; i < N; i++) {
+      const gi = g[i], base = i * P;
+      for (let p = 0; p < P; p++) cen[base + p] -= gi * coef[p];
+    }
+  }
+
+  const power = buf.power; power.fill(0);
+  for (let i = 0; i < N; i++) {
+    const base = i * P;
+    for (let p = 0; p < P; p++) { const v = cen[base + p]; power[p] += v * v; }
+  }
+
+  const best = buf.best; best.fill(0);
+  let bestFreq = target;
+  const t0 = stamps[head % N];
+  for (const f of band) {
+    // Non-uniform DFT on real timestamps: browsers do not deliver frames on a
+    // perfectly even cadence, and assuming they do smears the very signal we
+    // are trying to measure.
+    const cs = buf.cs, sn = buf.sn;
+    for (let i = 0; i < N; i++) {
+      const th = -2 * Math.PI * f * (stamps[(head + i) % N] - t0);
+      cs[i] = Math.cos(th); sn[i] = Math.sin(th);
+    }
+    const re = buf.re, im = buf.im; re.fill(0); im.fill(0);
+    for (let i = 0; i < N; i++) {
+      const base = i * P, c = cs[i], s = sn[i];
+      for (let p = 0; p < P; p++) { const v = cen[base + p]; re[p] += v * c; im[p] += v * s; }
+    }
+    for (let p = 0; p < P; p++) {
+      const mag2 = re[p] * re[p] + im[p] * im[p];
+      const frac = Math.min(1, (2 * mag2 / N) / (power[p] + 1e-9));
+      const depth = (2 * Math.sqrt(mag2) / N) / (pmean[p] + 1e-6);
+      const ok = depth >= MIN_DEPTH && Math.sqrt(power[p] / N) >= 0.03;
+      const val = ok ? frac : 0;
+      // Per-pixel, not "whichever frequency last improved anything in the
+      // whole frame" -- that global tracker could attribute a completely
+      // different pixel's winning frequency to the actual peak.
+      if (val > best[p]) { best[p] = val; buf.bestDepth[p] = depth; buf.bestFreqAt[p] = f; }
+    }
+  }
+
+  // Peak, and the background it has to beat (99th percentile ~ CFAR reference).
+  let peak = 0, peakIdx = 0;
+  for (let p = 0; p < P; p++) if (best[p] > peak) { peak = best[p]; peakIdx = p; }
+  buf.sortBuf.set(best); const sorted = buf.sortBuf.sort();
+  // Floored: in a clean dark scene the 99th percentile tends to zero and the
+  // ratio explodes into six digits, which reads as a broken instrument. 0.02
+  // is the measured score floor of bare sensor noise; nothing meaningful is
+  // below it, so margins are honest AND finite (<= 50x).
+  const bg = Math.max(sorted[Math.floor(P * 0.99)], 0.02);
+
+  bestFreq = peak > 0 ? buf.bestFreqAt[peakIdx] : target;
+
+  // Pure modulation-timing analysis has no idea what a beacon actually looks
+  // like -- it will happily pick a shirt or a wall over the real flash if
+  // that surface shows a stronger relative swing, e.g. from bloom/AGC ripple
+  // sympathetic to the true source nearby. A phone's camera flash is one of
+  // the few things that hits genuine sensor saturation; ordinary room
+  // surfaces essentially never do. Requiring real brightness, not just
+  // relative modulation, throws out candidates no actual beacon would ever
+  // produce.
+  //
+  // This must be the PEAK (on-state) brightness, not the time-average, and it
+  // must come from the REAL video, not the WxH analysis buffer.
+  //   - Time-average: a first version used it and broke on the exact case it
+  //     was meant to fix -- a ~50%-duty beacon averages to roughly HALF its
+  //     peak brightness, so a 255/0 beacon averages ~127 and a threshold
+  //     meant to demand "hits near-white when lit" rejects it outright.
+  //   - Analysis-buffer dilution: even reading the window's true max, a
+  //     small beacon's peak gets spread across neighbouring cells by the
+  //     downsample (needed for speed), understating it there specifically.
+  //     A synthetic beacon genuinely peaking near 205 measured only ~123 in
+  //     the analysis buffer -- diluted below any threshold that could still
+  //     reject a shirt.
+  // Cropping straight from the live video at the candidate's position avoids
+  // both: real peak, real resolution.
+  if (peak > 0) {
+    const fx = Math.round((peakIdx % W) * (els.view.width / W));
+    const fy = Math.round(Math.floor(peakIdx / W) * (els.view.height / H));
+    const half = PROBE_SIZE / 2;
+    const sx = Math.min(Math.max(0, fx - half), els.view.width - PROBE_SIZE);
+    const sy = Math.min(Math.max(0, fy - half), els.view.height - PROBE_SIZE);
+    probeCtx.drawImage(video, sx, sy, PROBE_SIZE, PROBE_SIZE, 0, 0, PROBE_SIZE, PROBE_SIZE);
+    const d = probeCtx.getImageData(0, 0, PROBE_SIZE, PROBE_SIZE).data;
+    let maxRaw = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      if (v > maxRaw) maxRaw = v;
+    }
+    peakBright = maxRaw;
+    if (peakBright < MIN_BRIGHT) peak = 0;
+  } else {
+    peakBright = 0;
+  }
+
+  // The mathematical hole that let a STEADY, saturated ceiling light lock: the
+  // score is a fraction of the pixel's OWN variance sitting at the target
+  // frequency -- it never checks whether that variance is large in absolute
+  // terms. A pixel pinned near 255 has very little total variance to begin
+  // with, so a tiny clipping-boundary wiggle (a barely-saturated pixel
+  // flickering between "fully clipped" and "just under") can BE nearly all of
+  // that pixel's variance, scoring as confidently as a real 12-to-205 swing.
+  // Brightness alone doesn't catch this either, since the light genuinely is
+  // bright. A real beacon does one thing a steady light structurally cannot:
+  // it turns off. Require the window to actually contain a dark reading, not
+  // just a statistically well-correlated one.
+  let selfMatch = 0;
+  if (peak > 0) {
+    let winMin = Infinity, winMax = -Infinity;
+    for (let i = 0; i < N; i++) {
+      const v = ring[((head + i) % N) * P + peakIdx];
+      if (v < winMin) winMin = v;
+      if (v > winMax) winMax = v;
+    }
+    if (winMin > winMax * MAX_OFF_RATIO) peak = 0;
+
+    // The camera can see the laser it's pointing. If the tracker's own lock
+    // state ever flickers (e.g. a marginal real signal hovering near the
+    // hold threshold), the laser toggles with it, and that toggle is a
+    // perfect digital on/off with none of the noise real light has --
+    // exactly the kind of clean signal this analysis is built to find. Left
+    // unchecked, the tracker can end up locking onto its own laser spot and
+    // sustaining the loop indefinitely. We have the one piece of ground
+    // truth no passive analysis could ever get: our own laser command
+    // history. If a candidate's bright/dark pattern matches it almost
+    // exactly, it isn't a beacon, it's a mirror.
+    if (peak > 0) {
+      const mid = (winMin + winMax) / 2;
+      let matches = 0;
+      for (let i = 0; i < N; i++) {
+        const v = ring[((head + i) % N) * P + peakIdx];
+        const candOn = v > mid ? 1 : 0;
+        if (candOn === laserHist[(head + i) % N]) matches++;
+      }
+      selfMatch = matches / N;
+      if (selfMatch > SELF_LASER_MATCH) peak = 0;
+    }
+  }
+
+  // Two real false locks so far both won at exactly the edge of the searched
+  // band (5.0 Hz once, ~3.0 Hz another time) rather than somewhere inside it.
+  // A beacon genuinely near the selected rate produces an interior peak; a
+  // peak that only ever sits at the boundary means the true energy source is
+  // OUTSIDE the searched range and this is its rolloff, not its centre --
+  // most likely mains-powered room lighting aliasing in, which can hit
+  // near-100% modulation depth on cheap drivers and so isn't caught by the
+  // depth gate alone.
+  const edgeLo = target - 1, edgeHi = target + 1, edgeMargin = 0.2;
+  if (peak > 0 && (bestFreq <= edgeLo + edgeMargin || bestFreq >= edgeHi - edgeMargin)) {
+    peak = 0;
+  }
+
+  score = peak; margin = peak > 0 ? peak / bg : 0;
+  peakDepth = peak > 0 ? buf.bestDepth[peakIdx] : 0;
+  if (peak > 0) { heldScore = score; heldMargin = margin; heldDepth = peakDepth; }
+
+  // The search grid is deliberately coarse to keep the whole-frame pass cheap,
+  // but that makes the reported rate land on the nearest grid line (4.5 Hz for
+  // a 4.2 Hz beacon). Re-sweeping finely costs nothing at a single pixel, and
+  // the displayed frequency is a number people read off the screen.
+  if (peak > 0) {
+    const t0f = stamps[head % N];
+    let bf = bestFreq, bv = -1;
+    for (let f = bestFreq - 0.3; f <= bestFreq + 0.3001; f += 0.05) {
+      let re = 0, im = 0;
+      for (let i = 0; i < N; i++) {
+        const th = -2 * Math.PI * f * (stamps[(head + i) % N] - t0f);
+        const v = cen[i * P + peakIdx];
+        re += v * Math.cos(th); im += v * Math.sin(th);
+      }
+      const mag = re * re + im * im;
+      if (mag > bv) { bv = mag; bf = f; }
+    }
+    bestFreq = bf;
+  }
+
+  // Clearing the thresholds once is not evidence. Measured on a real webcam
+  // with nothing in front of it, sensor noise alone reaches score 0.34 and
+  // ~3x the background -- enough to trip any single-shot test, which is
+  // exactly what "it locks onto nothing" looks like. The thing noise cannot
+  // do is keep producing its winner in the SAME PLACE: a real beacon stays
+  // put while noise scatters. So a peak has to be confirmed several analyses
+  // running, near where it last appeared, before it counts.
+  // Acquiring and holding are different jobs. Getting in must be strict, or
+  // noise walks in. Staying in must be forgiving, or ordinary frame-to-frame
+  // fluctuation throws away a lock that is still perfectly good -- which reads
+  // as flickering rather than tracking. Same reason the simulator has a COAST
+  // state instead of dropping straight back to SEARCH.
+  const locked = state === 'LOCKED';
+  const strong = locked ? (peak > HOLD_MIN && margin > HOLD_CFAR)
+                        : (peak > LOCK_MIN && margin > CFAR);
+  const px = (peakIdx % W) * (els.view.width / W);
+  const py = Math.floor(peakIdx / W) * (els.view.height / H);
+
+  // A moving beacon shifts several tens of pixels between analyses, so the
+  // "same thing" radius must grow with the measured speed or motion reads as
+  // a brand-new candidate and resets the confirmation count mid-track.
+  const spd = Math.hypot(vel.x, vel.y);                    // px per frame
+  const CR = CONFIRM_RADIUS + spd * ANALYSE_EVERY * 3;
+  if (strong) {
+    if (cand && Math.hypot(px - cand.x, py - cand.y) < CR) {
+      cand.hits++; cand.misses = 0; cand.x = px; cand.y = py; cand.freq = bestFreq;
+    } else {
+      cand = { x: px, y: py, hits: 1, misses: 0, freq: bestFreq };
+    }
+  } else if (cand) {
+    cand.misses++;
+    // Fast motion smears the blink across map cells, so the map is EXPECTED
+    // to go quiet while the target moves -- the per-frame follower is still
+    // measuring the light every frame (contrast gate, coastFrames near 0)
+    // and carries the lock. While that is demonstrably true, map silence
+    // must not kill a lock the refiner is actively holding; the moment the
+    // refiner goes blind too (coastFrames grows), the normal drop applies.
+    // Bounded either way: no lock survives the map being silent for 3x the
+    // drop budget, so a beacon that truly vanished still drops even if a
+    // steady light sits inside the tether radius.
+    const dropLim = DROP_MISSES +
+      (state === 'LOCKED' ? Math.min(9, Math.round(3 * spd)) : 0);
+    // "The follower has seen the light RECENTLY", not "at this exact instant".
+    // A single bad patch mid-sweep briefly pushes coastFrames past a dark
+    // half-cycle, and a 10-frame window let that one moment coincide with map
+    // silence and kill an otherwise healthy lock. Half a second is still a
+    // strict definition of recent, and it is bounded.
+    const refinerAlive = state === 'LOCKED' && coastFrames < REFINER_ALIVE_FRAMES;
+    // The ceiling on map silence is ABSOLUTE, not a multiple of dropLim.
+    // dropLim collapses the moment the beacon stops moving -- which is
+    // exactly when the map is at its weakest, because its N-frame window is
+    // still full of the motion that just happened and needs about a second
+    // and a half of stillness to rebuild. Tying the ceiling to it killed good
+    // locks a fraction of a second after every fast move. MAX_MAP_SILENCE
+    // covers that rebuild and no more, so a beacon that truly vanished still
+    // drops on a fixed, explainable schedule.
+    // Extra patience only while the map's silence is explained by motion it
+    // has not yet washed out of its window. Once the scene has been still for
+    // a full window and the map STILL says nothing, the light being followed
+    // probably is not blinking, and the lock should die promptly.
+    const silenceBudget = MAX_MAP_SILENCE +
+      (stillFrames < N ? MAP_REBUILD_GRACE : 0);
+    if (cand.misses > dropLim &&
+        (!refinerAlive || cand.misses > silenceBudget)) {
+      lastDrop = { mapSilentAnalyses: cand.misses, dropLim: dropLim,
+                   silenceBudget: silenceBudget, stillFrames: stillFrames,
+                   refinerBlindFrames: coastFrames, speedPxFrame: +spd.toFixed(1),
+                   reason: !refinerAlive ? 'follower lost the light'
+                                         : 'modulation map silent too long' };
+      cand = null;
+    } else if (refinerAlive && pos && cand.misses > 1) {
+      // Slide the stale candidate along with the carried lock, so the map's
+      // eventual strong return associates with the moving target instead of
+      // reading as a brand-new light 100 px away.
+      cand.x = pos.x; cand.y = pos.y;
+    }
+  }
+
+  confirm = cand ? cand.hits : 0;
+
+  if (state !== 'LOCKED') {
+    if (cand && cand.hits >= CONFIRM_HITS) {
+      pos = { x: cand.x, y: cand.y };
+      anchor = { x: cand.x, y: cand.y };
+      onContrast = 0;                 // relearned from the first lit frames
+      vel = { x: 0, y: 0 }; lastMeas = null;
+      heldScore = heldMargin = heldDepth = 0;
+      detectedHz = cand.freq;
+      setState('LOCKED');
+    } else {
+      setState(cand ? 'CONFIRMING' : 'SEARCHING');
+    }
+  } else if (!cand) {
+    setState('SEARCHING'); pos = null; anchor = null; onContrast = 0;
+    vel = { x: 0, y: 0 }; lastMeas = null;
+    heldScore = heldMargin = heldDepth = 0;
+  } else {
+    // Still locked: re-tether to where the modulation map says the beacon is
+    // now. Without this the per-frame follower is the only thing moving `pos`
+    // after acquisition, and nothing ever pulls a drifting lock back onto the
+    // one light that is actually blinking at the target frequency.
+    //
+    // With one correction the original lacked: the map's position is the
+    // energy centroid of the whole N-frame window, i.e. where the beacon was
+    // ~N/2 frames AGO. Re-tethering a moving lock to that raw value yanks
+    // the anchor backwards along the motion path -- measured as the ring
+    // trailing a briskly moved phone and then sticking. Project the map's
+    // answer forward by the measured velocity over that known lag, and blend
+    // with the dead-reckoned anchor so a static beacon keeps the original
+    // behaviour exactly (vel ~ 0 makes both terms collapse to cand).
+    // The map's answer is the energy centroid of the whole N-frame window, so
+    // it describes where the beacon was about half a window ago. Nudge it
+    // forward by the measured velocity -- but bound that nudge by a FIXED
+    // number of pixels, never by anything that grows with the follower's own
+    // error. (A cap proportional to |cand - pos| is self-reinforcing: drift
+    // buys more projection, which buys more drift. That was the runaway.)
+    // Trust the projection only while the follower can actually see the
+    // light; a velocity measured through a blind patch is a guess.
+    const lagF = Math.min(N / 2, 14);
+    let projx = 0, projy = 0;
+    if (coastFrames < 4) {
+      projx = vel.x * lagF; projy = vel.y * lagF;
+      const pl = Math.hypot(projx, projy);
+      if (pl > ANCHOR_LAG_CAP) { projx *= ANCHOR_LAG_CAP / pl; projy *= ANCHOR_LAG_CAP / pl; }
+    }
+    anchor = { x: cand.x + projx, y: cand.y + projy };
+    detectedHz = cand.freq;
+  }
+}
+
+function setState(s) {
+  state = s === 'STANDBY' ? 'SEARCHING' : s;
+  if (s !== 'LOCKED') coastFrames = 0;
+  paintState(s === 'STANDBY' ? 'STANDBY' : s);
+}
+
+// Showing the confirmation count makes it visible that a candidate is being
+// checked rather than silently ignored -- and makes a near-miss diagnosable
+// instead of looking like the tracker simply does nothing. COASTING is shown
+// amber: the lock is alive but currently carried by prediction, and the
+// operator deserves to know the difference.
+function paintState(s) {
+  els.chipText.textContent = s === 'CONFIRMING' ? `CONFIRMING ${confirm}/${CONFIRM_HITS}` : s;
+  els.chip.className = 'state-chip ' + (s === 'LOCKED' ? 'locked'
+                        : s === 'COASTING' ? 'coasting' : 'searching');
+}
+
+/* ---------------- main loop ---------------- */
+function loop() {
+  if (!stream) return;
+  workCtx.drawImage(video, 0, 0, W, H);
+  const d = workCtx.getImageData(0, 0, W, H).data;
+
+  const slot = ((head + filled) % N) * P, idx = (head + filled) % N;
+  let sum = 0;
+  for (let p = 0; p < P; p++) {
+    const q = p << 2;
+    const y = 0.299 * d[q] + 0.587 * d[q + 1] + 0.114 * d[q + 2];
+    ring[slot + p] = y; sum += y;
+  }
+  frameMean[idx] = sum / P + 1e-6;
+  stamps[idx] = performance.now() / 1000;
+  laserHist[idx] = laserOn ? 1 : 0;
+  if (filled < N) filled++; else head = (head + 1) % N;
+
+  if (++frameNo % ANALYSE_EVERY === 0) analyse();
+
+  if (MIRROR_VIEW) {
+    outCtx.save();
+    outCtx.translate(els.view.width, 0);
+    outCtx.scale(-1, 1);
+    outCtx.drawImage(video, 0, 0, els.view.width, els.view.height);
+    outCtx.restore();
+  } else {
+    outCtx.drawImage(video, 0, 0, els.view.width, els.view.height);
+  }
+  // The modulation map says *which* light is the beacon, but only every few
+  // frames and at a coarse resolution where one cell spans several display
+  // pixels. Following the actual bright spot at full resolution every frame
+  // is what makes the marker sit on the beacon instead of near it, and what
+  // keeps the servos moving smoothly between analyses.
+  // THE rule, learned the hard way: prediction may steer WHERE WE LOOK and
+  // nothing else. The reported position only ever moves toward something the
+  // camera actually measured this frame.
+  //
+  // The previous build extrapolated `pos` AND `anchor` by the velocity every
+  // frame, then re-projected the anchor by half a window again inside
+  // analyse() -- a double integration whose cap grew with the very drift it
+  // was meant to limit. The result was positive feedback: the ring accelerated
+  // away from the beacon and sat over blank wall reading brightness 10 while
+  // still claiming a lock. Velocity now informs the search window only.
+  stillFrames = Math.hypot(vel.x, vel.y) > 1.5 ? 0 : stillFrames + 1;
+  if (state === 'LOCKED' && pos) refine();
+  drawHud();
+  if (state === 'LOCKED' && pos && serialWriter) steer();
+
+  paintState(displayState());
+  const lk = state === 'LOCKED';
+  const dScore = lk ? heldScore : score;
+  const dMargin = lk ? heldMargin : margin;
+  const dDepth = lk ? heldDepth : peakDepth;
+  els.score.textContent = dScore.toFixed(2);
+  els.score.className = dScore > LOCK_MIN ? 'good' : '';
+  els.margin.textContent = dMargin.toFixed(1) + '×';
+  els.margin.className = dMargin > CFAR ? 'good' : '';
+  els.depth.textContent = dDepth.toFixed(2);
+  els.depth.className = dDepth >= MIN_DEPTH ? 'good' : '';
+  els.bright.textContent = peakBright.toFixed(0);
+  els.bright.className = peakBright >= MIN_BRIGHT ? 'good' : '';
+  els.freq.textContent = state === 'LOCKED' ? detectedHz.toFixed(1) + ' Hz' : '—';
+  els.fps.textContent = fps.toFixed(0);
+  els.fps.className = (fps && fps < 2.5 * (parseFloat(els.hz.value) + 1)) ? 'warn' : '';
+}
+
+function refine() {
+  const w = els.view.width, h = els.view.height;
+
+  // ---- WHERE TO LOOK (prediction is allowed here, and only here) ----
+  // Carry the last measured position forward by the measured velocity over a
+  // bounded lead, so a moving beacon is still inside the box when we look.
+  // Tethered to the anchor -- the modulation map's answer, the only thing in
+  // this program that knows WHICH light is the beacon -- so a bad velocity
+  // estimate can widen the search but can never walk it into another room.
+  const spdR = Math.min(Math.hypot(vel.x, vel.y), MAX_SPEED);
+  // Lead grows with blind time: four dark frames at 8 px/frame puts the
+  // beacon 32 px from where we last measured it, and a one-frame lead simply
+  // cannot reach that.
+  const lead = Math.min(PREDICT_LEAD_MAX, 1 + coastFrames);
+  // Cap the lead in PIXELS, not just in frames. A hand decelerating at the end
+  // of a flick leaves the velocity estimate high for a few frames after the
+  // beacon has already stopped; an uncapped lead then flings the search a
+  // hundred pixels past a stationary light, and both the disc and the box
+  // miss it -- traced as the lock dying right at the end of the fastest
+  // sweep. Bounded lead + an uncertainty-sized disc covers the moving case
+  // and the just-stopped case with the same numbers.
+  let lx = vel.x * lead, ly = vel.y * lead;
+  const ll = Math.hypot(lx, ly);
+  if (ll > LEAD_MAX_PX) { lx *= LEAD_MAX_PX / ll; ly *= LEAD_MAX_PX / ll; }
+  let cx = pos.x + lx, cy = pos.y + ly;
+  if (anchor) {
+    const ax = cx - anchor.x, ay = cy - anchor.y, ar = Math.hypot(ax, ay);
+    // The anchor is the map's answer and lags the truth by about half a
+    // window; at speed that is a long way back, so a tight leash to it pins
+    // the SEARCH behind the beacon and the follower never sees the light
+    // again. Scale the leash with speed so it always reaches past that lag.
+    // Identity is still guarded -- by the modulation map, which never
+    // re-confirms a wrong light and drops the lock on schedule.
+    const lim = SEARCH_TETHER + 8 * spdR;
+    if (ar > lim) { cx = anchor.x + ax * (lim / ar); cy = anchor.y + ay * (lim / ar); }
+  }
+
+  const roi = Math.min(ROI_MAX,
+    Math.round(TRACK_ROI + 5 * spdR + 2 * Math.min(coastFrames, 12)));
+  const x0 = Math.max(0, Math.round(cx) - roi);
+  const y0 = Math.max(0, Math.round(cy) - roi);
+  const x1 = Math.min(w, Math.round(cx) + roi);
+  const y1 = Math.min(h, Math.round(cy) + roi);
+  const rw = x1 - x0, rh = y1 - y0;
+  if (rw < 4 || rh < 4) return;
+  // Sample the VIDEO, not the display canvas. The display is mirrored for the
+  // operator's benefit; tracking works in true camera coordinates. Reading
+  // the flipped canvas here would sample the mirror image of the ROI and walk
+  // the lock straight off the target.
+  trackCtx.drawImage(video, x0, y0, rw, rh, 0, 0, rw, rh);
+  const d = trackCtx.getImageData(0, 0, rw, rh).data;
+
+  // ---- IS THE TRACKED LIGHT LIT RIGHT NOW? ----
+  // Two questions, and telling them apart is the whole job. The ROI-wide peak
+  // answers "is anything near the lock bright?" -- which a ceiling lamp two
+  // centimetres away answers yes to, forever. The LOCAL peak answers "is the
+  // light I am actually tracking lit right now?", which is the only useful
+  // one. Alongside it the background level of the surrounding box, because in
+  // a lit room brightness alone cannot answer either question: a lit hall's
+  // bare wall already reads about 120, so any absolute bar is cleared by the
+  // empty room. CONTRAST against the immediate surroundings has no such floor.
+  const rs = resScale();
+  const blind = Math.min(coastFrames, 12);
+
+  // Size the "is it lit" disc to the actual POSITIONAL UNCERTAINTY -- roughly
+  // speed x blind-time, plus an allowance for the beacon having accelerated
+  // while we could not see it. A disc sized only for speed starves the loop:
+  // too small to reach the light -> no measurement -> the velocity estimate
+  // stays too small -> the disc stays too small. Traced live at 4 px/frame
+  // estimated against 10 actual, with the follower 130 px behind.
+  //
+  // The 70 px ceiling is not arbitrary and must not be raised: at 90 px the
+  // disc reached far enough to swallow a steady lamp sitting a few
+  // centimetres from the beacon, and locking a decoy is the one failure this
+  // project cannot have. Confining the wide search to the ANCHOR's
+  // neighbourhood instead was tried and is worse -- the anchor is precisely
+  // what goes stale during motion, so it cannot reach the beacon either.
+  const LOCAL_R = Math.min(70, LOCAL_R_REF * rs + 2.0 * spdR + 0.9 * spdR * blind + 2.5 * blind);
+  const FOCUS_SIGMA = FOCUS_SIGMA_REF * rs + 0.6 * spdR + 0.8 * Math.min(coastFrames, 8);
+  const recapture = coastFrames > 5;      // blind past any normal dark phase
+  let localPeak = 0, nBg = 0;
+  bgHist.fill(0);
+  const lr2 = LOCAL_R * LOCAL_R;
+  for (let y = 0; y < rh; y++) {
+    const gy = y0 + y, dy = gy - cy;
+    for (let x = 0; x < rw; x++) {
+      const q = (y * rw + x) << 2;
+      const v = d[q] * 0.299 + d[q+1] * 0.587 + d[q+2] * 0.114;
+      const gx = x0 + x, dx = gx - cx;
+      if (dx * dx + dy * dy <= lr2) { if (v > localPeak) localPeak = v; }
+      // Every second pixel is plenty for a median and halves the cost.
+      else if (((x ^ y) & 1) === 0) { bgHist[v | 0]++; nBg++; }
+
+    }
+  }
+  // Median of the surroundings via histogram -- no sort, no allocation. The
+  // median rather than the mean because a lamp in the box would drag a mean
+  // upward, which is exactly the case this has to survive.
+  // Guard the degenerate case: against a frame edge the box gets cropped, and
+  // if almost all of what survives falls inside the local disc there is no
+  // background left to compare against. With nothing to judge by, judge
+  // nothing -- hold, and wait for a better frame.
+  if (nBg < 8) return;
+  let bg = 0, acc = 0;
+  const halfBg = nBg >> 1;
+  for (let i = 0; i < 256; i++) { acc += bgHist[i]; if (acc >= halfBg) { bg = i; break; } }
+
+  let contrast = localPeak - bg;
+  const litBar = Math.max(MIN_CONTRAST, onContrast * OFF_PHASE_RATIO);
+  // Blind for longer than any dark phase lasts, yet something in the box
+  // clears the same lit-contrast bar this beacon itself set -- the light is
+  // simply not where we were staring. Re-centre on it. Bounded by the box, by
+  // the tether below, and by the modulation map, which never re-confirms a
+  // wrong light and so drops the lock on schedule.
+  let fcx = cx, fcy = cy;
+  if (recapture && contrast < litBar) {
+    // Second pass, only when we are genuinely blind: find the NEAREST pixel
+    // that is lit by this beacon's own standard. Proximity, not brightness --
+    // a phone torch and a table lamp both saturate at 255, so "brightest in
+    // the box" is a coin flip the lamp regularly won (measured: the lock
+    // jumped to the steady lamp). The nearest qualifying light is the one the
+    // prediction was pointing at.
+    const thr = bg + litBar;
+    let bestD2 = Infinity, bx = 0, by = 0;
+    for (let y = 0; y < rh; y++) {
+      const gy = y0 + y, dy = gy - cy;
+      for (let x = 0; x < rw; x++) {
+        const q = (y * rw + x) << 2;
+        const v = d[q] * 0.299 + d[q+1] * 0.587 + d[q+2] * 0.114;
+        if (v < thr) continue;
+        const gx = x0 + x, dx = gx - cx;
+        const dd = dx * dx + dy * dy;
+        if (dd < bestD2) { bestD2 = dd; bx = gx; by = gy; }
+      }
+    }
+    if (bestD2 < Infinity) {
+      contrast = litBar;               // it clears the bar by construction
+      fcx = bx; fcy = by;
+    }
+  }
+
+  // ---- DARK PHASE: measure nothing, invent nothing ----
+  // A beacon blinking at 4 Hz is dark for about four frames in a row at
+  // 30 fps. A dark beacon carries no position information, so use none of it:
+  // do not chase the brightest thing left in the box (a window, a screen
+  // edge, a face), and do not extrapolate either -- extrapolation through a
+  // blind patch is exactly how the ring used to sail away. Hold, and lean on
+  // the one thing that still knows where the beacon is: the modulation map,
+  // which is measuring the blink regardless of this frame.
+  if (contrast < litBar) {
+    coastFrames++;
+    // Relax the learned expectation while it is going unmet. onContrast is
+    // "how far this beacon rises above its own surroundings when lit", learned
+    // from the beacon itself -- but one bloomed frame (the torch swung close,
+    // or a saturated exposure) latches it far above what the beacon normally
+    // manages, and at the lit branch's 0.995 decay the bar then stays too high
+    // for seconds. Every frame the bar goes unmet is evidence the bar is
+    // wrong. It can never fall below MIN_CONTRAST, and the recapture it
+    // enables now picks the nearest lit thing rather than the brightest, so
+    // relaxing it cannot hand the lock to a lamp.
+    onContrast *= BLIND_CONTRAST_DECAY;
+    if (coastFrames <= DARK_PHASE_FRAMES && spdR > 1 && anchor) {
+      // Inside a NORMAL blink-off we are not lost -- we know exactly why we
+      // cannot see the beacon, and we know it is still travelling. Holding
+      // still here forfeits a whole dark half-cycle of ground (8 px/frame x
+      // 4 frames = 32 px, every cycle), which is most of the residual lag.
+      // This is the one place extrapolation is honest, and it is bounded
+      // three ways: it stops at DARK_PHASE_FRAMES, it is clamped to the
+      // anchor's tether, and it never writes to the anchor itself -- so it
+      // cannot feed back on itself the way the previous build's did.
+      let nx2 = pos.x + vel.x, ny2 = pos.y + vel.y;
+      const dx = nx2 - anchor.x, dy = ny2 - anchor.y, r = Math.hypot(dx, dy);
+      const tether = ANCHOR_MAX + 6 * spdR;
+      if (r > tether) { nx2 = anchor.x + dx * (tether / r); ny2 = anchor.y + dy * (tether / r); }
+      pos = { x: nx2, y: ny2 };
+    } else if (anchor) {
+      // Past a plausible dark phase we ARE lost, so stop guessing and lean on
+      // the map. Weaken the pull as speed rises: the anchor is stale by
+      // construction, so at speed it sits behind the beacon and pulling hard
+      // toward it drags the ring backwards against the motion (traced: pos
+      // going 90 -> 85 while the light ran 164 -> 184).
+      const pull = coastFrames > DARK_PHASE_FRAMES
+        ? RESCUE_PULL                              // lost: trust the map
+        : ANCHOR_PULL / (1 + 0.35 * spdR);         // dark: it is stale, be gentle
+      pos = { x: pos.x + (anchor.x - pos.x) * pull,
+              y: pos.y + (anchor.y - pos.y) * pull };
+    }
+    // Do NOT decay the estimate through a normal dark phase: a 4 Hz beacon is
+    // off for about four frames at 30 fps and the target keeps moving the
+    // whole time. Decaying here shrank the search lead precisely when the gap
+    // was widest -- measured as the follower freezing mid-sweep while the
+    // light carried on without it. Past any plausible dark half-cycle the
+    // estimate really is stale, and then it fades.
+    if (coastFrames > DARK_PHASE_FRAMES) { vel.x *= 0.88; vel.y *= 0.88; }
+    return;
+  }
+  coastFrames = 0;
+  onContrast = Math.max(contrast, onContrast * 0.995);
+
+  // ---- MEASURE: brightness-weighted centroid of the tracked blob ----
+  // Not just its hottest pixel: a saturated LED is a patch of equal 255s and
+  // picking any one of them makes the marker jitter inside it. The distance
+  // term keeps a BRIGHTER neighbour from dragging the centroid -- this
+  // refines the light we are on, it does not average it with whatever else
+  // clears the threshold.
+  const cut = bg + Math.max(4, contrast * 0.5);
+  let sx = 0, sy = 0, sw = 0;
+  for (let y = 0; y < rh; y++) {
+    const gy = y0 + y, dy = gy - fcy;
+    for (let x = 0; x < rw; x++) {
+      const q = (y * rw + x) << 2;
+      const v = d[q] * 0.299 + d[q+1] * 0.587 + d[q+2] * 0.114;
+      if (v < cut) continue;
+      const gx = x0 + x, dx = gx - fcx;
+      const wgt = (v - cut + 1) * Math.exp(-(dx * dx + dy * dy) / (2 * FOCUS_SIGMA * FOCUS_SIGMA));
+      sx += gx * wgt; sy += gy * wgt; sw += wgt;
+    }
+  }
+  if (sw <= MIN_WEIGHT) return;
+  const nx = sx / sw, ny = sy / sw;
+
+  // ---- MOVE: toward the measurement, and only toward the measurement ----
+  // Step limit: a jump this big is not the beacon moving -- at 30 fps that
+  // would be an implausible speed -- it is a different object having entered
+  // the box. Step toward it rather than onto it, so a genuine move still
+  // tracks within a few frames while a passing reflection cannot capture the
+  // lock in one. The allowance grows with measured speed and with blind time,
+  // because after a dark patch the beacon genuinely has moved further.
+  // The step limit exists to reject a DIFFERENT object entering the box, not
+  // to throttle the beacon's own speed -- identity is guarded by the
+  // modulation map and the tether. After a blind patch the beacon has
+  // genuinely travelled, so the allowance has to travel with it or the ring
+  // closes the gap far slower than the beacon opens it.
+  const stepLim = REFINE_STEP + 3 * spdR + 5 * blind;
+  let tx = nx, ty = ny;
+  const jump = Math.hypot(tx - pos.x, ty - pos.y);
+  if (jump > stepLim) {
+    const k = stepLim / jump;
+    tx = pos.x + (tx - pos.x) * k;
+    ty = pos.y + (ty - pos.y) * k;
+  }
+  // High gain on purpose: this is a measurement, not a guess, so closing on it
+  // quickly is what puts the ring ON the light instead of trailing it.
+  const smooth = Math.min(0.8, REFINE_SMOOTH + 0.05 * spdR);
+  let px = pos.x + (tx - pos.x) * smooth;
+  let py = pos.y + (ty - pos.y) * smooth;
+
+  // The tether. The modulation map is the only thing here that knows WHICH
+  // light is the beacon; brightness alone does not. So the follower may
+  // sharpen the position within a bounded radius of the last confirmed
+  // detection and no further: correction, never a free walk.
+  if (anchor) {
+    const dx = px - anchor.x, dy = py - anchor.y;
+    const r = Math.hypot(dx, dy);
+    const tether = ANCHOR_MAX + 6 * spdR;
+    if (r > tether) {
+      px = anchor.x + dx * (tether / r);
+      py = anchor.y + dy * (tether / r);
+    }
+  }
+
+  // Velocity is learned from MEASURED position deltas over elapsed frames --
+  // the only estimator that converges on the target's true speed. (Learning
+  // from the post-smoothing residual, as an earlier build did, converges to
+  // roughly half of it, so the ring fell further behind on every dark phase.)
+  // Clamped, because a wild estimate is what steers the search off target.
+  if (lastMeas) {
+    const df = frameNo - lastMeas.f;
+    if (df >= 1 && df <= 12) {
+      let mvx = (nx - lastMeas.x) / df, mvy = (ny - lastMeas.y) / df;
+      const ms = Math.hypot(mvx, mvy);
+      if (ms > MAX_SPEED) { mvx *= MAX_SPEED / ms; mvy *= MAX_SPEED / ms; }
+      // Adaptive gain: small disagreement = smoothing; a direction reversal
+      // means the old estimate is simply wrong, and clinging to it would
+      // steer the search the wrong way through the turn.
+      const wN = Math.min(0.85, 0.45 + 0.06 * Math.hypot(mvx - vel.x, mvy - vel.y));
+      vel.x += wN * (mvx - vel.x);
+      vel.y += wN * (mvy - vel.y);
+    }
+  }
+  lastMeas = { x: nx, y: ny, f: frameNo };
+  pos = { x: px, y: py };
+}
+
+function drawHud() {
+  const c = outCtx, w = els.view.width, h = els.view.height;
+  c.save();
+  c.fillStyle = 'rgba(4,9,21,.72)';
+  c.fillRect(0, 0, w, 64);
+  const ds = displayState();
+  c.font = '600 15px ui-monospace, monospace';
+  c.fillStyle = ds === 'LOCKED' ? '#3BD68C' : ds === 'COASTING' ? '#FFC24D' : '#8EA4C4';
+  c.fillText(ds === 'CONFIRMING' ? `CONFIRMING ${confirm}/${CONFIRM_HITS}` : ds, 14, 29);
+  c.font = '12px ui-monospace, monospace';
+  c.fillStyle = '#EAF4FD';
+  const hScore = state === 'LOCKED' ? heldScore : score;
+  const hDepth = state === 'LOCKED' ? heldDepth : peakDepth;
+  c.fillText('blink ' + hScore.toFixed(2) + '   depth ' + hDepth.toFixed(2)
+           + '   bright ' + peakBright.toFixed(0)
+           + '   ' + (state === 'LOCKED' ? detectedHz.toFixed(1) + ' Hz' : '--')
+           + '   ' + fps.toFixed(0) + ' fps', 110, 24);
+  c.fillStyle = '#8EA4C4';
+  c.fillText('gate: bright>=' + MIN_BRIGHT.toFixed(0) + '  depth>=' + MIN_DEPTH.toFixed(2)
+           + '   tilt:' + (cal.invTilt ? 'INV' : 'norm'), 110, 44);
+
+  c.strokeStyle = 'rgba(140,150,165,.5)'; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(w/2 - 13, h/2); c.lineTo(w/2 + 13, h/2);
+  c.moveTo(w/2, h/2 - 13); c.lineTo(w/2, h/2 + 13); c.stroke();
+
+  if (state === 'LOCKED' && pos) {
+    // pos is in true camera coordinates; the picture under it is mirrored, so
+    // the ring has to be mirrored too or it lands on the wrong side of the
+    // screen from the beacon the operator is looking at.
+    const mx = MIRROR_VIEW ? w - pos.x : pos.x;
+    const coasting = ds === 'COASTING';
+    c.strokeStyle = coasting ? '#FFC24D' : '#3BD68C';
+    if (coasting) c.setLineDash([6, 5]);
+    c.lineWidth = 2.5;
+    c.beginPath(); c.arc(mx, pos.y, 22, 0, 6.284); c.stroke();
+    c.lineWidth = 1; c.globalAlpha = .6;
+    c.beginPath(); c.arc(mx, pos.y, 33, 0, 6.284); c.stroke();
+    c.setLineDash([]);
+    // Velocity vector: makes "the tracker knows where it is going" visible.
+    const spd = Math.hypot(vel.x, vel.y);
+    if (spd > 1.2) {
+      const k = 6, vx = (MIRROR_VIEW ? -vel.x : vel.x) * k, vy = vel.y * k;
+      c.globalAlpha = .85; c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(mx, pos.y); c.lineTo(mx + vx, pos.y + vy); c.stroke();
+    }
+  }
+  c.restore();
+}
+
+/* ---------------- optional: drive the rig over USB ---------------- */
+async function openPort(port, silent) {
+  await port.open({ baudRate: 115200 });
+  serialWriter = port.writable.getWriter();
+  els.rigState.textContent = 'connected';
+  els.rigState.className = 'good';
+  els.testRig.disabled = false;
+  els.calCard.style.display = 'block';
+  els.rig.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>RIG CONNECTED';
+  if (!silent) note('Rig connected. It will steer the laser onto the beacon whenever the status reads LOCKED.');
+  setTimeout(() => sendRig(90, 90, false), 1800);     // the Nano reboots on open
+}
+
+async function connectRig() {
+  if (!('serial' in navigator)) {
+    note('Your browser has no Web Serial support. Use Chrome or Edge to drive the physical rig — '
+       + 'the camera demo above works in any browser.', true);
+    return;
+  }
+  try {
+    await openPort(await navigator.serial.requestPort(), false);
+  } catch (e) {
+    note('Rig not connected: ' + e.message, true);
+  }
+}
+
+/* Browsers will not hand a page a USB device without an explicit click the
+   first time -- that permission cannot be skipped. But once granted, the port
+   comes back from getPorts() on later visits, so the click is a one-time cost
+   per device rather than something to repeat before every demo. */
+async function autoConnectRig() {
+  if (!('serial' in navigator)) return;
+  try {
+    const ports = await navigator.serial.getPorts();
+    if (ports.length) await openPort(ports[0], true);
+  } catch (e) { /* fall back to the button */ }
+}
+
+if ('serial' in navigator) {
+  navigator.serial.addEventListener('connect', e => { if (!serialWriter) openPort(e.target, true).catch(() => {}); });
+  navigator.serial.addEventListener('disconnect', () => {
+    serialWriter = null;
+    els.rigState.textContent = 'disconnected';
+    els.rigState.className = 'warn';
+    els.testRig.disabled = true;
+  });
+  autoConnectRig();
+}
+
+function sendRig(p, t, laser) {
+  if (!serialWriter) return;
+  const enc = new TextEncoder();
+  // Every command needs its own newline: the firmware only acts on a buffered
+  // line when it sees one, so an unterminated "L1" gets glued onto the front
+  // of the next position command and that movement is silently discarded.
+  serialWriter.write(enc.encode('P' + Math.round(p) + ' T' + Math.round(t) + '\n'));
+  if (laser !== laserOn) {
+    serialWriter.write(enc.encode((laser ? 'L1' : 'L0') + '\n'));
+    laserOn = laser;
+  }
+}
+
+async function testRig() {
+  if (!serialWriter) { note('Connect the rig first.', true); return; }
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  note('Watch the laser dot now: pan only (left/right) for 2s, then tilt only (up/down) for 2s…');
+  await wait(400);
+  sendRig(60, 90, true); await wait(900);
+  sendRig(120, 90, true); await wait(900);         // pan sweep -- note which way the dot went
+  sendRig(90, 70, true); await wait(900);
+  sendRig(90, 110, true); await wait(900);          // tilt sweep -- note which way the dot went
+  sendRig(90, 90, true); await wait(300);
+  for (let i = 0; i < 6; i++) { sendRig(90, 90, i % 2 === 0); await wait(250); }
+  sendRig(90, 90, false);
+  pan = 90; tilt = 90;
+  note('Done. If pan moved the dot up/down instead of left/right (or vice versa), check '
+     + '<b>SWAP PAN/TILT</b>. If a direction was backwards, check the matching '
+     + '<b>INVERT</b> box. If nothing moved or blinked at all, it is a wiring/connection '
+     + 'problem, not a calibration one.');
+}
+
+function steer() {
+  /* The camera does NOT move with the laser on this rig -- the webcam is
+     fixed to the laptop lid and only the laser rides the pan/tilt.
+
+     That makes an incremental controller (pan += gain * error, which this
+     used to be) structurally wrong, not merely mistuned. Adding a fraction
+     of the error each frame assumes moving the servo changes what the camera
+     sees, so the error shrinks and the loop settles. Here, panning the laser
+     never changes a fixed camera's view: the error stays exactly the same
+     next frame, the same correction is added again, and the servo integrates
+     straight into its end stop and parks there -- pointing somewhere with no
+     relationship to the beacon at all. That is the "laser points in a
+     completely different direction" symptom.
+
+     With a fixed camera the relationship is direct, not iterative: a beacon
+     at a known pixel offset IS at a known angle off the camera's axis, given
+     the camera's field of view. So command that angle absolutely, every
+     frame, rather than creeping toward it. No accumulation, no end-stop
+     drift, and it re-points correctly the instant the beacon moves. */
+  const w = els.view.width, h = els.view.height;
+  let ax = ((pos.x - w / 2) / w) * cal.fovH;   // degrees off-axis, horizontal
+  let ay = ((pos.y - h / 2) / h) * cal.fovV;   // degrees off-axis, vertical
+
+  // Which camera axis drives which servo, and which direction counts as
+  // positive, is a fact about how this bracket is physically mounted -- not
+  // derivable from the video, so it stays on the calibration panel.
+  if (cal.swap) { const t = ax; ax = ay; ay = t; }
+  const sp = cal.invPan ? 1 : -1, st = cal.invTilt ? 1 : -1;
+
+  // Absolute angle from centre, plus the fixed parallax trim (camera and
+  // laser are not at the same point in space, and on this rig they are a
+  // good 20 cm apart vertically).
+  pan  = Math.max(20, Math.min(160, 90 + sp * ax + cal.trimPan));
+  tilt = Math.max(40, Math.min(140, 90 + st * ay + cal.trimTilt));
+  sendRig(pan, tilt, true);
+}
+
+/* ---------------- beacon mode ---------------- */
+let beaconTimer = null;
+/* ---------------- the full-engine rig console ----------------
+   The in-page tracker above is the zero-install browser demo. The PHYSICAL
+   rig's camera runs through the real Python engine (hil/serve.py), which
+   serves its own live console on localhost. This button is the bridge:
+   probe for the engine, open its console when present, explain how to start
+   it when not. Chrome exempts http://localhost from mixed-content blocking,
+   so the probe works even from the https deployment. */
+const ENGINE_URL = 'http://localhost:8765';
+async function probeEngine(quiet) {
+  try {
+    const ctl = new AbortController();
+    const tm = setTimeout(() => ctl.abort(), 1500);
+    const r = await fetch(ENGINE_URL + '/live/meta', { signal: ctl.signal });
+    clearTimeout(tm);
+    if (r.ok) {
+      const m = await r.json();
+      els.engineBtn.classList.add('good');
+      els.engineNote.innerHTML = 'Engine detected: <b>' + (m.source || 'camera') +
+        '</b> · rig ' + (m.rig || '?') + '. Opens the live rig console.';
+      return true;
+    }
+  } catch (e) { /* not running -- the normal case */ }
+  if (!quiet) {
+    note('The desktop engine is not running on this machine. In the repo folder run ' +
+         '<b>pip install -e .</b> once, then <b>python -m fsoc_pat.hil.serve</b> ' +
+         '(add <b>--port-serial auto</b> when the Mk2 is plugged in) and press this again.', true);
+  }
+  return false;
+}
+els.engineBtn.onclick = async () => {
+  if (await probeEngine(false)) window.open(ENGINE_URL + '/rig.html', '_blank');
+};
+setTimeout(() => probeEngine(true), 1200);
+
+function beaconOn() {
+  const hz = parseFloat(els.hz.value);
+  els.overlay.classList.add('on');
+  if (els.overlay.requestFullscreen) els.overlay.requestFullscreen().catch(() => {});
+  let lit = false;
+  beaconTimer = setInterval(() => {
+    lit = !lit;
+    els.overlay.style.background = lit ? '#FFFFFF' : '#000000';
+  }, 500 / hz);                       // half a period per state = hz full cycles
+}
+function beaconOff() {
+  clearInterval(beaconTimer); beaconTimer = null;
+  els.overlay.classList.remove('on'); els.overlay.style.background = '#000';
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+
+els.start.onclick = start;
+els.rig.onclick = connectRig;
+els.testRig.onclick = testRig;
+els.beacon.onclick = beaconOn;
+els.beaconExit.onclick = beaconOff;
+els.overlay.onclick = beaconOff;
+
+if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+  note('This browser cannot open a camera. Chrome, Edge, Firefox or Safari over HTTPS are fine.', true);
+  els.start.disabled = true;
+} else if (location.protocol === 'file:') {
+  note('Opened as a local file, so the browser will refuse camera access. Serve this folder over '
+     + 'http (for example <b>python -m http.server</b> in the docs folder) or use the deployed site.', true);
+}
+</script>
+</body>
+</html>

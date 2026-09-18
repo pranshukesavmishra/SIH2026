@@ -1,0 +1,12 @@
+{
+  "temperature": 1.1558,
+  "abstain_lo": 0.48,
+  "abstain_hi": 0.52,
+  "val_samples": 246,
+  "val_auc": 0.9583,
+  "ece_before": 0.0654,
+  "ece_after": 0.0688,
+  "abstain_fraction": 0.0081,
+  "accuracy_when_voting": 0.9057,
+  "harvest_seed": 5000
+}

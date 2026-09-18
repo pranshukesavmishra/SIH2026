@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.spec
+!packaging/fsoc-pat.spec
+runs/
+dist/
+.venv-build/
+*.egg-info/
+
+# Personal contact details - never commit to a public repo
+team_private/
+
+# Local deployment and temporary screenshot
+.netlify/
+image.png
+
+# rig runtime artefacts
+tools/rig/rig_debug.log
+tools/rig/rig_report.json
+tools/rig/dist/
+packaging/dist/

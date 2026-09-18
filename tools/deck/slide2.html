@@ -1,0 +1,210 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --navy:#0F2E4E; --blue:#1B75BB; --blueL:#EAF3FB; --cyan:#0E9BC4;
+    --green:#1E9E63; --ink:#14202C; --muted:#5C6B7A; --line:#D9E3ED; --panel:#F6F9FC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:2320px;height:1040px}
+  body{font-family:"Liberation Sans",Arial,"DejaVu Sans",sans-serif;color:var(--ink);
+       background:#fff;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+  .eyebrow{font-size:25px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--blue)}
+  .rule{height:3px;flex:1;border-radius:2px;
+        background:linear-gradient(90deg,var(--blue),#8FC3E8 60%,rgba(255,255,255,0))}
+  .plabel{display:flex;align-items:center;gap:12px;margin-bottom:9px;flex:0 0 auto}
+  .head{display:flex;align-items:baseline;justify-content:space-between;flex:0 0 auto;margin-bottom:11px}
+  h1{font-size:50px;font-weight:700;letter-spacing:-.7px;color:var(--navy)}
+  h1 em{font-style:normal;color:var(--blue)}
+  .stamp{font-size:24px;font-weight:700;color:var(--navy)}
+  .stamp span{font-weight:400;color:var(--muted)}
+
+  .scene{flex:1 1 auto;min-height:0;border-radius:18px;overflow:hidden;display:flex}
+  .scene svg{width:100%;height:100%;display:block}
+
+  .bottom{display:grid;grid-template-columns:1.08fr 1fr;gap:24px;flex:0 0 auto;
+          align-items:stretch;margin-top:14px}
+  .bottom > div{display:flex;flex-direction:column}
+
+  .gate{flex:1 1 auto;background:linear-gradient(180deg,#0F2E4E,#153A5F);color:#fff;
+        border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .gate .gh{padding:15px 26px 13px;font-size:36px;font-weight:700;letter-spacing:-.3px}
+  .gate .gh span{color:#5FD0A6}
+  .row{display:flex;align-items:center;gap:20px;padding:16px 26px;flex:1 1 auto;
+       border-top:1px solid rgba(255,255,255,.14)}
+  .who{flex:0 0 200px;font-size:28px;font-weight:700}
+  .who small{display:block;font-size:21px;font-weight:400;color:#9FB9CF;margin-top:3px}
+  .wave{flex:1 1 auto}
+  .badge{flex:0 0 auto;font-size:25px;font-weight:700;padding:11px 18px;border-radius:9px}
+  .bad{background:rgba(200,68,60,.22);color:#FF9C95;border:1px solid rgba(255,156,149,.5)}
+  .good{background:rgba(30,158,99,.24);color:#7BE0B0;border:1px solid rgba(123,224,176,.5)}
+
+  .panel{border:1.5px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;
+         box-shadow:0 2px 6px rgba(16,40,66,.06);flex:1 1 auto;display:flex;flex-direction:column}
+  .shot{width:100%;display:block;border-bottom:1px solid var(--line)}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px 16px;flex:1 1 auto}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;text-align:center;
+       display:flex;flex-direction:column;justify-content:center;padding:8px 4px}
+  .kpi .v{font-size:52px;font-weight:700;color:var(--navy);letter-spacing:-.7px;line-height:1}
+  .kpi .v small{font-size:28px;font-weight:700}
+  .kpi .l{font-size:20px;color:var(--muted);margin-top:7px;letter-spacing:.6px;text-transform:uppercase}
+  .kpi.g .v{color:#12603D}
+  .kpi.b .v{color:var(--blue)}
+</style>
+
+<div class="plabel">
+  <div class="eyebrow">Proposed Solution (Describe your Idea/Solution/Prototype)</div>
+  <div class="rule"></div>
+</div>
+
+<div class="head">
+  <h1>The <em>eyes and neck</em> of a laser-communication terminal</h1>
+  <div class="stamp">ISRO · PS 26169 <span>— every figure measured</span></div>
+</div>
+
+<div class="plabel">
+  <div class="eyebrow">Detailed explanation of the proposed solution</div>
+  <div class="rule"></div>
+</div>
+
+<div class="scene">
+<svg viewBox="0 0 2320 470" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081525"/><stop offset="1" stop-color="#123354"/>
+    </linearGradient>
+    <radialGradient id="earth" cx="0.5" cy="0.1" r="0.9">
+      <stop offset="0" stop-color="#1B6FA8"/><stop offset="0.55" stop-color="#12507C"/>
+      <stop offset="1" stop-color="#0C3253"/>
+    </radialGradient>
+    <linearGradient id="fov" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#4FC7EA" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#4FC7EA" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#9BEBFF" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#4FC7EA" stop-opacity="0"/></radialGradient>
+  </defs>
+
+  <rect width="2320" height="470" fill="url(#sky)"/>
+
+  <!-- starfield -->
+  <g fill="#7E93A8">
+    <circle cx="120" cy="60" r="2.4"/><circle cx="300" cy="140" r="1.8"/><circle cx="520" cy="46" r="2"/>
+    <circle cx="700" cy="190" r="1.6"/><circle cx="880" cy="66" r="2.6"/><circle cx="1040" cy="150" r="1.7"/>
+    <circle cx="1260" cy="52" r="2.1"/><circle cx="1420" cy="132" r="1.6"/><circle cx="1600" cy="60" r="2.3"/>
+    <circle cx="1820" cy="128" r="1.7"/><circle cx="2010" cy="52" r="2"/><circle cx="2190" cy="120" r="1.8"/>
+    <circle cx="210" cy="220" r="1.5"/><circle cx="640" cy="96" r="1.4"/><circle cx="1150" cy="222" r="1.5"/>
+    <circle cx="1700" cy="206" r="1.4"/><circle cx="2110" cy="196" r="1.6"/><circle cx="400" cy="264" r="1.3"/>
+  </g>
+
+  <!-- earth limb -->
+  <circle cx="1160" cy="1240" r="880" fill="url(#earth)"/>
+  <circle cx="1160" cy="1240" r="880" fill="none" stroke="#5FD0A6" stroke-opacity=".35" stroke-width="3"/>
+  <circle cx="1160" cy="1240" r="898" fill="none" stroke="#4FC7EA" stroke-opacity=".16" stroke-width="16"/>
+
+  <!-- camera field of view, opening from the terminal up to the satellite -->
+  <path d="M1852 300 L560 42 L560 250 Z" fill="url(#fov)"/>
+
+  <!-- optical link -->
+  <path d="M1846 296 L500 122" stroke="#4FC7EA" stroke-width="4" stroke-dasharray="16 12" opacity=".85"/>
+
+  <!-- decoys -->
+  <g opacity=".9">
+    <circle cx="980" cy="96" r="13" fill="#DE8A22" opacity=".55"/>
+    <text x="1000" y="88" fill="#F0B463" font-size="23" font-family="Liberation Sans">glint ✕</text>
+    <circle cx="1420" cy="238" r="12" fill="#C8443C" opacity=".55"/>
+    <text x="1440" y="232" fill="#E29B95" font-size="23" font-family="Liberation Sans">decoy ✕</text>
+  </g>
+
+  <!-- satellite with blinking beacon -->
+  <g transform="translate(470,122) scale(1.22)">
+    <circle r="86" fill="url(#glow)" opacity=".5"/>
+    <circle r="54" fill="none" stroke="#8FE6FF" stroke-opacity=".45" stroke-width="2.5"/>
+    <circle r="74" fill="none" stroke="#8FE6FF" stroke-opacity=".22" stroke-width="2.5"/>
+    <rect x="-92" y="-13" width="60" height="26" rx="3" fill="#2D5B85" stroke="#8FB6D6" stroke-width="2"/>
+    <rect x="32" y="-13" width="60" height="26" rx="3" fill="#2D5B85" stroke="#8FB6D6" stroke-width="2"/>
+    <rect x="-30" y="-22" width="60" height="44" rx="7" fill="#E6EEF5" stroke="#9FB9CF" stroke-width="2"/>
+    <circle cx="0" cy="0" r="11" fill="#8FE6FF"/>
+  </g>
+
+  <!-- ground terminal: tripod + pan-tilt gimbal + camera -->
+  <g transform="translate(1852,300)" stroke-linecap="round">
+    <path d="M-34 96 L0 26 M34 96 L0 26 M0 96 L0 26" stroke="#9FB9CF" stroke-width="7" fill="none"/>
+    <rect x="-30" y="6" width="60" height="26" rx="6" fill="#26527A" stroke="#9FB9CF" stroke-width="2.5"/>
+    <g transform="rotate(-11)">
+      <rect x="-24" y="-30" width="48" height="36" rx="7" fill="#E6EEF5" stroke="#9FB9CF" stroke-width="2.5"/>
+      <rect x="-46" y="-24" width="26" height="24" rx="5" fill="#4FC7EA" stroke="#DCF3FB" stroke-width="2.5"/>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g font-family="Liberation Sans">
+    <g transform="translate(60,300)">
+      <circle r="27" fill="#1B75BB"/><text y="10" text-anchor="middle" fill="#fff" font-size="30" font-weight="bold">1</text>
+      <rect x="42" y="-24" width="286" height="48" rx="10" fill="#0B2440" stroke="#2E5A85" stroke-width="2"/>
+      <text x="62" y="9" fill="#DCE9F4" font-size="27" font-weight="bold">Physics-true sky</text>
+    </g>
+    <g transform="translate(470,300)">
+      <path d="M0 -128 L0 -34" stroke="#5FD0A6" stroke-width="3" stroke-dasharray="7 6"/>
+      <circle r="27" fill="#1E9E63"/><text y="10" text-anchor="middle" fill="#fff" font-size="30" font-weight="bold">2</text>
+      <rect x="42" y="-24" width="392" height="48" rx="10" fill="#0B2440" stroke="#2E5A85" stroke-width="2"/>
+      <text x="62" y="9" fill="#DCE9F4" font-size="27" font-weight="bold">4 Hz blink = identity</text>
+    </g>
+    <g transform="translate(1176,382)">
+      <path d="M0 -34 L0 -128" stroke="#4FC7EA" stroke-width="3" stroke-dasharray="7 6"/>
+      <circle r="27" fill="#0E9BC4"/><text y="10" text-anchor="middle" fill="#fff" font-size="30" font-weight="bold">3</text>
+      <rect x="42" y="-24" width="352" height="48" rx="10" fill="#0B2440" stroke="#2E5A85" stroke-width="2"/>
+      <text x="62" y="9" fill="#DCE9F4" font-size="27" font-weight="bold">Aim 40 ms ahead</text>
+    </g>
+    <g transform="translate(1806,432)">
+      <circle r="27" fill="#173F66"/><text y="10" text-anchor="middle" fill="#fff" font-size="30" font-weight="bold">4</text>
+      <rect x="42" y="-24" width="400" height="48" rx="10" fill="#0B2440" stroke="#2E5A85" stroke-width="2"/>
+      <text x="62" y="9" fill="#DCE9F4" font-size="27" font-weight="bold">30 corrections / second</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<div class="bottom">
+  <div>
+    <div class="plabel" style="margin-top:12px">
+      <div class="eyebrow">Innovation and uniqueness of the solution</div>
+      <div class="rule"></div>
+    </div>
+    <div class="gate">
+      <div class="gh">Brightness is not identity — <span>modulation is</span>.</div>
+      <div class="row">
+        <div class="who">Star / glint<small>brighter, steady</small></div>
+        <div class="wave">
+          <svg viewBox="0 0 300 34" width="100%"><path d="M4 17h292" stroke="#FF9C95" stroke-width="5" fill="none"/></svg>
+        </div>
+        <div class="badge bad">REJECTED</div>
+      </div>
+      <div class="row">
+        <div class="who">Our beacon<small>dimmer, 4 Hz</small></div>
+        <div class="wave">
+          <svg viewBox="0 0 300 34" width="100%">
+            <path d="M4 30v-26h26v26h26v-26h26v26h26v-26h26v26h26v-26h26v26h26v-26h26v26h26v-26h20"
+                  stroke="#7BE0B0" stroke-width="5" fill="none" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="badge good">LOCKED</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="plabel" style="margin-top:12px">
+      <div class="eyebrow">How it addresses the problem</div>
+      <div class="rule"></div>
+    </div>
+    <div class="panel">
+      <img class="shot" src="console.png">
+      <div class="kpis">
+        <div class="kpi b"><div class="v">1.27<small>s</small></div><div class="l">to acquire</div></div>
+        <div class="kpi g"><div class="v">98.3<small>%</small></div><div class="l">lock held</div></div>
+        <div class="kpi"><div class="v">0<small>/64</small></div><div class="l">wrong locks</div></div>
+      </div>
+    </div>
+  </div>
+</div>

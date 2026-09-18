@@ -1,0 +1,182 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --navy:#0F2E4E; --blue:#1B75BB; --blueL:#EAF3FB; --cyan:#0E9BC4;
+    --green:#1E9E63; --greenL:#E8F6EF; --amber:#DE8A22; --amberL:#FDF3E4;
+    --ink:#14202C; --muted:#5C6B7A; --line:#D9E3ED; --panel:#F6F9FC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:2320px;height:1040px}
+  body{font-family:"Liberation Sans",Arial,"DejaVu Sans",sans-serif;color:var(--ink);background:#fff;
+       -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:1040px}
+  .eyebrow{font-size:24px;font-weight:700;letter-spacing:1.9px;text-transform:uppercase;color:var(--blue);white-space:nowrap}
+  .eyebrow.amber{color:#B96F12}
+  .rule{height:3px;flex:1;border-radius:2px;
+        background:linear-gradient(90deg,var(--blue),#8FC3E8 60%,rgba(255,255,255,0))}
+  .rule.amber{background:linear-gradient(90deg,var(--amber),#F0CB94 60%,rgba(255,255,255,0))}
+  .plabel{display:flex;align-items:center;gap:12px;margin-bottom:9px;flex:0 0 auto}
+
+  .mid{display:grid;grid-template-columns:1fr 1.28fr;gap:22px;flex:1 1 auto;min-height:0;margin-bottom:18px}
+  .card{border:1.5px solid var(--line);border-radius:16px;background:#fff;padding:20px 24px;
+        box-shadow:0 2px 6px rgba(16,40,66,.06);display:flex;flex-direction:column}
+  .ct{font-size:30px;font-weight:700;color:var(--navy)}
+  .cs{font-size:22px;color:var(--muted);margin-top:3px}
+  .charts{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:34px;margin-top:18px}
+  .chart svg{width:100%;display:block}
+  .clabel{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:2px}
+
+  /* risk -> fix rows */
+  .rows{flex:1 1 auto;display:flex;flex-direction:column;gap:12px}
+  .r{flex:1 1 auto;display:grid;grid-template-columns:82px 1fr 44px 1.05fr;align-items:center;
+     gap:14px;border:1.5px solid var(--line);border-radius:14px;padding:10px 16px;background:#FCFDFE}
+  .ric{width:66px;height:66px;border-radius:14px;background:var(--amberL);border:1.5px solid #F0D6AC;
+       display:flex;align-items:center;justify-content:center}
+  .rn{font-size:29px;font-weight:700;color:#7A4A08;line-height:1.15}
+  .arw{color:#9AAABA}
+  .fx{display:flex;align-items:center;gap:14px}
+  .fn{font-size:28px;font-weight:700;color:#0E5636;line-height:1.15;flex:1 1 auto}
+  .ev{flex:0 0 auto;background:var(--navy);color:#fff;border-radius:9px;padding:10px 14px;
+      font-size:23px;font-weight:700;text-align:center;line-height:1.2}
+
+  /* proof strip */
+  .proof{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;flex:0 0 auto}
+  .tile{border:1.5px solid var(--line);border-radius:16px;background:var(--panel);padding:18px 22px;
+        display:flex;align-items:center;gap:18px}
+  .tile .v{font-size:44px;font-weight:700;color:var(--navy);line-height:1.02;letter-spacing:-.5px}
+  .tile .v em{font-style:normal;color:var(--green)}
+  .tile .l{font-size:23px;color:var(--muted);margin-top:5px;line-height:1.25}
+</style>
+
+<div class="plabel">
+  <div class="eyebrow">Analysis of the feasibility of the idea</div>
+  <div class="rule"></div>
+</div>
+
+<div class="mid">
+  <div class="card">
+    <div class="ct">64 randomised runs</div>
+    <div class="cs">dim beacons · heavy turbulence · vibration · moving decoys</div>
+    <div class="charts">
+      <div class="chart">
+        <div class="clabel">Time to acquire the beacon</div>
+        <svg viewBox="0 0 900 158">
+          <line x1="40" y1="118" x2="870" y2="118" stroke="#C3D2DE" stroke-width="2"/>
+          <g font-family="Liberation Sans" font-size="20" fill="#7C8B9A" text-anchor="middle">
+            <text x="40" y="146">0</text><text x="206" y="146">1 s</text><text x="372" y="146">2 s</text>
+            <text x="538" y="146">3 s</text><text x="704" y="146">4 s</text><text x="870" y="146">5 s</text>
+          </g>
+          <rect x="40" y="56" width="664" height="46" rx="10" fill="#E3EEF7"/>
+          <rect x="40" y="56" width="251" height="46" rx="10" fill="#1B75BB"/>
+          <line x1="291" y1="44" x2="291" y2="114" stroke="#0F2E4E" stroke-width="4"/>
+          <line x1="482" y1="48" x2="482" y2="110" stroke="#5C7C99" stroke-width="3"/>
+          <line x1="704" y1="44" x2="704" y2="114" stroke="#C8443C" stroke-width="4"/>
+          <g font-family="Liberation Sans" font-weight="bold">
+            <text x="291" y="32" font-size="25" fill="#0F2E4E" text-anchor="middle">median 1.27 s</text>
+            <text x="704" y="32" font-size="25" fill="#C8443C" text-anchor="middle">worst 4.0 s</text>
+          </g>
+        </svg>
+      </div>
+      <div class="chart">
+        <div class="clabel">Lock retention across the pass</div>
+        <svg viewBox="0 0 900 158">
+          <line x1="40" y1="118" x2="870" y2="118" stroke="#C3D2DE" stroke-width="2"/>
+          <g font-family="Liberation Sans" font-size="20" fill="#7C8B9A" text-anchor="middle">
+            <text x="40" y="146">90 %</text><text x="247" y="146">92.5 %</text><text x="455" y="146">95 %</text>
+            <text x="662" y="146">97.5 %</text><text x="870" y="146">100 %</text>
+          </g>
+          <rect x="40" y="56" width="830" height="46" rx="10" fill="#E3F1EA"/>
+          <rect x="173" y="56" width="697" height="46" rx="10" fill="#1E9E63"/>
+          <line x1="173" y1="44" x2="173" y2="114" stroke="#C8443C" stroke-width="4"/>
+          <line x1="662" y1="44" x2="662" y2="114" stroke="#0F2E4E" stroke-width="4"/>
+          <g font-family="Liberation Sans" font-weight="bold">
+            <text x="173" y="32" font-size="25" fill="#C8443C" text-anchor="middle">worst 91.6 %</text>
+            <text x="700" y="32" font-size="25" fill="#0F2E4E" text-anchor="middle">median 97.6 %</text>
+          </g>
+        </svg>
+      </div>
+      <div style="font-size:22px;color:#5C6B7A;border-top:1px solid #E4EBF2;padding-top:14px">
+        Scored against ground truth the tracker never sees. Every run replayable from its logged seed.</div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;min-height:0">
+    <div class="plabel">
+      <div class="eyebrow amber">Challenges &amp; risks → strategies to overcome them</div>
+      <div class="rule amber"></div>
+    </div>
+    <div class="rows">
+      <div class="r">
+        <div class="ric"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#DE8A22" stroke-width="3.4" stroke-linecap="round">
+          <path d="M4 13c5-7 9 7 14 0s9 7 14 0 5 4 8 2"/><path d="M4 24c5-7 9 7 14 0s9 7 14 0 5 4 8 2"/>
+          <path d="M4 35c5-7 9 7 14 0s9 7 14 0 5 4 8 2"/></svg></div>
+        <div class="rn">Heavy turbulence</div>
+        <div class="arw"><svg width="34" height="22"><path d="M0 11h22M16 4l7 7-7 7" fill="none" stroke="#9AAABA" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fx"><div class="fn">Coast the fade, then re-spiral</div>
+          <div class="ev">1.27 s<br>94.3 % lock</div></div>
+      </div>
+
+      <div class="r">
+        <div class="ric"><svg width="44" height="44" viewBox="0 0 44 44">
+          <circle cx="14" cy="16" r="8" fill="#F4C68A"/><circle cx="30" cy="30" r="10" fill="#DE8A22"/>
+          <path d="M25 25l10 10M35 25l-10 10" stroke="#8A4E06" stroke-width="3.2" stroke-linecap="round"/></svg></div>
+        <div class="rn">Decoys &amp; sun-glint</div>
+        <div class="arw"><svg width="34" height="22"><path d="M0 11h22M16 4l7 7-7 7" fill="none" stroke="#9AAABA" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fx"><div class="fn">4 Hz blink gate + AI verifier</div>
+          <div class="ev">0 / 64<br>AUC 0.957</div></div>
+      </div>
+
+      <div class="r">
+        <div class="ric"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#DE8A22" stroke-width="3.4">
+          <circle cx="22" cy="22" r="17"/><path d="M22 12v11l8 5" stroke-linecap="round"/></svg></div>
+        <div class="rn">40 ms mount latency</div>
+        <div class="arw"><svg width="34" height="22"><path d="M0 11h22M16 4l7 7-7 7" fill="none" stroke="#9AAABA" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fx"><div class="fn">Two-path Smith predictor</div>
+          <div class="ev">4.2 µrad lag<br>at 0.75 °/s</div></div>
+      </div>
+
+      <div class="r">
+        <div class="ric"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#DE8A22" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 32l10-14 8 8 9-16"/><path d="M26 10h8v8"/></svg></div>
+        <div class="rn">Sharp UAV manoeuvres</div>
+        <div class="arw"><svg width="34" height="22"><path d="M0 11h22M16 4l7 7-7 7" fill="none" stroke="#9AAABA" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fx"><div class="fn">Dual-model IMM estimator</div>
+          <div class="ev">re-weighted<br>every frame</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proof">
+  <div class="tile">
+    <svg width="86" height="86" viewBox="0 0 86 86">
+      <circle cx="43" cy="43" r="32" fill="none" stroke="#E4EBF2" stroke-width="12"/>
+      <circle cx="43" cy="43" r="32" fill="none" stroke="#1E9E63" stroke-width="12"
+              stroke-dasharray="201 201" transform="rotate(-90 43 43)" stroke-linecap="round"/>
+      <text x="43" y="51" text-anchor="middle" font-size="22" font-weight="bold" fill="#0F2E4E"
+            font-family="Liberation Sans">100%</text></svg>
+    <div><div class="v">73 / 73</div><div class="l">tests pass</div></div>
+  </div>
+  <div class="tile">
+    <svg width="86" height="86" viewBox="0 0 86 86">
+      <circle cx="43" cy="43" r="32" fill="none" stroke="#E4EBF2" stroke-width="12"/>
+      <circle cx="43" cy="43" r="32" fill="none" stroke="#1B75BB" stroke-width="12"
+              stroke-dasharray="201 201" transform="rotate(-90 43 43)" stroke-linecap="round"/>
+      <text x="43" y="51" text-anchor="middle" font-size="22" font-weight="bold" fill="#0F2E4E"
+            font-family="Liberation Sans">100%</text></svg>
+    <div><div class="v">64 / 64</div><div class="l">runs acquired</div></div>
+  </div>
+  <div class="tile">
+    <svg width="86" height="86" viewBox="0 0 86 86">
+      <path d="M43 9l27 10v22c0 17-11 29-27 35-16-6-27-18-27-35V19z" fill="#E8F6EF" stroke="#1E9E63" stroke-width="3.5"/>
+      <path d="M31 44l9 10 17-21" fill="none" stroke="#1E9E63" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><div class="v"><em>0</em> wrong locks</div><div class="l">decoys never fooled it</div></div>
+  </div>
+  <div class="tile" style="display:block">
+    <div class="v" style="font-size:40px">8–21 ms <span style="font-size:23px;color:#5C6B7A;font-weight:400">of 33 ms</span></div>
+    <svg width="100%" height="26" viewBox="0 0 340 26" preserveAspectRatio="none" style="margin-top:10px">
+      <rect y="5" width="340" height="16" rx="8" fill="#DCE6EF"/>
+      <rect y="5" width="216" height="16" rx="8" fill="#1B75BB"/></svg>
+    <div class="l" style="margin-top:8px">no GPU · no cloud · no dataset</div>
+  </div>
+</div>

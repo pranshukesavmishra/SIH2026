@@ -1,0 +1,7 @@
+# Netlify headers.
+#
+# The live tracker is the one page that gets iterated on right up to a demo,
+# and a browser silently serving a cached copy means testing a version that no
+# longer exists -- a fault that looks exactly like "the fix did nothing".
+/live.html
+  Cache-Control: no-store, must-revalidate

@@ -1,0 +1,687 @@
+<title>SIH 2026 Target Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#EDF0F3;
+  --surface:#FFFFFF;
+  --surface-2:#F5F7F9;
+  --ink:#101820;
+  --ink-2:#48545F;
+  --ink-3:#6E7C88;
+  --rule:#D2DAE1;
+  --rule-2:#E3E9EE;
+  --accent:#A85E06;
+  --accent-soft:#F3E3CD;
+  --lock:#186B54;
+  --lock-soft:#DCEDE7;
+  --warn:#8E5A00;
+  --avoid:#9C2E23;
+  --avoid-soft:#F5DFDC;
+  --bar:#B4700F;
+  --bar-pick:#186B54;
+
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+
+  --wrap:1180px;
+  --prose:70ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0A1015;
+    --surface:#121A21;
+    --surface-2:#18222B;
+    --ink:#E6ECF2;
+    --ink-2:#A2AEBA;
+    --ink-3:#7C8A97;
+    --rule:#26323D;
+    --rule-2:#1E2932;
+    --accent:#E0A143;
+    --accent-soft:#33261195;
+    --lock:#48AE8B;
+    --lock-soft:#12352C;
+    --warn:#D0A052;
+    --avoid:#DC7263;
+    --avoid-soft:#3A1F1B;
+    --bar:#C98A32;
+    --bar-pick:#48AE8B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0A1015;
+  --surface:#121A21;
+  --surface-2:#18222B;
+  --ink:#E6ECF2;
+  --ink-2:#A2AEBA;
+  --ink-3:#7C8A97;
+  --rule:#26323D;
+  --rule-2:#1E2932;
+  --accent:#E0A143;
+  --accent-soft:#33261195;
+  --lock:#48AE8B;
+  --lock-soft:#12352C;
+  --warn:#D0A052;
+  --avoid:#DC7263;
+  --avoid-soft:#3A1F1B;
+  --bar:#C98A32;
+  --bar-pick:#48AE8B;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+.prose{max-width:var(--prose)}
+
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.18}
+p{margin:0}
+a{color:var(--accent)}
+strong{font-weight:600}
+
+.eyebrow{
+  font-family:var(--f-mono);font-size:11.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+.mast{
+  border-bottom:1px solid var(--rule);
+  background:var(--surface);
+  padding:52px 0 0;
+}
+.mast .wrap{display:flex;flex-direction:column;gap:22px}
+.mast h1{font-size:clamp(34px,5.2vw,58px);font-weight:700;letter-spacing:-.022em}
+.mast .lede{max-width:64ch;color:var(--ink-2);font-size:19px}
+.metastrip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  border-top:1px solid var(--rule);margin-top:8px;
+}
+.metastrip div{
+  padding:16px 18px 20px;border-right:1px solid var(--rule-2);
+}
+.metastrip div:last-child{border-right:none}
+.metastrip .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:5px}
+.metastrip .v{font-family:var(--f-display);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.metastrip .v small{font-family:var(--f-body);font-size:13px;font-weight:400;color:var(--ink-3)}
+
+/* ---------- sections ---------- */
+section{padding:56px 0}
+section + section{border-top:1px solid var(--rule)}
+.sechead{display:flex;gap:18px;align-items:baseline;margin-bottom:26px}
+.secnum{
+  font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.1em;padding-top:6px;flex:0 0 auto;
+}
+.sechead h2{font-size:clamp(23px,3vw,31px);letter-spacing:-.014em}
+.sechead .sub{color:var(--ink-3);font-size:15px;margin-top:6px;max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:18px}
+.stack-lg{display:flex;flex-direction:column;gap:30px}
+
+/* ---------- verdict ---------- */
+.verdict{
+  background:var(--surface);border:1px solid var(--rule);
+  border-top:3px solid var(--lock);
+  padding:30px 32px 32px;display:flex;flex-direction:column;gap:18px;
+}
+.verdict-top{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.psid{
+  font-family:var(--f-mono);font-size:26px;font-weight:600;letter-spacing:-.01em;
+}
+.tag{
+  font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);
+  color:var(--ink-2);background:var(--surface-2);
+}
+.tag.lock{color:var(--lock);border-color:var(--lock);background:var(--lock-soft)}
+.tag.acc{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.verdict h3{font-size:21px;line-height:1.34;max-width:52ch}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1px;background:var(--rule-2);border:1px solid var(--rule-2)}
+.why div{background:var(--surface);padding:16px 18px}
+.why .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:7px}
+.why .t{font-size:15px;line-height:1.5;color:var(--ink-2)}
+
+.alt{display:grid;grid-template-columns:repeat(auto-fit,minmax(292px,1fr));gap:16px}
+.altcard{background:var(--surface);border:1px solid var(--rule);padding:22px 22px 24px;display:flex;flex-direction:column;gap:11px}
+.altcard .psid{font-size:19px}
+.altcard h4{font-size:16px;line-height:1.4}
+.altcard p{font-size:15px;color:var(--ink-2);line-height:1.55}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:660px}
+th,td{text-align:left;padding:12px 15px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+thead th{
+  font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);
+  border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.id{font-family:var(--f-mono);font-size:13.5px;font-weight:500;white-space:nowrap}
+td small{color:var(--ink-3);font-size:13px}
+tr.pick td{background:var(--lock-soft)}
+tr.pick td.id{font-weight:600}
+
+/* ---------- chart ---------- */
+figure{margin:0;background:var(--surface);border:1px solid var(--rule);padding:26px 26px 20px}
+figcaption{font-size:14px;color:var(--ink-3);margin-top:18px;padding-top:14px;border-top:1px solid var(--rule-2);max-width:72ch;line-height:1.55}
+.chart{display:flex;flex-direction:column;gap:9px}
+.row{display:grid;grid-template-columns:104px 1fr 52px;gap:12px;align-items:center}
+.row .lab{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.track{position:relative;height:19px;background:var(--surface-2);border-radius:2px}
+.fill{
+  position:absolute;left:0;top:0;bottom:0;background:var(--bar);
+  border-radius:2px 4px 4px 2px;
+}
+.row.is-pick .fill{background:var(--bar-pick)}
+.row.is-pick .lab{color:var(--ink);font-weight:600}
+.row .val{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-2);text-align:right}
+.medline{
+  position:relative;height:0;border-top:1px dashed var(--rule);margin:4px 0 2px;
+}
+.medlabel{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);display:block;margin-top:8px}
+
+/* ---------- callouts ---------- */
+.note{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);
+  padding:20px 22px;display:flex;flex-direction:column;gap:9px;
+}
+.note.caution{border-left-color:var(--avoid)}
+.note h4{font-size:15px;font-family:var(--f-display)}
+.note p{font-size:15.5px;color:var(--ink-2);line-height:1.58}
+
+ul,ol{margin:0;padding-left:1.25em;display:flex;flex-direction:column;gap:8px}
+li{padding-left:.15em}
+li::marker{color:var(--ink-3)}
+ol.beats{counter-reset:b;list-style:none;padding-left:0;gap:0}
+ol.beats li{
+  counter-increment:b;display:grid;grid-template-columns:40px 1fr;gap:16px;
+  padding:15px 0;border-bottom:1px solid var(--rule-2);
+}
+ol.beats li:last-child{border-bottom:none}
+ol.beats li::before{
+  content:counter(b,decimal-leading-zero);
+  font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--accent);padding-top:4px;
+}
+ol.beats b{font-family:var(--f-display);font-weight:600;font-size:16px;display:block;margin-bottom:3px}
+ol.beats span{color:var(--ink-2);font-size:15.5px;line-height:1.55}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px}
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:1px;background:var(--rule-2);border:1px solid var(--rule-2)}
+.modules div{background:var(--surface);padding:17px 19px}
+.modules .n{font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:6px}
+.modules b{font-family:var(--f-display);font-size:15.5px;display:block;margin-bottom:5px;font-weight:600}
+.modules p{font-size:14.5px;color:var(--ink-2);line-height:1.5}
+
+footer{border-top:1px solid var(--rule);padding:34px 0 60px;color:var(--ink-3);font-size:14px}
+footer .wrap{display:flex;flex-direction:column;gap:9px;max-width:var(--wrap)}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  section{padding:40px 0}
+  .wrap{padding:0 18px}
+  .sechead{flex-direction:column;gap:6px}
+  .row{grid-template-columns:88px 1fr 44px;gap:8px}
+  .verdict{padding:24px 20px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <span class="eyebrow">Smart India Hackathon 2026 &middot; Selection Analysis</span>
+    <h1>Which problem statement to pick — and why</h1>
+    <p class="lede">All 226 SIH 2026 problem statements scored against four filters: five years of winner
+      patterns, a defence/space mandate, provable end-to-end buildability, and how hard the
+      statement works to repel the crowd.</p>
+  </div>
+  <div class="wrap">
+    <div class="metastrip">
+      <div><span class="k">Statements analysed</span><span class="v">226</span></div>
+      <div><span class="k">Defence / space cluster</span><span class="v">47</span></div>
+      <div><span class="k">Software / hardware</span><span class="v">172<small> / 54</small></span></div>
+      <div><span class="k">Idea submission closes</span><span class="v">20 Sep<small> 2026</small></span></div>
+      <div><span class="k">Grand finale</span><span class="v">Dec<small> 2026</small></span></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap stack-lg">
+    <div class="sechead" style="margin-bottom:0">
+      <span class="secnum">VERDICT</span>
+      <div>
+        <h2>Pick SIH26169 — ISRO, FSOC virtual camera tracking</h2>
+        <p class="sub">It is the only statement in the defence cluster where 100% specification coverage
+          is guaranteed rather than hoped for, and it still sits in the top 15 most crowd-repellent
+          statements of all 226.</p>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="verdict-top">
+        <span class="psid">SIH26169</span>
+        <span class="tag lock">Primary pick</span>
+        <span class="tag">ISRO</span>
+        <span class="tag">Software</span>
+        <span class="tag acc">Zero external dependency</span>
+      </div>
+      <h3>AI-Based Virtual Camera Tracking System for Coarse Alignment of Mobile Free Space
+        Optical Communication (FSOC) Terminals</h3>
+      <div class="why">
+        <div>
+          <span class="k">Winner pattern</span>
+          <p class="t">Judges reward a stable, complete, measurable build over an ambitious partial one.
+            This statement publishes its own deliverables list and evaluation table — you can engineer
+            directly to the rubric.</p>
+        </div>
+        <div>
+          <span class="k">Defence / space</span>
+          <p class="t">ISRO, and FSOC pointing-acquisition-tracking is core strategic communications
+            work. Highest-credential category the user asked for, without hardware procurement risk.</p>
+        </div>
+        <div>
+          <span class="k">End to end</span>
+          <p class="t">You author the entire world: the scene, the beacon, the camera, the turbulence,
+            the tracker, the metrics. No dataset to chase, no API to beg for, no hardware to buy.
+            Nothing can be missing because nothing is external.</p>
+        </div>
+        <div>
+          <span class="k">Low competition</span>
+          <p class="t">Ranks 14th of 226 on crowd repellence. "Free space optical", "coarse alignment"
+            and "pointing, acquisition and tracking" filter out the overwhelming majority of teams
+            before they read the second paragraph.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alt">
+      <div class="altcard">
+        <span class="psid">SIH26168</span>
+        <span class="tag acc" style="align-self:flex-start">Highest ceiling</span>
+        <h4>ISRO — AI/ML Intelligent Dead Reckoning for seamless navigation</h4>
+        <p>The single most crowd-repellent statement of all 226, and it demands preliminary AI models
+          plus position plots <em>inside the proposal itself</em> — a barrier that will gut its
+          submission count. Take this instead of 26169 <strong>only</strong> if you have genuine
+          sensor-fusion and Android strength. The catch: lane-level accuracy under GNSS blackout is a
+          performance target you cannot guarantee, so "nothing missing" is not provable here.</p>
+      </div>
+      <div class="altcard">
+        <span class="psid">SIH26055</span>
+        <span class="tag acc" style="align-self:flex-start">Maximum DRDO credential</span>
+        <h4>DRDO — Smart Scan Strategy for Electronic Warfare</h4>
+        <p>Also fully self-contained: the statement explicitly specifies a <em>simulated</em> RF
+          environment, so you build the simulator and the ML scheduler and nothing else. "Electronic
+          Warfare" is one of the strongest repellents in the entire set. Take this if the DRDO name
+          matters more to you than certainty — its brief is terse, so you must define the problem
+          yourself, which cuts both ways.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sechead">
+      <span class="secnum">01</span>
+      <div>
+        <h2>How SIH is actually won</h2>
+        <p class="sub">The mechanics decide the strategy, and most teams never do this arithmetic.</p>
+      </div>
+    </div>
+    <div class="prose stack">
+      <p>SIH does not have one national winner. <strong>Every problem statement has its own winner</strong>,
+        with its own prize — ₹1 lakh through SIH 2023 and 2024, raised to ₹1.5 lakh in 2025. Your
+        competition is never "all of India". It is the handful of teams assigned to
+        <em>your</em> statement at <em>your</em> nodal centre.</p>
+      <p>The funnel runs: college internal hackathon → your SPOC nominates up to 30 teams
+        (25 shortlisted, 5 waitlisted) → idea submission on the portal, capped at 500 per statement →
+        roughly 5 to 8 teams per statement reach the Grand Finale. At IIT Roorkee's 2025 hardware
+        finale, 23 teams competed across 5 problem statements — under 5 teams per statement.</p>
+      <p>So your odds of being shortlisted are approximately <span class="mono">6 ÷ (submissions on your PS)</span>.
+        That single number swings by more than an order of magnitude depending on nothing but which
+        statement you type into the form.</p>
+    </div>
+
+    <div class="tablewrap" style="max-width:760px">
+      <table>
+        <thead>
+          <tr><th>If your statement draws…</th><th class="num">P(shortlist)</th><th class="num">P(win) at 1-in-6 finale</th><th class="num">P(win) if you are clearly best</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>400 submissions <small>— a popular AI/app PS</small></td><td class="num">1.5%</td><td class="num">0.25%</td><td class="num">0.9%</td></tr>
+          <tr><td>150 submissions</td><td class="num">4.0%</td><td class="num">0.7%</td><td class="num">2.4%</td></tr>
+          <tr><td>60 submissions</td><td class="num">10.0%</td><td class="num">1.7%</td><td class="num">6.0%</td></tr>
+          <tr class="pick"><td>25 submissions <small>— a hard defence PS</small></td><td class="num">24.0%</td><td class="num">4.0%</td><td class="num">14.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="color:var(--ink-2);font-size:15.5px">The right-hand column assumes a 60% win
+      rate at the finale, which is what a team that has been building since September and arrives with
+      a hardened, over-delivered system should expect against teams that started in December. Statement
+      choice is worth roughly <strong>16×</strong>. Execution is worth roughly <strong>3.6×</strong>.
+      Choose first, then execute.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sechead">
+      <span class="secnum">02</span>
+      <div>
+        <h2>What five editions of winners have in common</h2>
+        <p class="sub">SIH 2020, 2022, 2023, 2024, 2025 — the 2026 edition is the ninth; there was no
+          SIH 2021.</p>
+      </div>
+    </div>
+    <ol class="beats prose" style="max-width:78ch">
+      <li><b>Completeness beats ambition.</b><span>The consistent judging guidance across editions:
+        a stable working prototype that fully answers the stated problem outscores a larger vision
+        with holes in it. Scoring runs across multiple rounds, 1–20 per criterion, weighted to 100,
+        with a final "power round" that decides close calls.</span></li>
+      <li><b>Deep-domain defence entries win with real engineering.</b><span>SIH 2023's Ministry of
+        Defence statement was won by IIT Bombay's Team Avlokan with a quadplane VTOL carrying a
+        boom-deployed magnetic anomaly detection suite for submarine detection — not an app, an
+        instrument. Hard statements are won by teams that treat them as engineering, and those teams
+        are rare.</span></li>
+      <li><b>The organisations adopt what they can use.</b><span>After SIH 2024, ISRO accepted four
+        solutions for in-house development (solar panel tilt adjustment, video geotagging, cyclone
+        intensity estimation from INSAT-3D IR imagery, and blockchain storage for large geospatial
+        datasets); DRDO accepted one (gesture-enabled PC commands). Build to the sponsor's operational
+        spec, not to a demo.</span></li>
+      <li><b>Solve the stated problem, not a buzzword adjacent to it.</b><span>Judges reward how
+        effectively you answer the brief, not how many technologies you stack. Feasibility,
+        cost-effectiveness, scalability and social relevance recur in every edition's criteria.</span></li>
+      <li><b>Nothing about the winners is glamorous.</b><span>SIH 2025's software national winner —
+        team Passengers, IUST Awantipora — built an API bridging AYUSH NAMASTE to ICD-11 for EMR
+        compliance. A standards-mapping API. Unfashionable, precisely scoped, completely
+        delivered.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack-lg">
+    <div class="sechead">
+      <span class="secnum">03</span>
+      <div>
+        <h2>The crowd-repellence index</h2>
+        <p class="sub">Live submission counts were not reachable from this environment, so crowding is
+          modelled structurally from each statement's own text.</p>
+      </div>
+    </div>
+
+    <div class="prose stack">
+      <p>Every statement's title and full description was scored for two opposing vocabularies. One
+        attracts volume — <span class="mono">portal, dashboard, chatbot, mobile app, gamified,
+        recommendation</span>. The other repels it — <span class="mono">SAR, interleaving, Viterbi,
+        ephemeris, IPsec, photoclinometry, dead reckoning, electronic warfare</span>. Combined with
+        acronym density and description length, this gives a proxy for how many student teams will
+        actually attempt the statement.</p>
+      <p>The distinction matters because <strong>the low-count strategy is widely known</strong> — the
+        submission counter is public on the portal, and guides have told students to sort by it for
+        years. Statements that are merely <em>unnoticed</em> get swarmed in the final week. Statements
+        that are low-count for <em>structural</em> reasons — a skill barrier the crowd cannot cross in
+        three weeks — stay low. Repellence is the durable moat; obscurity is not.</p>
+    </div>
+
+    <figure>
+      <div class="chart">
+        <div class="row is-pick"><span class="lab">SIH26168</span><div class="track" title="ISRO — Intelligent Dead Reckoning · repellence 98.8"><div class="fill" style="width:100%"></div></div><span class="val">98.8</span></div>
+        <div class="row"><span class="lab">SIH26159</span><div class="track" title="NTRO — SecureMailScope · repellence 66.8"><div class="fill" style="width:67.6%"></div></div><span class="val">66.8</span></div>
+        <div class="row"><span class="lab">SIH26167</span><div class="track" title="ISRO — SatQuery AI · repellence 49.7"><div class="fill" style="width:50.3%"></div></div><span class="val">49.7</span></div>
+        <div class="row"><span class="lab">SIH26054</span><div class="track" title="DRDO — Aero piston engine digital twin · repellence 48.2"><div class="fill" style="width:48.8%"></div></div><span class="val">48.2</span></div>
+        <div class="row"><span class="lab">SIH26149</span><div class="track" title="NTRO — Secure erasure and file carving · repellence 39.4"><div class="fill" style="width:39.9%"></div></div><span class="val">39.4</span></div>
+        <div class="row is-pick"><span class="lab">SIH26169</span><div class="track" title="ISRO — FSOC virtual camera tracking · repellence 38.1"><div class="fill" style="width:38.6%"></div></div><span class="val">38.1</span></div>
+        <div class="row"><span class="lab">SIH26157</span><div class="track" title="NTRO — SOC supervisory analytics · repellence 37.3"><div class="fill" style="width:37.8%"></div></div><span class="val">37.3</span></div>
+        <div class="row"><span class="lab">SIH26153</span><div class="track" title="NTRO — Network attack forecasting · repellence 37.1"><div class="fill" style="width:37.5%"></div></div><span class="val">37.1</span></div>
+        <div class="row"><span class="lab">SIH26049</span><div class="track" title="DRDO — High-altitude electronics reliability · repellence 32.5"><div class="fill" style="width:32.9%"></div></div><span class="val">32.5</span></div>
+        <div class="row"><span class="lab">SIH26050</span><div class="track" title="DRDO — Anti-drone high-altitude optimisation · repellence 31.8"><div class="fill" style="width:32.2%"></div></div><span class="val">31.8</span></div>
+        <div class="row is-pick"><span class="lab">SIH26055</span><div class="track" title="DRDO — Smart scan strategy for electronic warfare · repellence 26.7"><div class="fill" style="width:27.0%"></div></div><span class="val">26.7</span></div>
+        <div class="row"><span class="lab">SIH26147</span><div class="track" title="NTRO — .IQ/.wav signal parameter extraction · repellence 18.6"><div class="fill" style="width:18.8%"></div></div><span class="val">18.6</span></div>
+        <div class="medline"></div>
+        <div class="row"><span class="lab" style="color:var(--ink-3)">median, all 226</span><div class="track" title="Median repellence across all 226 statements"><div class="fill" style="width:8.5%;background:var(--rule)"></div></div><span class="val">8.4</span></div>
+      </div>
+      <figcaption>Crowd-repellence index for the defence/space cluster, highest first. Green marks the
+        three recommended statements. The median across all 226 statements is 8.4 — every statement
+        above is at least three times more repellent than the typical SIH problem. Derived from
+        title and description text; not an official SIH metric.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sechead">
+      <span class="secnum">04</span>
+      <div>
+        <h2>The shortlist, scored on all four filters</h2>
+        <p class="sub">Eleven defence, space and intelligence statements that survived screening, ranked
+          by weighted expected value.</p>
+      </div>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>PS</th><th>Org</th><th>Statement</th>
+            <th class="num">Repel<br>35%</th><th class="num">Self-<br>contained 30%</th>
+            <th class="num">Demo<br>20%</th><th class="num">Cred<br>15%</th><th class="num">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pick"><td class="id">SIH26168</td><td>ISRO</td><td>AI/ML intelligent dead reckoning for GNSS-denied navigation <small>— highest ceiling, unprovable accuracy target</small></td><td class="num">10</td><td class="num">7</td><td class="num">10</td><td class="num">9</td><td class="num">8.95</td></tr>
+          <tr class="pick"><td class="id">SIH26169</td><td>ISRO</td><td>FSOC virtual camera tracking for coarse alignment <small>— recommended: certainty of complete delivery</small></td><td class="num">7.5</td><td class="num">10</td><td class="num">8</td><td class="num">9</td><td class="num">8.58</td></tr>
+          <tr><td class="id">SIH26159</td><td>NTRO</td><td>SecureMailScope — cryptographic posture assessment from PCAP <small>— strong, pure-software hedge</small></td><td class="num">9</td><td class="num">9</td><td class="num">7</td><td class="num">8</td><td class="num">8.45</td></tr>
+          <tr><td class="id">SIH26149</td><td>NTRO</td><td>Integrated secure erasure + forensic file carving <small>— looks easy, so it will attract more teams than the index suggests</small></td><td class="num">8</td><td class="num">10</td><td class="num">7</td><td class="num">8</td><td class="num">8.40</td></tr>
+          <tr class="pick"><td class="id">SIH26055</td><td>DRDO</td><td>Smart scan strategy for electronic warfare <small>— maximum DRDO credential, terse brief</small></td><td class="num">6.5</td><td class="num">10</td><td class="num">7</td><td class="num">10</td><td class="num">8.18</td></tr>
+          <tr><td class="id">SIH26147</td><td>NTRO</td><td>Automated .IQ / .wav signal parameter extraction and demodulation</td><td class="num">5.5</td><td class="num">9</td><td class="num">8</td><td class="num">8</td><td class="num">7.43</td></tr>
+          <tr><td class="id">SIH26054</td><td>DRDO</td><td>Digital twin for MALE UAV aero piston engines <small>— needs engine telemetry you cannot get</small></td><td class="num">8.5</td><td class="num">5</td><td class="num">7</td><td class="num">10</td><td class="num">7.38</td></tr>
+          <tr><td class="id">SIH26161</td><td>NTRO</td><td>Dam break inundation modelling via hydrodynamic simulation</td><td class="num">6</td><td class="num">7</td><td class="num">8</td><td class="num">7</td><td class="num">6.85</td></tr>
+          <tr><td class="id">SIH26143</td><td>NTRO</td><td>Oil spill detection from SAR + AIS vessel attribution <small>— beautiful demo, all data is free</small></td><td class="num">4</td><td class="num">8</td><td class="num">9</td><td class="num">8</td><td class="num">6.80</td></tr>
+          <tr><td class="id">SIH26166</td><td>ISRO</td><td>Chandrayaan-2 sun-angle invariant image correspondence <small>— the "moon" brand will draw a crowd</small></td><td class="num">3.5</td><td class="num">8</td><td class="num">7</td><td class="num">10</td><td class="num">6.53</td></tr>
+          <tr><td class="id">SIH26150</td><td>NTRO</td><td>Multi-vendor DVR/NVR forensic analysis <small>— requires physical recorders from 6 OEMs</small></td><td class="num">7</td><td class="num">4</td><td class="num">6</td><td class="num">8</td><td class="num">6.05</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <h4>Why the recommendation is 26169 and not the top-scoring 26168</h4>
+      <p>The model ranks 26168 first on raw expected value. But the stated requirement was a statement
+        you can prepare <em>end to end, with nothing missing</em>. 26169 lets you build every single
+        listed deliverable with certainty, because you author the whole system including its inputs.
+        26168 asks for lane-level accuracy through a GNSS blackout — you can implement every listed
+        module and still miss the bar, because IMU drift does not care how well you engineered.
+        Under a "nothing missing" constraint, 26169 wins. If your team already has real strength in
+        Kalman filtering, IMU calibration and on-device inference, flip to 26168 and take the higher
+        ceiling.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack-lg">
+    <div class="sechead">
+      <span class="secnum">05</span>
+      <div>
+        <h2>Building SIH26169 end to end</h2>
+        <p class="sub">Ten modules. Every one of them is code you write; none of them waits on anyone
+          else.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The statement asks for a software system that generates a configurable virtual environment and
+        moving beacons, implements a movable virtual camera, detects and continuously tracks the beacon
+        with computer vision, repositions the camera, injects atmospheric turbulence and platform
+        vibration, and reports tracking statistics in real time. Mandatory deliverables are a standalone
+        executable, documented modular source, a 10–15 page technical report, a user manual, and an
+        automatic performance log covering simulation duration, FPS, acquisition time, average and
+        maximum tracking error, lock retention rate and processing time.</p>
+    </div>
+
+    <div class="modules">
+      <div><span class="n">M1</span><b>Scene generator</b><p>Configurable virtual world — sky gradients, star fields, terrain, cloud and clutter layers, moving distractors. Offscreen rendering, seeded and reproducible.</p></div>
+      <div><span class="n">M2</span><b>Beacon model</b><p>One or more targets on scripted trajectories (LEO pass, UAV waypoints, random walk) with a real radiometric model: irradiance falloff, Airy-disc PSF, modulated blink pattern.</p></div>
+      <div><span class="n">M3</span><b>Virtual pan-tilt camera</b><p>FOV, focal length, pixel pitch, resolution, frame rate, exposure, ADC quantisation, gimbal rate and acceleration limits, and command latency.</p></div>
+      <div><span class="n">M4</span><b>Disturbance engine</b><p>Kolmogorov phase screens for turbulence-induced tip/tilt and scintillation, PSD-driven platform vibration, shot/read/dark noise, sun glint, dropped frames.</p></div>
+      <div><span class="n">M5</span><b>Detection</b><p>Two independent paths: matched-filter/centroid classical detection, and a small CNN trained on your own synthetic frames. Each is a fallback for the other.</p></div>
+      <div><span class="n">M6</span><b>Tracking</b><p>Kalman or IMM filter with data association, explicit lock/loss state machine, and a spiral re-acquisition search after loss. Handles multiple beacons and decoys.</p></div>
+      <div><span class="n">M7</span><b>Pointing control</b><p>Closed-loop PID with velocity feed-forward from the track, rate limiting, and latency compensation so the loop stays stable at realistic gimbal delays.</p></div>
+      <div><span class="n">M8</span><b>Metrics engine</b><p>Every logged quantity the statement names, in pixels and microradians, plus detection probability versus SNR curves. Auto-exports the performance report.</p></div>
+      <div><span class="n">M9</span><b>Operator GUI</b><p>Live camera view with track overlay, full parameter panel, real-time error plots, scenario load/save as YAML, one-click report export.</p></div>
+      <div><span class="n">M10</span><b>Packaging</b><p>Single standalone executable, commented modular source, technical report, user manual, and the optional 3–5 minute demonstration video.</p></div>
+    </div>
+
+    <div class="grid2">
+      <div class="stack">
+        <h3 style="font-size:18px">Going beyond the brief</h3>
+        <p style="color:var(--ink-2);font-size:15.5px">The statement is the floor. These are what
+          separate a delivered project from a winning one, and each one is defensible as directly
+          serving ISRO's stated purpose — a cheap platform for developing PAT algorithms.</p>
+        <ul style="font-size:15.5px;color:var(--ink-2)">
+          <li><strong>Close the PAT chain.</strong> Model a quadrant photodiode and fine steering mirror
+            and demonstrate coarse → fine handoff. The brief stops at coarse; you finish the story.</li>
+          <li><strong>Hardware in the loop.</strong> A webcam, a two-axis servo pan-tilt and an LED
+            beacon costs under ₹3,000 and proves the identical code drives real optics. The brief's own
+            premise is that hardware is prohibitively expensive — showing the transfer is the single
+            strongest thing you can put in front of an ISRO judge.</li>
+          <li><strong>Real orbital geometry.</strong> Drive trajectories from actual TLEs via Skyfield so
+            your angular rates match a genuine ground-to-LEO pass instead of an invented one.</li>
+          <li><strong>Link budget coupling.</strong> Convert pointing error into FSO link availability and
+            BER, so tracking accuracy maps to communications performance rather than pixels.</li>
+          <li><strong>Monte Carlo campaign.</strong> A thousand randomised scenarios producing a
+            statistical performance envelope, not a single lucky demo run.</li>
+          <li><strong>Baseline comparison.</strong> Benchmark against OpenCV's KCF and CSRT trackers and
+            plain centroiding, with the results table in the report.</li>
+        </ul>
+      </div>
+
+      <div class="stack">
+        <h3 style="font-size:18px">Schedule, from today</h3>
+        <ol class="beats">
+          <li><b>Now → 3 Sep</b><span>Lock the statement. Assign the six roles. Read the FSOC PAT
+            literature. Build a minimal renderer with a moving dot and a centroid tracker — you need a
+            screenshot and a number for the proposal.</span></li>
+          <li><b>4 → 10 Sep</b><span>Internal college hackathon. Prepare the idea submission around
+            preliminary <em>results</em>, not slides. Almost nobody submits measured performance at this
+            stage; it is the cheapest differentiation available.</span></li>
+          <li><b>By 20 Sep</b><span>Idea submission on the portal. Verify the deadline yourself — the
+            portal snapshot says 20 September, some secondary sources say 30 September.</span></li>
+          <li><b>October</b><span>Full simulator, disturbance engine, tracker v2, control loop, metrics
+            engine. Target: the complete mandatory scope working, unpolished.</span></li>
+          <li><b>November</b><span>GUI, packaging, hardware-in-the-loop rig, Monte Carlo campaign,
+            technical report and user manual. Freeze features by end of month.</span></li>
+          <li><b>December</b><span>Rehearse the demo until it cannot fail. Keep two or three planned
+            extensions in your pocket to implement live during the 36 hours — judges score visible
+            progress across rounds.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="note">
+      <h4>Six roles for six people</h4>
+      <p>Simulation and rendering · computer vision and detection · estimation, control and metrics ·
+        GUI, packaging and scenario tooling · hardware-in-the-loop rig and demo operation ·
+        report, manual and presentation. The last role is not a consolation prize — the technical
+        report and user manual are named deliverables, and most teams treat them as an afterthought
+        the night before.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sechead">
+      <span class="secnum">06</span>
+      <div>
+        <h2>Statements to stay away from</h2>
+        <p class="sub">The other end of the repellence index — high volume, low differentiation.</p>
+      </div>
+    </div>
+    <div class="prose stack">
+      <p>These will draw the largest submission counts in the set. Every one of them is a portal, a
+        chatbot, a marketplace or a dashboard: familiar shape, no skill barrier, hundreds of teams able
+        to produce a credible-looking version in a weekend. Winning one means beating 400 teams at
+        something 400 teams can do.</p>
+    </div>
+    <div class="tablewrap" style="max-width:860px">
+      <table>
+        <thead><tr><th>PS</th><th>Organisation</th><th>Statement</th><th class="num">Repellence</th></tr></thead>
+        <tbody>
+          <tr><td class="id">SIH26087</td><td>Ministry of Cooperation</td><td>Cooperative capacity building, ERP &amp; employment platform</td><td class="num">−15.8</td></tr>
+          <tr><td class="id">SIH26088</td><td>Ministry of Cooperation</td><td>Multilingual cooperative governance &amp; legal assistance chatbot</td><td class="num">−14.3</td></tr>
+          <tr><td class="id">SIH26093</td><td>MoSJE</td><td>Real-time stress and trauma assessment module</td><td class="num">−10.7</td></tr>
+          <tr><td class="id">SIH26101</td><td>MoSPI</td><td>AI-enabled learning platform</td><td class="num">−10.4</td></tr>
+          <tr><td class="id">SIH26129</td><td>Govt of Maharashtra</td><td>Interoperability among government departments</td><td class="num">−6.8</td></tr>
+          <tr><td class="id">SIH26184</td><td>Ministry of Home Affairs</td><td>Predictive analytics framework for cybercrime</td><td class="num">−6.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="color:var(--ink-2);font-size:15.5px">Negative repellence means the
+      attractor vocabulary dominates. Note that a Ministry of Home Affairs statement appears here —
+      a defence-adjacent ministry is not automatically low-competition. The barrier has to be in the
+      <em>work</em>, not the letterhead.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="sechead">
+      <span class="secnum">07</span>
+      <div>
+        <h2>What to verify before you commit</h2>
+        <p class="sub">Limits of this analysis, stated plainly.</p>
+      </div>
+    </div>
+    <div class="stack" style="max-width:78ch">
+      <div class="note caution">
+        <h4>Live submission counts could not be retrieved</h4>
+        <p>sih.gov.in and every public mirror are blocked by this environment's network policy. Both
+          dataset snapshots available were taken on 21–22 August, when every statement still read
+          <span class="mono">0/500</span>. The crowding analysis here is <em>modelled from statement
+          text</em>, not measured. Open the portal yourself, sort the defence cluster by submitted
+          count around 10–14 September, and confirm that 26169, 26055 and 26168 are genuinely light
+          before you lock in. If one of them has unexpectedly swarmed, move to SIH26159 or SIH26147.</p>
+      </div>
+      <div class="note caution">
+        <h4>Three data caveats</h4>
+        <p>Difficulty levels and scores quoted anywhere in this dossier are community-derived estimates
+          from a public dataset repository, not official SIH ratings. One of the two mirrors had its
+          theme column misaligned against every row — themes here come from the mirror that
+          cross-checks correctly. And the idea submission deadline reads 20 September on the portal
+          snapshot while some secondary write-ups say 30 September; treat 20 September as the real one
+          until your SPOC confirms otherwise.</p>
+      </div>
+      <div class="note">
+        <h4>Hedge with your college's other teams</h4>
+        <p>Your SPOC nominates up to 30 teams. Coordinate so your college covers 26169, 26055 and 26159
+          across different teams rather than three teams piling onto the same statement — you multiply
+          the college's shortlisting surface without diluting any single submission, and none of the
+          three overlaps in required skills.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Analysis over all 226 SIH 2026 problem statements, cross-referenced from two independent public
+      dataset mirrors (snapshots 21 and 22 August 2026) and SIH winner reporting from the 2020, 2022,
+      2023, 2024 and 2025 editions.</p>
+    <p>Repellence index, self-containment, demo strength and credential scores are analytical estimates
+      produced for this dossier, not official SIH metrics.</p>
+  </div>
+</footer>
